@@ -1,6 +1,6 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = @"..\..\..\..\..\Input Files\Day 1.txt";
+    const string PUZZLE_INPUT = @"PuzzleInput.txt";
     const string CRLF = "\r\n"; //platform depependent. 
 
     //Puzzle data is integer values (calories) seperated by a space. 
