@@ -1,6 +1,6 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 3.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     int scorePart1 = 0;

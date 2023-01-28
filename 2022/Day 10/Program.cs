@@ -1,6 +1,6 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 10.txt"; ;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     StreamReader sr = new(PUZZLE_INPUT);
     string op = ""; //our operation. 

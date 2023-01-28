@@ -1,6 +1,6 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = @"..\..\..\..\Input Files\Day 2.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     //Playing Rock Paper Scissors. 

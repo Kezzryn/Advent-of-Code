@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = @"..\..\..\..\..\Input Files\Day 21.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     MonkeyTree monkeys = new(File.ReadAllLines(PUZZLE_INPUT));
     //monkeys.ToggleVerbose();
 

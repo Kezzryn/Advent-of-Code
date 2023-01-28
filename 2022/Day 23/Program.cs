@@ -1,11 +1,14 @@
 ﻿using AoC_2022_Day_23;
 
-bool verbose = false;
-
 try
 {
-    string[] inputFile = File.ReadAllLines("C:\\Users\\bholmes\\Desktop\\AoC\\Day23ElfData.txt");
-    Log infoLog = new Log("C:\\Users\\bholmes\\Desktop\\AoC\\Day23ElfLog.txt");
+    bool verbose = false;
+
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    const string LOG_FILE = "DebugLog.txt";
+
+    string[] inputFile = File.ReadAllLines(PUZZLE_INPUT);
+    Log infoLog = new Log(LOG_FILE);
 
     List<Elf> elves = new List<Elf>();
 

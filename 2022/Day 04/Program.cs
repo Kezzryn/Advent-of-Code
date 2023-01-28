@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 4.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     const int LEFT_START = 0;
     const int LEFT_END = 1;

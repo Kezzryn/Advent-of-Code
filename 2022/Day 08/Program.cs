@@ -18,7 +18,7 @@ void LoadForest()
 {
     //note that we flip the map when we load it, 'cause top down file goes to 0 bound array
     //shouldn't matter since none of our answers rely on absolute positioning.
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 8.txt"; ;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     FOREST_COL = puzzleInput.Count();

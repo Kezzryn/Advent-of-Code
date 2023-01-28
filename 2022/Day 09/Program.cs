@@ -8,7 +8,7 @@ try
     Rope shortRope = new Rope(PART_1_ROPE_SIZE);
     Rope longRope = new Rope(PART_2_ROPE_SIZE);
 
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 9.txt"; ;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     shortRope.Move(puzzleInput);

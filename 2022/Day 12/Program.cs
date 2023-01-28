@@ -1,10 +1,10 @@
 ﻿using AoC_2022_Day_12;
 using System.Drawing;
 
-const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 12.txt";
-
 try
 {
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+
     Map theMap = new(PUZZLE_INPUT);
 
     int numSteps = 0;

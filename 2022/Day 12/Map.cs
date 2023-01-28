@@ -87,7 +87,7 @@ namespace AoC_2022_Day_12
             };
 
             PriorityQueue<Point, int> searchQueue = new(); //we enque based on fScore + h, the distance travelled, plus taxi distance guess to destination.
-            HashSet<Point> inSearchQueue = new(); //we add this because we don't have a away to query the queue to see if a specific item is in it.
+            HashSet<Point> inSearchQueue = new(); //we add this because we don't have a way to query the queue to see if a specific item is in it.
 
             //gScore is value of the path from start to here
             //fScore is estimated from here to end. We're using Taxi Distance as our hieruistic 

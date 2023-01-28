@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 13.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     Packet dividerPacketA = new("[[2]]");
     Packet dividerPacketB = new("[[6]]");

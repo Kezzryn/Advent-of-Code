@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = @"..\..\..\..\..\Input Files\Day 20.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int decryptionKey = 811589153;
 
     Mixer codeMixerPart1 = new(File.ReadAllLines(PUZZLE_INPUT));

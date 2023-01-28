@@ -7,7 +7,7 @@ try
     ElfDirectory currentDir = new(ROOT_DIR_NAME, null);
     List<ElfDirectory> directories = new() { currentDir };
 
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 7.txt"; ;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
 

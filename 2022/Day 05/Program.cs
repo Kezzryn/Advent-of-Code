@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Text.RegularExpressions;
 
-const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 5.txt"; ;
+const string PUZZLE_INPUT = "PuzzleInput.txt";
 string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
 
 const string CRLF = "\r\n"; // if we ever run this on another platform, fix this. 

@@ -21,7 +21,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 6.txt"; ;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
 
     Console.WriteLine($"Start of Packet: {FindStartMarker(puzzleInput, 4)}");

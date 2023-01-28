@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 11.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     MonkeyTroupe troupePart1 = new(PUZZLE_INPUT);
     MonkeyTroupe troupePart2 = new(PUZZLE_INPUT, "PART2");

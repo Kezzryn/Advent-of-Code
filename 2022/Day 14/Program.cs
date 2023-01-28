@@ -2,7 +2,7 @@
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 14.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     Map chasm = new(File.ReadAllLines(PUZZLE_INPUT), false);
 

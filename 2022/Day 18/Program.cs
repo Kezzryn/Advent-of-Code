@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 try
 {
-    const string PUZZLE_INPUT = @"..\..\..\..\..\Input Files\Day 18.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     Stopwatch sw = Stopwatch.StartNew();
 
     Droplet obs = new(PUZZLE_INPUT);

@@ -3,7 +3,7 @@ using System.Drawing;
 
 try
 {
-    const string PUZZLE_INPUT = "..\\..\\..\\..\\..\\Input Files\\Day 15.txt";
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     const int Part1Slice = 2000000;
 
