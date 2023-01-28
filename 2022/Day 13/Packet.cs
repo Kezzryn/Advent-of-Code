@@ -130,7 +130,9 @@ namespace AoC_2022_Day_13
 
             //rules. 
             //if both are ints return if leftInt < rightInt 
-            //if right list is longer, then
+            //If both values are lists, compare the first value of each list, then the second value, and so on.
+            //If the left list runs out of items first, the inputs are in the right order.
+            //If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
 
             for (int i = 0; i < leftPacket.ElementList.Count; i++)
             {
