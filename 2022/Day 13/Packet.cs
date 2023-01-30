@@ -40,30 +40,27 @@ namespace AoC_2022_Day_13
             _packetValue = "";
         }
 
-        private static int FindMatchingBrace(string inputPacket, int startElement)
+        private static int FindMatchingBrace(string inputPacket, int startPos)
         {
-            int returnValue = -1;
             int matchCount = 0;
 
-            for (int i = startElement; i < inputPacket.Length; i++)
+            for (int i = startPos; i < inputPacket.Length; i++)
             {
                 if (inputPacket[i] == '[') { matchCount++; }
                 if (inputPacket[i] == ']') { matchCount--; }
-                if (matchCount == 0)
-                {
-                    returnValue = i;
-                    break;
-                }
+                if (matchCount == 0) return i;
             }
-            return returnValue;
+
+            return -1;
         }
 
         private static List<string> PacketToList(string inputPacket)
         {
             //Convert the packet to an List<string>.
-            //Each element of the List will contain one element of the inputPacket, which could be an integer, a list, or even an empty list
+            //Each element of the List will contain one element of the inputPacket, which could be an integer, a list, or Empty 
             List<string> returnValue = new();
 
+            // Check empty 
             if (inputPacket == "[]")
             {
                 returnValue.Add(string.Empty);
@@ -71,22 +68,18 @@ namespace AoC_2022_Day_13
             }
 
             //Do we have any brackets?
-            if (inputPacket.Contains('[') == false || inputPacket.Contains(']') == false)
+            if (inputPacket.IndexOfAny("[]".ToCharArray()) == -1)
             {
-                //no brackets at all. We might be a list. Do we have commas? 
-                if (inputPacket.Contains(','))
-                    returnValue.AddRange(inputPacket.Split(','));
-                else
-                    returnValue.Add(inputPacket);
-
+                // no brackets at all. Split on ',' and return the results.
+                returnValue.AddRange(inputPacket.Split(','));
                 return returnValue;
             }
 
             //if we got this far, we have some brackets.
-            //so now the heavy lifting starts. We're going to take the current packet and turn it into a list, which might contain nested lists.  
+            //Now the heavy lifting starts. We're going to take the current packet and turn it into a list, which might contain nested lists.  
             //[],[1,[2,3,4],5],6] will return a list with three elements: {""}, {1,[2,3,4],5}, {6}  
             int startElement = 0;
-            int endElement = 0;
+            int endElement;
             while (startElement < inputPacket.Length)
             {
                 if (inputPacket[startElement] == '[')
@@ -117,27 +110,25 @@ namespace AoC_2022_Day_13
 
         private static int Compare(Packet? leftPacket, Packet? rightPacket)
         {
-            //null tests. 
+            // Null tests. 
             if (leftPacket is null && rightPacket is not null) return ReturnValues.LessThan;
             if (leftPacket is not null && rightPacket is null) return ReturnValues.GreaterThan;
             if (leftPacket is null && rightPacket is null) return ReturnValues.EqualTo;
 
-            //let's get rid of all the compiler warnings about nulls...  NB: this should never trigger 
-            if (leftPacket is null || rightPacket is null) return ReturnValues.EqualTo;
-
-            //Unknown is a self-flag that we need to keep processing. It should never be passed back to a comparison function.
+            // Unknown is a self-flag that we need to keep processing. It should never be passed back to a comparison function.
             int returnValue = ReturnValues.Unknown;
 
-            //rules. 
-            //if both are ints return if leftInt < rightInt 
-            //If both values are lists, compare the first value of each list, then the second value, and so on.
-            //If the left list runs out of items first, the inputs are in the right order.
-            //If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
+            // Rules. 
+            // If both are ints return if leftInt < rightInt 
+            // If both values are lists, compare the first value of each list, then the second value, and so on.
+            // If the left list runs out of items first, the inputs are in the right order.
+            // If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
 
-            for (int i = 0; i < leftPacket.ElementList.Count; i++)
+            // NB: null forgiving is used here on leftPacket and rightPacket, 'cause we handled those up top, but the compiler doesn't see it.
+            for (int i = 0; i < leftPacket!.ElementList.Count; i++)
             {
-                //If the right list runs out of items first, then left is GT right
-                if (i > rightPacket.ElementList.Count - 1)
+                // If the right list runs out of items first, then left is GT right
+                if (i > rightPacket!.ElementList.Count - 1)
                 {
                     returnValue = ReturnValues.GreaterThan;
                     break;
@@ -146,7 +137,7 @@ namespace AoC_2022_Day_13
                 string leftElement = leftPacket.ElementList.ElementAt(i);
                 string rightElement = rightPacket.ElementList.ElementAt(i);
 
-                //check integer comparisons 
+                // Check integer comparisons 
                 if (int.TryParse(leftElement, out int leftInt) && int.TryParse(rightElement, out int rightInt))
                 {
                     if (leftInt < rightInt) returnValue = ReturnValues.LessThan;

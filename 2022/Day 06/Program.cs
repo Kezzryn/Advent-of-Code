@@ -3,20 +3,16 @@
     //Report the number of characters from the beginning of the buffer to the end of the first marker.
     //Where the marker is defined as all characters that are all different.
 
-    int returnValue = -1;
-    string block = "";
-
     for (int i = 0; i <= inputData.Length - WindowSize; i++)
     {
-        block = inputData.Substring(i, WindowSize);
+        string block = inputData.Substring(i, WindowSize);
 
         if (block.Distinct().Count() == WindowSize)
         {
-            returnValue = i + WindowSize;
-            break;
+            return i + WindowSize;
         }
     }
-    return returnValue;
+    return -1;
 }
 
 try

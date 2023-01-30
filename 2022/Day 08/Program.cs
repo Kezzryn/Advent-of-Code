@@ -1,6 +1,6 @@
 ﻿//used to clarify GetLowerBound / GetUpperBound calls. 
 const int ROW = 0; //rows are the first dimension of the forest array (array is 0 bound) 
-const int COL = 1; //columsn are the second dimension of the forest array (array is 0 bound) 
+const int COL = 1; //columns are the second dimension of the forest array (array is 0 bound) 
 
 //derived from the input file and should be the max row/col of the forest. 
 int FOREST_ROW = -1;

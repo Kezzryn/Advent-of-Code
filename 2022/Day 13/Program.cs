@@ -13,6 +13,8 @@ try
         .Select(x => new Packet(x))
         .ToList();
 
+    // Use Where().Zip() create a list of paired touples of (puzzleInput[i], puzzleInput[i+1]) 
+    // Then sum the ones where the first element is < the second element. 
     int indexSum = puzzleInput
             .Where((x, i) => i % 2 == 0)
             .Zip(puzzleInput

@@ -26,13 +26,15 @@
 
         public char GetChar(int index)
         {
-            //TODO error check bounds 
+            //Decimal to character conversion
             return _symbolsOffset[index];
         }
 
         public int GetValue(char index)
         {
-            //TODO error check return value
+            // SNAFU EG: 
+            // symbol list is: = - 0 1 2  _zeroOffset is 2
+            // values range from -2 to +2, so fetching '-' at array index of 1, we apply the offset to return it's value of -1. 
             return _symbolList.IndexOf(index) - _zeroOffset;
         }
 
@@ -40,6 +42,7 @@
         {
             return _zeroOffset;
         }
+
         public int PowerOf => _symbolList.Length;
 
     }
