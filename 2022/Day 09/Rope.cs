@@ -24,7 +24,7 @@ namespace AoC_2022_Day_9
             AddTailPos();
         }
 
-        public void ToggleVerbose() => _verbose = !verbose;
+        public void ToggleVerbose() => _verbose = !_verbose;
 
         public int NumTailPos()
         {
