@@ -2,16 +2,24 @@
 
 try
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    const string PUZZLE_INPUT = "PuzzleInputTest.txt";
 
     CaveComplex volcano = new(File.ReadAllLines(PUZZLE_INPUT));
 
-    //Console.WriteLine("LOADED");
-    //Console.WriteLine("*****");
+    Dictionary<string, string> prev;
+    Dictionary<string, int> dist; 
 
-    //volcano.PrintLayout();
+    volcano.Dijkstra("AA",out prev, out dist);
 
-    volcano.Simplify();
+    foreach (KeyValuePair<string, int> kvp in dist)
+    {
+        Console.WriteLine($"DIST: {kvp.Key} = {kvp.Value}");
+    }
+
+    foreach (KeyValuePair<string, string> kvp in prev)
+    {
+        Console.WriteLine($"PREV: {kvp.Key} = {kvp.Value}");
+    }
 
     volcano.PrintLayout();
 

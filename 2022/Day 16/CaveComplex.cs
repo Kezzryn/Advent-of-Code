@@ -13,6 +13,9 @@ namespace AoC_2022_Day_16
             _caves = new Dictionary<string, Cave>();
 
             foreach (string cave in caveData) AddCave(cave);
+
+            Simplify();
+          //  FullLinkage();
         }
 
         public void AddCave(string caveName, int flowRate)
@@ -66,6 +69,7 @@ namespace AoC_2022_Day_16
 
         public void Simplify()
         {
+            // Remove all non-root nodes with a flow rate of 0 We don't care about them, they're just extra distance on the graph.
             Stack<string> removeList = new();
 
             foreach (string s in _caves.Keys)
@@ -105,56 +109,66 @@ namespace AoC_2022_Day_16
 
         private void FullLinkage()
         {
+            Dictionary<string, string> prev;
+            Dictionary<string, int> dist;
+
+            foreach (string node in _caves.Keys)
+            {
+    //            Dijkstra(node, out prev, out dist);
+            }
+
+    
             /*
+             * Compute dist(u), the shortest-path distance from root v to vertex u in G using Dijkstra's algorithm or Bellman–Ford algorithm.
              * 
-Compute dist(u), the shortest-path distance from root v to vertex u in G using Dijkstra's algorithm or Bellman–Ford algorithm.
-
-For all non-root vertices u, we can assign to u a parent vertex pu such that pu is connected to u, and that dist(pu) + edge_dist(pu,u) = dist(u). In case multiple choices for pu exist, choose pu for which there exists a shortest path from v to pu with as few edges as possible; this tie-breaking rule is needed to prevent loops when there exist zero-length cycles.
-
-Construct the shortest-path tree using the edges between each node and its parent.
+             * For all non-root vertices u, we can assign to u a parent vertex pu such that pu is connected to u, 
+             * and that dist(pu) + edge_dist(pu,u) = dist(u).
+             * 
+             * In case multiple choices for pu exist, choose pu for which there exists a shortest path from v to pu with as few edges as possible; 
+             * this tie-breaking rule is needed to prevent loops when there exist zero-length cycles.
+             * Construct the shortest-path tree using the edges between each node and its parent.
              */
-
-
         }
 
-        private void Dijkstra(string startNode, string[] endNode) //return what? list of distnaces for a start of X?
+        public void Dijkstra(string startNode, out Dictionary<string, string> prev, out Dictionary<string, int> dist)  
+        // Return a list of node/dist pairs we can feed into a cave exit dictionary
         {
+            // dist is from start to key, coming from parent.
             // dist[source] ← 0                           // Initialization/
-            // create vertex priority queue Q
+            prev = new();
+            dist = new();
 
-            PriorityQueue<string, int> searchQueue = new(); //we enque based on fScore + h, the distance travelled, plus taxi distance guess to destination.
-//            HashSet<string> inSearchQueue = new(); //we add this because we don't have a way to query the queue to see if a specific item is in it.
+            // create vertex queue
+            List<string> searchQueue = new();
 
-            //dist is from start to Key, coming from parent.
-            Dictionary<string, (int dist, string? parent)> stepCounter = new();
-
-            foreach (KeyValuePair<string, Cave> kvp in _caves)
+            // Load our queue and intialzie all of our result values. 
+            foreach (KeyValuePair<string, Cave> kvpCave in _caves)
             {
-                //if v ≠ source
-                //   dist[v] ← INFINITY                 // Unknown distance from source to v
-                //   prev[v] ← UNDEFINED                // Predecessor of v
-                //Q.add_with_priority(v, dist[v])
-                if (kvp.Key != startNode)
-                {
+                dist.Add(kvpCave.Key, int.MaxValue);
+                prev.Add(kvpCave.Key, string.Empty);
 
-                }
+                searchQueue.Add(kvpCave.Key);
             }
-          
+
+            // while Q is not empty:
+            // u ← vertex in Q with min dist[u]
+            // remove u from Q
             while (searchQueue.Count > 0)
             {
-                // u ← Q.extract_min()                    // Remove and return best vertex
+                string u = dist.OrderBy(d => d.Value).ToList().Select(x => x.Key).First();
+                searchQueue.Remove(u);
 
-                //  for each neighbor v of u:              // Go through all v neighbors of u
-                    // alt ← dist[u] + Graph.Edges(u, v)
-                    // if alt < dist[v]:
-                    // dist[v] ← alt
-                    // prev[v] ← u
-                    // Q.decrease_priority(v, alt)
+                // for each neighbor v of u still in Q:
+                foreach (string v in _caves[u].ExitList().Intersect(searchQueue))
+                {
+                    int alt = dist[u] + _caves[u].ExitDistance(v);
+                    if (alt < dist[v])
+                    {
+                        dist[v] = alt;
+                        prev[v] = u;
+                    }
+                }
             }
-
-
-        //return dist, prev
-
         }
 
         // public int DontBlowUp(int timeRemaing)

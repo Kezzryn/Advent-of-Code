@@ -1,44 +1,72 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace AoC_2015_Day_6
 {
-    internal class XmasLightGrid
+    internal static class RuleSet
     {
-        private readonly Dictionary<Point, bool> _lightGrid = new();
+        public const int Toggle = 0;
+        public const int Brighten = 1;
+    }
 
-        public XmasLightGrid()
+    internal partial class XmasLightGrid
+    {
+        private readonly Dictionary<Point, int> _lightGrid = new();
+        private readonly int ToggleOrBright;
+
+        public XmasLightGrid(int ruleSet = RuleSet.Toggle)
         {
-
+            ToggleOrBright = ruleSet;
         }
 
         private void FlipLights(int x1, int y1, int x2, int y2, char action)
         {
-            int right = int.Max(x1, x2);
-            int top = int.Max(y1, y2);
+            // data is always bottom left to upper right.
 
-            int left = int.Min(x1, x2);
-            int bottom = int.Min(y1, y2);
+            Point cursor = new (0,0);
 
-            for (int x = left; x <= right; x++)
+            for (int x = x1; x <= x2; x++)
             {
-                for (int y = bottom; y <= top; y++)
+                for (int y = y1; y <= y2; y++)
                 {
-                    if (_lightGrid.TryGetValue(new Point(x, y), out bool light))
+                    cursor.X = x;
+                    cursor.Y = y; 
+                    if (_lightGrid.TryGetValue(cursor, out int light))
                     {
-                        light = action switch
+                        _lightGrid[cursor] += action switch
                         {
-                            'T' => !light,
-                            'O' => true,
-                            'F' => false,
-                            _ => false
+                            'T' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? -1 : 1 : 2,
+                            'O' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? 0 : 1 : 1,
+                            'F' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? -1 : 0 : -1,
+                            _ => 0
                         };
+                        if (_lightGrid[cursor] < 0) _lightGrid[cursor] = 0;
                     }
                     else
                     {
-                        _lightGrid.Add(new Point(x, y), action != 'F');
+                        if (ToggleOrBright == RuleSet.Toggle)
+                        {
+                            _lightGrid.Add(cursor, (action != 'F') ? 1 : 0) ;
+                        }
+                        else
+                        {
+                            _lightGrid.Add(cursor, action switch { 'T' => 2, 'O' => 1, _ => 0 });
+                        }
+                        
                     }
                 }
             }
+        }
+
+        public void Instruction(string instruction)
+        {
+            int[] numbers = FindNumbers().Matches(instruction).Select(x => int.Parse(x.Value)).ToArray();
+
+            if (instruction.StartsWith("toggle")) Toggle(numbers[0], numbers[1], numbers[2], numbers[3]);
+
+            if (instruction.StartsWith("turn on")) TurnOn(numbers[0], numbers[1], numbers[2], numbers[3]);
+
+            if (instruction.StartsWith("turn off")) TurnOff(numbers[0], numbers[1], numbers[2], numbers[3]);
         }
 
         public void Toggle(int x1, int y1, int x2, int y2)
@@ -55,8 +83,15 @@ namespace AoC_2015_Day_6
         {
             FlipLights(x1, y1, x2, y2, 'F');
         }
+        public int NumLit() => _lightGrid.Where(pair => pair.Value >= 0).Count();
 
-        public int NumLit() => _lightGrid.Where(pair => pair.Value == true).Count();
+        public int Luminosity() => _lightGrid.Select(pair => pair.Value).Sum();
 
     }
+    partial class XmasLightGrid
+    {
+        [GeneratedRegex("\\d+")]
+        private static partial Regex FindNumbers();
+    }
+ 
 }

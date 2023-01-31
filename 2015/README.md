@@ -22,3 +22,9 @@ Day 5 - Doesn't He Have Intern-Elves For This?
 - This solution could probably be improved with liberal applcation of Regex.
 
 Day 6 - Probably a Fire Hazard
+- Change the values in a 1000x1000 grid. 
+- Brute forced the solution with a Dictionary of Points
+
+Day 7 - Some Assembly Required
+- Bitwise logic gate emulation 
+- 

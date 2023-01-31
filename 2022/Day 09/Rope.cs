@@ -36,7 +36,7 @@ namespace AoC_2022_Day_9
             if (_tailVisited.Add(_segments[TAIL]) && _verbose) Console.WriteLine($"Adding tail position: {_segments[TAIL]} count: {_tailVisited.Count}");
         }
 
-        public void Move(IEnumerable<string> moveSet)
+        public void Move(string[] moveSet)
         {
             foreach (string move in moveSet)
             {
@@ -79,9 +79,11 @@ namespace AoC_2022_Day_9
                     }
                     else
                     {
-                        if (_verbose) Console.WriteLine($"{moves} {i}: Not Adjacent: {_segments[i]}, {_segments[i - 1]}");
                         //not adjacent, move i towards i-1 
+                        if (_verbose) Console.WriteLine($"{moves} {i}: Not Adjacent: {_segments[i]}, {_segments[i - 1]}");
+                        
                         MoveTowards(ref _segments[i], _segments[i - 1]);
+
                         if (_verbose) Console.WriteLine($"{moves} {i}: Moved a towards b: {_segments[i]}, {_segments[i - 1]}");
                     }
                 }
