@@ -5,21 +5,21 @@ try
     const string PUZZLE_INPUT = "PuzzleInputTest.txt";
 
     CaveComplex volcano = new(File.ReadAllLines(PUZZLE_INPUT));
+    
+    volcano.PrintLayout();
 
-    Dictionary<string, string> prev;
-    Dictionary<string, int> dist; 
+    volcano.FullLinkage();
 
-    volcano.Dijkstra("AA",out prev, out dist);
-
-    foreach (KeyValuePair<string, int> kvp in dist)
+    /*
+    Dictionary<string, (string, int)> path;
+    
+    volcano.Dijkstra("AA",out path);
+    
+    foreach (KeyValuePair<string, (string prev, int dist)> kvp in path)
     {
-        Console.WriteLine($"DIST: {kvp.Key} = {kvp.Value}");
+        Console.WriteLine($"{kvp.Key} = {kvp.Value.dist} {kvp.Value}");
     }
-
-    foreach (KeyValuePair<string, string> kvp in prev)
-    {
-        Console.WriteLine($"PREV: {kvp.Key} = {kvp.Value}");
-    }
+    */
 
     volcano.PrintLayout();
 
