@@ -3,7 +3,9 @@
     class CaveComplex
     {
         private const string rootNode = "AA";
-        private readonly Dictionary<string, Cave> _caves = new();
+        private bool _verbose = false;
+
+        public readonly Dictionary<string, Cave> _caves = new();
         
         public CaveComplex(string[] caveData)
         {
@@ -28,6 +30,9 @@
             Simplify();
             FullLinkage();
         }
+
+        public void ToggleVerbose() => _verbose = !_verbose;
+        public List<string> AllCaves() => _caves.OrderBy(x => x.Value.FlowRate).Select(x => x.Key).ToList();
         private void FullLinkage()
         {
             foreach (string node in _caves.Keys)
@@ -41,7 +46,6 @@
                 }
             }
         }
-
         private void LinkCave(string caveOne, string caveTwo, int distance = 1)
         {
             if (caveOne == caveTwo) return; //never link to ourselves.
@@ -49,13 +53,11 @@
             if (_caves.TryGetValue(caveOne, out Cave? caveA)) caveA.AddExit(caveTwo, distance);
             if (_caves.TryGetValue(caveTwo, out Cave? caveB)) caveB.AddExit(caveOne, distance);
         }
-
         private void RemoveLink(string caveOne, string caveTwo)
         {
             if (_caves.TryGetValue(caveOne, out Cave? caveA)) caveA.RemoveExit(caveTwo);
             if (_caves.TryGetValue(caveTwo, out Cave? caveB)) caveB.RemoveExit(caveOne);
         }
-
         private void RemoveCave(string name)
         {
             if (!_caves.TryGetValue(name, out Cave? value)) return;
@@ -66,7 +68,6 @@
             }
             _caves.Remove(name);
         }
-
         private void Simplify()
         {
             // Remove all non-root nodes with a flow rate of 0.
@@ -107,7 +108,6 @@
             }
             Console.WriteLine(" ");
         }
-
         private void Dijkstra(string startNode, out Dictionary<string, (string prev, int dist)> paths)  
         // Return a list of node/dist pairs we can feed into a cave exit dictionary
         {
@@ -143,12 +143,79 @@
                 }
             }
         }
+        public int PathCost(List<string> nodes, int startTime, out int timeRemaining)
+        {
+            const int ValveOpenTime = 1; //figure out how to best build this into our pathing.
+            int returnValue = 0;
 
-        // public int DontBlowUp(int timeRemaing)
-        // {
+            timeRemaining = startTime; 
 
-        //    return 0;
-        // }
+            for (int i = 0; i < nodes.Count - 1; i++)
+            {
+                timeRemaining -= _caves[nodes[i]].ExitDistance(nodes[i + 1]) + ValveOpenTime;
+                if (timeRemaining <= 0) break;
+                returnValue += _caves[nodes[i + 1]].FlowFromTime(timeRemaining);
+            }
 
+            return -returnValue;
+        }
+        public static string ListToString(List<string> s) => s.Aggregate((x, y) => x + y);
+        public List<string> BnBSolve(string startNode, List<string> searchSpace, int totalTime, int totalDepth = -1) 
+        {
+            //the problem is a set of nodes that we have to visit within the scope of timeRemaining. 
+
+            // for each node. 
+            // - generate a list of subnodes.  Priortize by distance( lowest) and flow rate (highest) 
+            // - AA -> DD (1 step, flow 20) comes before AA -> JJ (2 steps, flow 21) 
+            // enqueue a set of proposed solutions for each node off of our current node, that does not include a node already visited.
+            // and then repeat... 
+
+            int current_optimum_pressure = int.MaxValue;
+            List<string> current_optimum_path = new()
+            {
+                startNode
+            };
+
+            PriorityQueue<List<string>, int> candidate_queue = new();
+
+            candidate_queue.Enqueue(current_optimum_path, current_optimum_pressure);
+
+            while (candidate_queue.Count > 0)
+            { 
+                List<string> candidate_solution = candidate_queue.Dequeue();
+                List<string> nextSteps = searchSpace.Except(candidate_solution).ToList();
+
+                if (nextSteps.Count < 1) // no more caves to explore, we have potential solution. 
+                {
+                    // test for potential problem solution. 
+                    int testPressure = PathCost(candidate_solution, totalTime, out _);
+                    if (testPressure < current_optimum_pressure)
+                    {
+                        current_optimum_path = candidate_solution;
+                        current_optimum_pressure = testPressure;
+                    }
+                    if (_verbose) Console.WriteLine($"New potential solution : {ListToString(current_optimum_path)} {current_optimum_pressure}");
+                }
+                else
+                {
+                    foreach(string next in nextSteps)
+                    {
+                        List<string> newStep = candidate_solution.Append(next).ToList();
+
+                        int newPressure = PathCost(newStep, totalTime, out int timeRemaining);
+
+                        if (_verbose) Console.Write($"considering {ListToString(newStep)} : {newPressure} >= {current_optimum_pressure} TR: {timeRemaining}");
+                        if (newPressure <= current_optimum_pressure && timeRemaining > 0)
+                        {
+                            if (_verbose) Console.Write(" *ADDED");
+                            candidate_queue.Enqueue(newStep, newPressure); //prefer stuff with more pressure. 
+                        }
+                        if (_verbose) Console.WriteLine();
+                    }
+                }
+            }
+
+            return current_optimum_path;
+        }
     }
 }
