@@ -1,5 +1,7 @@
 ﻿namespace AoC_2022_Day_16
 {
+    //This is not used in the Day 16 solution and is here for historical reasons. 
+
     class CaveComplex
     {
         private const string rootNode = "AA";
@@ -157,8 +159,25 @@
                 returnValue += _caves[nodes[i + 1]].FlowFromTime(timeRemaining);
             }
 
-            return -returnValue;
+            return returnValue;
         }
+
+        public int Boundry(List<string> new_candidate_solution, int startTime)
+        {
+            //trying to minimize this future lookup, in order to find the maximum. 
+            //path cost of the remaining nodes from time, sorted from highest to lowest? 
+
+            List<string> searchSpace = _caves.OrderByDescending(d => d.Value.FlowRate).ToList().Select(x => x.Key).Except(new_candidate_solution).ToList();
+
+            searchSpace.Insert(0, new_candidate_solution.Last());
+
+            int returnValue = PathCost(searchSpace, startTime, out _); 
+
+            if (_verbose) Console.WriteLine($"{ListToString(new_candidate_solution)} =>? {ListToString(searchSpace)} st: {startTime} rv: {returnValue}");
+
+            return returnValue;
+        }
+
         public static string ListToString(List<string> s) => s.Aggregate((x, y) => x + y);
         public List<string> BnBSolve(string startNode, List<string> searchSpace, int totalTime, int totalDepth = -1) 
         {
@@ -170,11 +189,13 @@
             // enqueue a set of proposed solutions for each node off of our current node, that does not include a node already visited.
             // and then repeat... 
 
-            int current_optimum_pressure = int.MaxValue;
+            int current_optimum_pressure = int.MinValue;
             List<string> current_optimum_path = new()
             {
                 startNode
             };
+
+
 
             PriorityQueue<List<string>, int> candidate_queue = new();
 
@@ -182,16 +203,16 @@
 
             while (candidate_queue.Count > 0)
             { 
-                List<string> candidate_solution = candidate_queue.Dequeue();
-                List<string> nextSteps = searchSpace.Except(candidate_solution).ToList();
+                List<string> curr_candidate_solution = candidate_queue.Dequeue();
+                List<string> nextSteps = searchSpace.Except(curr_candidate_solution).ToList();
 
-                if (nextSteps.Count < 1) // no more caves to explore, we have potential solution. 
+                if (nextSteps.Count < 1 || curr_candidate_solution.Count >= totalDepth) // no more caves to explore, or we're at our depth limit. we have potential solution. 
                 {
                     // test for potential problem solution. 
-                    int testPressure = PathCost(candidate_solution, totalTime, out _);
-                    if (testPressure < current_optimum_pressure)
+                    int testPressure = PathCost(curr_candidate_solution, totalTime, out _);
+                    if (testPressure > current_optimum_pressure)
                     {
-                        current_optimum_path = candidate_solution;
+                        current_optimum_path = curr_candidate_solution;
                         current_optimum_pressure = testPressure;
                     }
                     if (_verbose) Console.WriteLine($"New potential solution : {ListToString(current_optimum_path)} {current_optimum_pressure}");
@@ -200,15 +221,17 @@
                 {
                     foreach(string next in nextSteps)
                     {
-                        List<string> newStep = candidate_solution.Append(next).ToList();
+                        List<string> new_candidate_solution = curr_candidate_solution.Append(next).ToList();
 
-                        int newPressure = PathCost(newStep, totalTime, out int timeRemaining);
+                        int newPressure = PathCost(new_candidate_solution, totalTime, out int timeRemaining);
 
-                        if (_verbose) Console.Write($"considering {ListToString(newStep)} : {newPressure} >= {current_optimum_pressure} TR: {timeRemaining}");
+                        _ = Boundry(new_candidate_solution, timeRemaining); 
+
+                        if (_verbose) Console.Write($"considering {ListToString(new_candidate_solution)} : {newPressure} >= {current_optimum_pressure} TR: {timeRemaining}");
                         if (newPressure <= current_optimum_pressure && timeRemaining > 0)
                         {
                             if (_verbose) Console.Write(" *ADDED");
-                            candidate_queue.Enqueue(newStep, newPressure); //prefer stuff with more pressure. 
+                            candidate_queue.Enqueue(new_candidate_solution, newPressure); //prefer stuff with more pressure. 
                         }
                         if (_verbose) Console.WriteLine();
                     }

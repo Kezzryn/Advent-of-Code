@@ -1,5 +1,7 @@
 ﻿namespace AoC_2022_Day_16
 {
+    //This is not used in the Day 16 solution and is here for historical reasons. 
+
     class Cave
     {
         //Key = caveName, Value = travel cost.
