@@ -64,7 +64,7 @@ Day 15 - Beacon Exclusion Zone
 
 Day 16 - Proboscidea Volcanium
 - Travelling Salesman type problem. 
-- This is going to involve using Dijkstra's algorithm to find optimal routes.
+- After struggling with Branch and Bound, I wound up implementing a very neat solution from reddit user u/juanplopes.
 
 Day 17 - Pyroclastic Flow
 - Tetris! 
