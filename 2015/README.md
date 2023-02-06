@@ -27,4 +27,9 @@ Day 6 - Probably a Fire Hazard
 
 Day 7 - Some Assembly Required
 - Bitwise logic gate emulation 
+- This is a binary tree. The main key for this puzzle is to cache is value of each node. 
+
+Day 8 - Matchsticks
+- String parsing, and comparison of represenation vs storage lengths.
 - 
+
