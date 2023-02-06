@@ -31,5 +31,5 @@ Day 7 - Some Assembly Required
 
 Day 8 - Matchsticks
 - String parsing, and comparison of represenation vs storage lengths.
-- 
+- Straight forward solution using language functions Regex.Escape() and Regex.Unescape()
 
