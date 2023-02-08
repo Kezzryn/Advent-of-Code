@@ -36,22 +36,22 @@ Day 8 - Treetop Tree House
 
 Day 9 - Rope Bridge
 - Snake simulator.
-- In this one we iteraivly apply some simple rules to an array of Points, shifting them one at a time to follow the leader.
+- In this one we iteratively  apply some simple rules to an array of Points, shifting them one at a time to follow the leader.
 
 Day 10 - Cathode-Ray Tube
 - Simple register and clock simulation
-- My answer to this was to simulate the the two instructions, with the addx instruction morphing between cycles to indicate if it was on its load or execute sequence. 
+- My answer to this was to simulate the two instructions, with the addx instruction morphing between cycles to indicate if it was on its load or execute sequence. 
 
 Day 11 - Monkey in the Middle
 - This is a game of moving items around, with a growing "worry factor" that needs to be tracked and operated on for each move. 
-- Part 2 of this puzzle involved Chinese Remainder Theorm as a way to manage the super large numbers the "worry factor" would become.
+- Part 2 of this puzzle involved Chinese Remainder Theorem as a way to manage the super large numbers the "worry factor" would become.
 
 Day 12 - Hill Climbing Algorithm
 - Find the shortest path from A to B. 
-- Implmented an A* pathfinding algorithm based off the Wikipedia psudocode. 
+- Implemented an A* pathfinding algorithm based off the Wikipedia psudocode. 
 
 Day 13 - Distress Signal
-- Compairing nested lists of integers and lists, which can be blank. 
+- Comparing nested lists of integers and lists, which can be blank. 
 - Packet object implements IComparable, IEquatable, and IComparisonOperators all so I can use A < B and List<Packet>.Sort();
 
 Day 14 - Regolith Reservoir
@@ -63,7 +63,7 @@ Day 15 - Beacon Exclusion Zone
 - Implemented a solution where I walked the perimeter of each rectangle.
 
 Day 16 - Proboscidea Volcanium
-- Travelling Salesman type problem. 
+- Traveling Salesman type problem. 
 - After struggling with Branch and Bound, I wound up implementing a very neat solution from reddit user u/juanplopes.
 
 Day 17 - Pyroclastic Flow
@@ -80,7 +80,7 @@ Day 19 - Not Enough Minerals
 
 Day 20 - Grove Positioning System
 - Circular double linked list manipulation.
-- A straight forward routine to move an item left or right in the list by calcuating it's new position (accounting for loops) and updating the links to/from it
+- A straight forward routine to move an item left or right in the list by calculating it's new position (accounting for loops) and updating the links to/from it
 
 Day 21 - Monkey Math
 - Binary tree walking
