@@ -2,6 +2,9 @@
 {
     internal class Map
     {
+        // This represents one side of a cube.
+        // We store links to other maps, and the rotation between this map and the next as a degree. (90, 180, 270, or negative) 
+
         private const char WALL = '#';
 
         private readonly string _theMap;
@@ -12,9 +15,7 @@
 
         public int GridX { get; }
         public int GridY { get; }
-
         public int ID { get; }
-
         public Map(string mapData, int interval, int gridX, int gridY, int id)
         {
             _theMap = mapData;
@@ -33,6 +34,16 @@
         {
             _links[direction] = link;
             _rotation[direction] = rotation;
+        }
+
+        public void SetLink(int[] link, int[] rotation)
+        {
+            // each array location needs to match the Directions constants or things will get weird.
+            for (int i = 0;i < link.Length; i++)
+            {
+                _links[i] = link[i];
+                _rotation[i] = rotation[i];
+            }
         }
         public int GetLink(int direction) => _links[direction];
         public int GetRotation(int direction) => _rotation[direction];

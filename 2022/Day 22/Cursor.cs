@@ -12,8 +12,8 @@
     {
         public int X;
         public int Y;
-        public int Facing; //this should match to an entry in the Directions class.
-        public int MapIndex;
+        public int Facing;      //this should match to an entry in the Directions class.
+        public int MapIndex;    //expected to be 0-5, but not bounds checked. Should match an index on _theCube array in Cube() 
 
         public Cursor()
         {
