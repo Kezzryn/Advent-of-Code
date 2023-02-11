@@ -58,7 +58,25 @@ namespace AoC_2022_Day_22
         }
         private void FoldCube()
         {
-            FoldFlat();
+            // TO DO Generalize this. 
+            /*
+            // TEST MAP
+            _theCube[0].SetLink(new[] { 5, 3, 2, 1 }, new[] { 180, 0, 90, 180 });
+            _theCube[1].SetLink(new[] { 2, 4, 5, 0 }, new[] { 0, 180, -90, 180 });
+            _theCube[2].SetLink(new[] { 3, 4, 1, 0 }, new[] { 0, 90, 0, -90 });
+            _theCube[3].SetLink(new[] { 5, 4, 2, 0 }, new[] { -90, 0, 0, 0 });
+            _theCube[4].SetLink(new[] { 5, 1, 2, 3 }, new[] { -90, 180, -90, 0 });
+            _theCube[5].SetLink(new[] { 0, 1, 4, 3 }, new[] { 180, 90, 0, 90 });
+            */
+            
+            // PUZZLE MAP
+            _theCube[0].SetLink(new[] { 1, 2, 3, 5 }, new[] { 0, 0, 180, -90 });
+            _theCube[1].SetLink(new[] { 4, 2, 0, 5 }, new[] { 180, -90, 0, 0 });
+            _theCube[2].SetLink(new[] { 1, 4, 3, 0 }, new[] { 90, 0, 90, 0 });
+            _theCube[3].SetLink(new[] { 4, 5, 0, 2 }, new[] { 0, 0, 180, -90 });
+            _theCube[4].SetLink(new[] { 1, 5, 3, 2 }, new[] { 180, -90, 0, 0 });
+            _theCube[5].SetLink(new[] { 4, 1, 0, 3 }, new[] { 90, 0, 90, 0 });
+            
         }
         private void FoldFlat()
         {
@@ -106,11 +124,9 @@ namespace AoC_2022_Day_22
                 m.SetLink(Directions.Down, link.ID);
             }
         }
-
         public static List<string> TranslateMoveset(string moveData)
         {
             // Accepts the moveData from the input file and return a list of moves back for the main program to enumerate on.
-
             List<string> returnValue = new();
             int cursor;
 
@@ -130,7 +146,6 @@ namespace AoC_2022_Day_22
 
             return returnValue;
         }
-
         public void Move(string move)
         {
             if (!int.TryParse(move, out int dist))
@@ -190,17 +205,16 @@ namespace AoC_2022_Day_22
 
         private void TranslatePosition(ref Cursor cursor, int rotation)
         {
-            // yes System.Windows.Media.Transform exists. 
-
-            float centerPoint = (float)_theCube[cursor.MapIndex].GetInterval() / 2;
+            //Offset that centerpoint 
+            float centerPoint = (float)(_theCube[cursor.MapIndex].GetInterval() - 1) / 2;
 
             Vector2 coords = new(cursor.X, cursor.Y);
 
             Matrix3x2 rotationMatrix = rotation switch
             {
                 90 or -270 => Matrix3x2.CreateRotation(-(float)(Math.PI / 2), new Vector2(centerPoint, centerPoint)),
-                180 or -180 => Matrix3x2.CreateRotation((float)(Math.PI), new Vector2(centerPoint, centerPoint)),
-                270 or -90 => Matrix3x2.CreateRotation(-(float)((3*Math.PI) / 2), new Vector2(centerPoint, centerPoint)),
+                180 or -180 => Matrix3x2.CreateRotation((float)Math.PI, new Vector2(centerPoint, centerPoint)),
+                270 or -90 => Matrix3x2.CreateRotation(-(float)((3 * Math.PI) / 2), new Vector2(centerPoint, centerPoint)),
                 _ => throw new NotImplementedException($"Unknown rotaton. {rotation}")
             } ;
 
@@ -216,26 +230,24 @@ namespace AoC_2022_Day_22
             switch (rotation)
             {
                 case 90 or -270:
-                    cursor.Turn("R");
+                    cursor.Turn("L");
                     break;
                 case 180 or -180:
                     cursor.Turn("R");
                     cursor.Turn("R");
                     break;
                 case 270 or -90:
-                    cursor.Turn("L");
+                    cursor.Turn("R");
                     break;
                 default:
                     throw new NotImplementedException($"Unknown rotaton. {rotation}");
             };
         }
-
         public Tuple<int, int, int> CursorPosition()
         {
             Tuple<int, int> xy = _theCube[_cursor.MapIndex].TranslateToSource(_cursor);
             return new(xy.Item1, xy.Item2, _cursor.Facing);
         }
-
         public void ToggleVerbose() => _verbose = !_verbose;
     }
 }

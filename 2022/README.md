@@ -89,7 +89,9 @@ Day 21 - Monkey Math
 
 Day 22 - Monkey Map
 - Pathfinding and cube folding.
-- TODO
+- Split the map up into six indivual "sides". Each side contians a link to its neighbors. As you walk the map, when you step off one, use the link information to place yourself on the new map.
+- For part two, we add a translation function when transitioning form map to map to account for differences in orientation.
+- There are 11 nets for an unfolded cube. At the moment, the "folding" is hard coded. A future TODO would be to perform a more generalized linking.
 
 Day 23 - Unstable Diffusion
 - Cell automata problem.
