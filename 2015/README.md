@@ -33,3 +33,6 @@ Day 8 - Matchsticks
 - String parsing, and comparison of represenation vs storage lengths.
 - Straight forward solution using language functions Regex.Escape() and Regex.Unescape()
 
+Day 9 - All in a Single Night
+- Travelling saleman problem. And hey! I can use my unused code from 2022 Day 16 for this. 
+- Simple dictionary with Branch and bound. I need to figure out a better function for bounding on Max.
