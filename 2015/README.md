@@ -40,3 +40,37 @@ Day 9 - All in a Single Night
 Day 10 - Elves Look, Elves Say
 - This is a look and say problem. 
 - String parsing with some range work with .Except()
+
+Day 11 - Corporate Policy
+- Straight forward password testing.
+- We borrow from the 2022 Day 25 puzzle for a tool to incrment the password while searching for a valid one.
+
+Day 12 - JSAbacusFramework.io
+- JSON parsing.
+
+
+Day 13 -  Knights of the Dinner Table 
+
+Day 14 - Reindeer Olympics
+
+Day 15 - Science for Hungry People
+
+Day 16  Aunt Sue
+
+Day 17 - No Such Thing as Too Much
+
+Day 18 - Like a GIF For Your Yard -
+
+Day 19 - Medicine for Rudolph
+
+Day 20 - Infinite Elves and Infinite Houses
+
+Day 21 - RPG Simulator 20XX
+
+Day 22 - Wizard Simulator 20XX
+
+Day 23 - Opening the Turing Lock
+
+Day 24 - It Hangs in the Balance
+
+Day 25 - Let It Snow
