@@ -84,20 +84,22 @@ try
             //Check the bitwise & between our valve map and our state so we don't double visit somewhere. 
             if ((theValves[valveCave] & state) != 0 || newBudget <= 0 ) continue;
 
-            //
+            //Recursive call for the next cave, while updating our statekey with a bit hack on the valves 
             visit(valveCave, newBudget, state | theValves[valveCave], flow + newBudget * theFlows[valveCave], answer);
         }
         return answer;
     }
 
-    //Why am I allowed to do stuff like this? 
+    //Why am I allowed to do  all this inlining? Feels weird. :)  
     double part1 = visit("AA", totalTimePart1, 0, 0, new()).Values.ToList().Max();
 
     Console.WriteLine($"Part 1: The most pressure that can be released in {totalTimePart1} minutes is {part1}.");
 
     Dictionary<int, double> answerKey = visit("AA", totalTimePart2, 0, 0, new());
 
-    //I REALLY need to be supervised.  
+    // I REALLY need to be supervised, this LINQ is crazy. 
+    // Create a Cartesian product of the answer key, filtering where the keys are "mesh" ( x & y == 0 )
+    // This is a super nifty solve for the multiple agents problem. 
     double part2 = answerKey.SelectMany(x => answerKey, (x, y) => new { x, y })
             .Where(pair => (pair.x.Key & pair.y.Key) == 0)
             .Select(pair => pair.x.Value + pair.y.Value)
