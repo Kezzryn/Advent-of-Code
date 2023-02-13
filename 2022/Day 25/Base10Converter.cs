@@ -39,7 +39,7 @@
             do
             {
                 int digit = (int)(inputValue % dictionary.PowerOf);
-                Console.WriteLine($"int {digit} = (int)({inputValue} % {dictionary.PowerOf});");
+                // Console.WriteLine($"int {digit} = (int)({inputValue} % {dictionary.PowerOf});");
                 returnValue = $"{dictionary.GetChar(digit)}{returnValue}";
 
                 inputValue /= dictionary.PowerOf;
