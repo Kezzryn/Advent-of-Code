@@ -47,19 +47,19 @@ Day 11 - Corporate Policy
 
 Day 12 - JSAbacusFramework.io
 - JSON parsing.
+- We used the Newtonsoft.Json.Linq libraries and iterated recursivly through the object model. 
 
-
-Day 13 -  Knights of the Dinner Table 
+Day 13 - Knights of the Dinner Table 
 
 Day 14 - Reindeer Olympics
 
 Day 15 - Science for Hungry People
 
-Day 16  Aunt Sue
+Day 16 - Aunt Sue
 
 Day 17 - No Such Thing as Too Much
 
-Day 18 - Like a GIF For Your Yard -
+Day 18 - Like a GIF For Your Yard
 
 Day 19 - Medicine for Rudolph
 
