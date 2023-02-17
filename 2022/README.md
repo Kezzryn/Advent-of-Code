@@ -75,8 +75,9 @@ Day 18 - Boiling Boulders
 - Brought back A* to find if an area had a path from inside to outside. This required working out the rules for a 3D point that worked with IComparable to be used in the algorithm.
 
 Day 19 - Not Enough Minerals
-- Optimization robot tasks.
-- TODO
+- Optimization of robot tasks.
+- Depth first search. RoboState does the heavy lifting of advancing time and holding the current state of the factory. RoboBlueprint serves as the primary container for each blueprint string.
+- A key learning item was the formula ( x + (y-1)/y ) to find the celing in integer division. 
 
 Day 20 - Grove Positioning System
 - Circular double linked list manipulation.
@@ -95,6 +96,7 @@ Day 22 - Monkey Map
 
 Day 23 - Unstable Diffusion
 - Cell automata problem.
+- Farily straight forward solution. Currently needs a performance pass, as the Where/FindAll test for neighbors is super slow.
 
 Day 24 - Blizzard Basin
 - Pathfinding through a shifting map

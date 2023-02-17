@@ -2,15 +2,6 @@
 {
     internal record Elf
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public string ID { get; }
-
-        public bool bounce { get; set; }
-
-        public int proposed_X { get; set; }
-        public int proposed_Y { get; set; }
-
         public Elf(string ID, int x, int y)
         {
             this.ID = ID;
@@ -18,10 +9,12 @@
             Y = y;
         }
 
-        public override string ToString()
-        {
-            return $"{ID} : ({X.ToString() + ", " + Y.ToString()})";
-        }
-    }
+        public string ID { get; }
 
+        public int X { get; set; }
+
+        public int Y { get; set; }
+
+        public override string ToString() => $"{ID} : ({X}, {Y})";
+    }
 }
