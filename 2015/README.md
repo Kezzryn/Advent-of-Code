@@ -52,6 +52,8 @@ Day 12 - JSAbacusFramework.io
 Day 13 - Knights of the Dinner Table 
 
 Day 14 - Reindeer Olympics
+- Interval processing. The TravelDistance function does the heavy lifting.
+- The tricky part was getting the LINQ right for the Part 2 GroupBy clause. 
 
 Day 15 - Science for Hungry People
 
