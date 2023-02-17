@@ -98,7 +98,7 @@ Day 23 - Unstable Diffusion
 
 Day 24 - Blizzard Basin
 - Pathfinding through a shifting map
-- TODO 
+- TODO: Implement a Windowed Hierarchical Coop A* 
 
 Day 25 - Full of Hot Air
 - Number conversion puzzle with the twist that some digits can represent negative numbers. 
