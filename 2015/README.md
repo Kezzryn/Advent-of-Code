@@ -49,7 +49,8 @@ Day 12 - JSAbacusFramework.io
 - JSON parsing.
 - We used the Newtonsoft.Json.Linq libraries and iterated recursivly through the object model. 
 
-Day 13 - Knights of the Dinner Table 
+Day 13 - Knights of the Dinner Table
+- Placement optimization of a circular list.
 
 Day 14 - Reindeer Olympics
 - Interval processing. The TravelDistance function does the heavy lifting.
@@ -58,6 +59,8 @@ Day 14 - Reindeer Olympics
 Day 15 - Science for Hungry People
 
 Day 16 - Aunt Sue
+- Pattern matching with incomplete data. 
+- Future fun: Rework as a Where clause. 
 
 Day 17 - No Such Thing as Too Much
 
