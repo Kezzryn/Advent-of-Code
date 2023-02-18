@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace AoC_2022_Day_23
+﻿namespace AoC_2022_Day_23
 {
     internal enum Directions
     {
