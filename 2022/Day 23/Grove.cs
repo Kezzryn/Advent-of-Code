@@ -1,4 +1,6 @@
-﻿namespace AoC_2022_Day_23
+﻿using System.Drawing;
+
+namespace AoC_2022_Day_23
 {
     internal enum Directions
     {
@@ -10,19 +12,18 @@
 
     internal class Grove
     {
-        private readonly List<Elf> _elves = new();
+        private readonly HashSet<Point> _elves = new();
         private readonly LinkedList<Directions> _directions = new();
 
         public Grove(string[] initalState)
         {
             string[] puzzleInput = initalState.Reverse().ToArray();
 
-
             for (int y = 0; y < puzzleInput.Length; y++)
             {
                 for (int x = 0; x < puzzleInput[y].Length; x++)
                 {
-                    if (puzzleInput[y][x] == '#') _elves.Add(new Elf($"x{x}y{y}", x, y));
+                    if (puzzleInput[y][x] == '#') _elves.Add(new Point(x, y));
                 }
             }
 
@@ -53,14 +54,18 @@
 
         private bool TakeStep() // return false if no steps are taken. 
         {
-            Dictionary<(int X, int Y), List<string>> proposedMoves = new();
+            Dictionary<Point, List<Point>> proposedMoves = new();
 
-            foreach (Elf e in _elves)
+            foreach (Point e in _elves)
             {
-                // we should be the only result.
-                //if (_elves.FindAll(x => x.Y >= e.Y - 1 && x.Y <= e.Y + 1 && x.X >= e.X - 1 && x.X <= e.X + 1).Count == 1) continue; //nobody around us, do nothing.
-                // 68990 ticks-ish.  50% time. 
-                if (_elves.Where(x => x.Y >= e.Y - 1 && x.Y <= e.Y + 1 && x.X >= e.X - 1 && x.X <= e.X + 1).ToList().Count == 1) continue;
+                HashSet<Point> neighbors = new()
+                {
+                    new Point(e.X-1, e.Y+1),    new Point(e.X, e.Y+1),  new Point(e.X+1, e.Y+1),
+                    new Point(e.X-1, e.Y),                              new Point(e.X+1, e.Y),
+                    new Point(e.X-1, e.Y-1),    new Point(e.X, e.Y-1),  new Point(e.X+1, e.Y-1)
+                };
+
+                if (!neighbors.Any(_elves.Contains)) continue;
 
                 // Honestly, if this is null here, we've got bigger issues than no error checking. 
                 LinkedListNode<Directions>? currentDirection = _directions.First;
@@ -69,31 +74,31 @@
                 {
                     bool isOtherElf = currentDirection.Value switch
                     {
-                        Directions.North => _elves.Find(rv => rv.Y == e.Y + 1 && rv.X >= e.X - 1 && rv.X <= e.X + 1) != null,
-                        Directions.South => _elves.Find(rv => rv.Y == e.Y - 1 && rv.X >= e.X - 1 && rv.X <= e.X + 1) != null,
-                        Directions.East => _elves.Find(rv => rv.X == e.X + 1 && rv.Y >= e.Y - 1 && rv.Y <= e.Y + 1) != null,
-                        Directions.West => _elves.Find(rv => rv.X == e.X - 1 && rv.Y >= e.Y - 1 && rv.Y <= e.Y + 1) != null,
+                        Directions.North => neighbors.Where(n => n.Y == e.Y + 1).Any(_elves.Contains),
+                        Directions.South => neighbors.Where(n => n.Y == e.Y - 1).Any(_elves.Contains),
+                        Directions.East => neighbors.Where(n => n.X == e.X + 1).Any(_elves.Contains),
+                        Directions.West => neighbors.Where(n => n.X == e.X - 1).Any(_elves.Contains),
                         _ => false
                     };
 
                     if (!isOtherElf)
                     {
-                        (int X, int Y) moveKey = currentDirection.Value switch
+                        Point moveKey = currentDirection.Value switch
                         {
-                            Directions.North => (e.X, e.Y + 1),
-                            Directions.South => (e.X, e.Y - 1),
-                            Directions.East => (e.X + 1, e.Y),
-                            Directions.West => (e.X - 1, e.Y),
-                            _ => (e.X, e.Y)
+                            Directions.North => new Point(e.X, e.Y + 1),
+                            Directions.South => new Point(e.X, e.Y - 1),
+                            Directions.East => new Point(e.X + 1, e.Y),
+                            Directions.West => new Point(e.X - 1, e.Y),
+                            _ => throw new NotSupportedException($"What direction? {currentDirection.Value}")
                         };
 
-                        if (proposedMoves.TryGetValue(moveKey, out List<string> dest))
+                        if (proposedMoves.TryGetValue(moveKey, out List<Point>? dest))
                         {
-                            dest.Add(e.ID); // Uh-oh, we've already got this key. Time to meet our neighbor
+                            dest.Add(e); // Uh-oh, we've already got this key. Time to meet our neighbor
                         }
                         else
                         {
-                            proposedMoves.Add(moveKey, new List<string> { e.ID }); // All clear... for now. 
+                            proposedMoves.Add(moveKey, new List<Point> { e }); // All clear... for now. 
                         }
 
                         break; // we've got a move, next elf time. 
@@ -104,17 +109,12 @@
                 } //end while
             } // end for each elf
 
-            foreach (KeyValuePair<(int X, int Y), List<string>> kvp in proposedMoves)
+            foreach (KeyValuePair<Point, List<Point>> kvp in proposedMoves)
             {
-                if (kvp.Value.Count > 1) continue; // more than one elf. Bounce 'em.
+                if (kvp.Value.Count > 1) continue; // more than one elf wants to go here? Nope. 
 
-                Elf? elf = _elves.Find(x => kvp.Value.First() == x.ID);
-
-                if (elf != null)
-                {
-                    elf.X = kvp.Key.X;
-                    elf.Y = kvp.Key.Y;
-                }
+                _elves.Remove(kvp.Value.First());
+                _elves.Add(kvp.Key);
             }
 
             // pop off FIRST value of the linked list and stick it on the end. 

@@ -97,6 +97,7 @@ Day 22 - Monkey Map
 Day 23 - Unstable Diffusion
 - Cell automata problem.
 - Farily straight forward solution. Currently needs a performance pass, as the Where/FindAll test for neighbors is super slow.
+- Speedups were achieved by dropping the Elf object in favor of a HashSet<Point> for the elves combined with generating a neighbor set to search across. 
 
 Day 24 - Blizzard Basin
 - Pathfinding through a shifting map
