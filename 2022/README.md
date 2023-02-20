@@ -102,7 +102,7 @@ Day 23 - Unstable Diffusion
 Day 24 - Blizzard Basin
 - Pathfinding through a shifting map
 - I modified the A* pathfinding routine from day 12 to include a 3D point where the Z was used as a time dimension.
-- For each step I calculated backwards to determine where a storm would have to start to intersect the currnet position, then checked the inital map for that information.
+- For each step I calculated backwards to determine where a storm would have to start to intersect the currnet position, then checked the inital map for that information. 
 
 Day 25 - Full of Hot Air
 - Number conversion puzzle with the twist that some digits can represent negative numbers. 
