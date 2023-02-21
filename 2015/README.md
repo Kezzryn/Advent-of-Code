@@ -75,6 +75,8 @@ Day 21 - RPG Simulator 20XX
 Day 22 - Wizard Simulator 20XX
 
 Day 23 - Opening the Turing Lock
+- Basic assembly type instruction set and a short program to decode.
+- Stright forward string parsing with a switch statement.
 
 Day 24 - It Hangs in the Balance
 
