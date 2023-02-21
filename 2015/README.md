@@ -51,6 +51,7 @@ Day 12 - JSAbacusFramework.io
 
 Day 13 - Knights of the Dinner Table
 - Placement optimization of a circular list.
+- This was brute forced with a simple depth first search. An improvment would be to introduce some sort of bounds check or other heuristic.  
 
 Day 14 - Reindeer Olympics
 - Interval processing. The TravelDistance function does the heavy lifting.
