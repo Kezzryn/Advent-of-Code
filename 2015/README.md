@@ -70,6 +70,8 @@ Day 17 - No Such Thing as Too Much
 - Used the bit technique from 2022 Day 16 to track the container patterns.
 
 Day 18 - Like a GIF For Your Yard
+- Game of Life simulation.
+- Lots of looping over the arrays. 
 
 Day 19 - Medicine for Rudolph
 
