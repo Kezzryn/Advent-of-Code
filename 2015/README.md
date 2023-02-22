@@ -58,12 +58,16 @@ Day 14 - Reindeer Olympics
 - The tricky part was getting the LINQ right for the Part 2 GroupBy clause. 
 
 Day 15 - Science for Hungry People
+- Hillclimbing, here we come.
+- 
 
 Day 16 - Aunt Sue
 - Pattern matching with incomplete data. 
 - Future fun: Rework as a Where clause. 
 
 Day 17 - No Such Thing as Too Much
+- Combinorial problem.
+- Used the bit technique from 2022 Day 16 to track the container patterns.
 
 Day 18 - Like a GIF For Your Yard
 
