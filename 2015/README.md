@@ -79,7 +79,8 @@ Day 19 - Medicine for Rudolph
 - See the reddit discussion for futher information on how the puzzle works.
 
 Day 20 - Infinite Elves and Infinite Houses
-- Factoring numbers!
+- Factoring numbers! I didn't know the method for factoring, so I watched some youtube videos to understand it, then went and found a math library to do it for me.
+- Part two was a filter on the factored list. 
 
 Day 21 - RPG Simulator 20XX
 

@@ -2,6 +2,7 @@
 {
     // From StackOverflow. 
     // https://stackoverflow.com/questions/239865/best-way-to-find-all-factors-of-a-given-number
+
     var factors = new List<int>();
     int max = (int)Math.Sqrt(number);  // Round down
 
@@ -17,15 +18,32 @@
     return factors;
 }
 
-int numPresents;
-int houseNumber = 0;
-
-while (true)
+try
 {
-    houseNumber++;
-    numPresents = Factor(houseNumber).Sum() * 10;
+    const int targetPresents = 33100000;
+    const int presentsPerElfPart1 = 10;
+    const int presentsPerElfPart2 = 11;
+    
+    int houseNumber = 0;
+    int houseNumberPart1 = 0;
+    int houseNumberPart2 = 0;
 
-    if (numPresents >= 33100000) break;
+    while (true)
+    {
+        houseNumber++;
+        var f = Factor(houseNumber);
+
+        if (houseNumberPart1 == 0) if (f.Sum() * presentsPerElfPart1 >= targetPresents) houseNumberPart1 = houseNumber;
+        if (houseNumberPart2 == 0) if (f.Where(x => x > houseNumber / 50).Sum() * presentsPerElfPart2 >= targetPresents) houseNumberPart2 = houseNumber;
+
+        if (houseNumberPart1 > 0 &&  houseNumberPart2 > 0) break;
+    }
+
+    Console.WriteLine($"Part 1: The first house to get more than {targetPresents} is: {houseNumberPart1}.");
+
+    Console.WriteLine($"Part 2: After changing to only delivering to 50 houses, the first house to get more than {targetPresents} is: {houseNumberPart2}.");
 }
-
-Console.WriteLine($"The house number is: {houseNumber}, which got {numPresents}.");
+catch (Exception e)
+{
+    Console.WriteLine(e);
+}
