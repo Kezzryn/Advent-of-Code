@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 static string GetHash(HashAlgorithm hashAlgorithm, string input)
@@ -22,7 +21,6 @@ static string GetHash(HashAlgorithm hashAlgorithm, string input)
     return sBuilder.ToString();
 }
 
-
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
@@ -39,7 +37,7 @@ try
     long part2Answer = 0;
     string hash = "";
 
-    while (!(isDoneP2 && isDoneP2))
+    while (!(isDoneP1 && isDoneP2))
     {
         counter++;
         hash = GetHash(md5Hash, $"{secretKey}{counter}");
