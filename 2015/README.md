@@ -74,8 +74,12 @@ Day 18 - Like a GIF For Your Yard
 - Lots of looping over the arrays. 
 
 Day 19 - Medicine for Rudolph
+- Part one was a straight forward string substitution. 
+- Part two turned out to be reversing the string substitution back down to a start point.
+- See the reddit discussion for futher information on how the puzzle works.
 
 Day 20 - Infinite Elves and Infinite Houses
+- Factoring numbers!
 
 Day 21 - RPG Simulator 20XX
 
