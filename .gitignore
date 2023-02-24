@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 #AoC Input files 
-PuzzleInput.txt
+[Pp]uzzle[Ii]nput.txt
 
 # User-specific files
 *.rsuser
