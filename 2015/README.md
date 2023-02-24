@@ -1,6 +1,6 @@
 #2015 Puzzle Summary 
 
-##Day 1 - Not Quite Lisp
+## Day 1 - Not Quite Lisp
 - Track location based on inputs. 
 - Loop through the string incrementing and decremeting a counter
 
