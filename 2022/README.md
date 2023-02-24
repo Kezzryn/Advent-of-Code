@@ -77,7 +77,7 @@ Day 18 - Boiling Boulders
 Day 19 - Not Enough Minerals
 - Optimization of robot tasks.
 - Depth first search. RoboState does the heavy lifting of advancing time and holding the current state of the factory. RoboBlueprint serves as the primary container for each blueprint string.
-- A key learning item was the formula ( x + (y-1)/y ) to find the celing in integer division. 
+- A key learning item was the formula ( x + (y-1)/y ) to find the ceiling in integer division. 
 
 Day 20 - Grove Positioning System
 - Circular double linked list manipulation.
@@ -90,19 +90,19 @@ Day 21 - Monkey Math
 
 Day 22 - Monkey Map
 - Pathfinding and cube folding.
-- Split the map up into six indivual "sides". Each side contians a link to its neighbors. As you walk the map, when you step off one, use the link information to place yourself on the new map.
+- Split the map up into six individual "sides". Each side contains a link to its neighbors. As you walk the map, when you step off one, use the link information to place yourself on the new map.
 - For part two, we add a translation function when transitioning form map to map to account for differences in orientation.
 - There are 11 nets for an unfolded cube. At the moment, the "folding" is hard coded. A future TODO would be to perform a more generalized linking.
 
 Day 23 - Unstable Diffusion
 - Cell automata problem.
-- Farily straight forward solution. Currently needs a performance pass, as the Where/FindAll test for neighbors is super slow.
+- Fairly straight forward solution. Currently needs a performance pass, as the Where/FindAll test for neighbors is super slow.
 - Speedups were achieved by dropping the Elf object in favor of a HashSet<Point> for the elves combined with generating a neighbor set to search across. 
 
 Day 24 - Blizzard Basin
 - Pathfinding through a shifting map
 - I modified the A* pathfinding routine from day 12 to include a 3D point where the Z was used as a time dimension.
-- For each step I calculated backwards to determine where a storm would have to start to intersect the currnet position, then checked the inital map for that information. 
+- For each step I calculated backwards to determine where a storm would have to start to intersect the current position, then checked the inital map for that information. 
 
 Day 25 - Full of Hot Air
 - Number conversion puzzle with the twist that some digits can represent negative numbers. 
