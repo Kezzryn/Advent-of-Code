@@ -84,8 +84,8 @@
 - **Solution:** - I didn't know the method for factoring, so I watched some YouTube videos to understand it, then went and found a function from StackOverflow to do it for me. 
 
 ### Day 21 - RPG Simulator 20XX
-- **Problem:**
-- **Solution:** 
+- **Problem:** Part one is a minimization problem, part two is the maximization to the same problem. 
+- **Solution:** Once again, the techniques from [2022 Day 16](../2022/Day%2016/) came to our rescue. The trickier part for part two was figuring out exactly what to test (and where) to break our loop early. Part two also exposed a bug where we were able to equip the same equipment multiple times, so that didn't help when trying to find a maximum.
 
 ### Day 22 - Wizard Simulator 20XX
 - **Problem:** 
