@@ -3,10 +3,12 @@
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string santaSteps = File.ReadAllText(PUZZLE_INPUT);
 
+    int partOne = santaSteps.Sum(x => x == '(' ? 1 : -1);
+    Console.WriteLine($"Part 1: Santa is on floor: {partOne}");
+
     int currentFloor = 0; 
     int numSteps = 0;
-    int firstBasement = -1;
-
+    
     foreach (char floor in santaSteps)
     {
         numSteps++;
@@ -16,11 +18,10 @@
             _ => throw new Exception($"WTF {floor}")
         };
 
-        firstBasement = (firstBasement == -1 && currentFloor < 0) ? numSteps : firstBasement;
+        if (currentFloor < 0) break;
     }
-
-    Console.WriteLine($"Santa is on floor: {currentFloor}");
-    Console.WriteLine($"Santa enters the basement at {firstBasement}");
+    
+    Console.WriteLine($"Part 2: Santa first enters the basement at {numSteps}");
 }
 catch (Exception e)
 {
