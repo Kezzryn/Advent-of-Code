@@ -4,10 +4,12 @@
 ### Day 1 - Not Quite Lisp
 - **Problem:** Track location based on inputs. 
 - **Solution:** Loop through the string incrementing and decrementing a counter.
+- **Feb 25, 2022:** I learned that you can put a lambda expression in `Sum()`. 
 
 ### Day 2 - I Was Told There Would Be No Math
 - **Problem:** Find the volume, area, perimeter and smallest side calculations on a rectangular box.
 - **Solution:** Abuse of anonymous arrays and LINQ syntax to calculate the smallest sides of things. Honestly, I was surprised I was allowed to define an anonymous array like that. Learning is fun. :)
+- **Feb 25, 2022:** More learning. After the changes in Day 1, I reworked the helper functions and removed the loop to collapse the program down to a pair of LINQ statements.
 
 ### Day 3 - Perfectly Spherical Houses in a Vacuum
 - **Problem:** Trace all visited locations.
