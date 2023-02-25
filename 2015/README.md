@@ -81,7 +81,9 @@ Day 19 - Medicine for Rudolph
 Day 20 - Infinite Elves and Infinite Houses
 - Factoring numbers!
 
-Day 21 - RPG Simulator 20XX
+### Day 21 - RPG Simulator 20XX
+- **Problem:** Part one is a minimization problem, part two is the maximization to the same problem. 
+- **Solution:** Once again, the techniques from [2022 Day 16](../2022/Day%2016/) came to our rescue. The trickier part for part two was figuring out exactly what to test (and where) to break our loop early. Part two also exposed a bug where we were able to equip the same equipment multiple times, so that didn't help when trying to find a maximum.
 
 Day 22 - Wizard Simulator 20XX
 

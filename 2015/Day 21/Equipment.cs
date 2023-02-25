@@ -2,46 +2,14 @@
 {
     internal static class Equipment
     {
-        public static bool HasArmor(int equipment) => Armor.Keys.Select(x => x & equipment).Where(x => x == 0).Any();
-
-        public static int EquipmentCost(int equipment)
-        {
-            int rv = 0;
-            foreach (int item in Weapons.Keys)
-            {
-                if ((item & equipment) == 0)
-                {
-                    rv += Weapons[item].GoldCost;
-                }
-            }
-
-            foreach (int item in Armor.Keys)
-            {
-                if ((item & equipment) == 0)
-                {
-                    rv += Armor[item].GoldCost;
-                }
-            }
-
-            foreach (int item in Rings.Keys)
-            {
-                if ((item & equipment) == 0)
-                {
-                    rv += Rings[item].GoldCost;
-                }
-            }
-
-            return rv;
-        }
+        public static bool HasArmor(int equipment) => Armor.Keys.Select(x => x & equipment).Where(x => x == 0).Count() != Armor.Count;
+        public static bool HasRings(int equipment) => Rings.Keys.Select(x => x & equipment).Where(x => x == 0).Count() != Rings.Count;
         public static (int GoldCost, int Damage, int Armor) GetEquipment(int id)
         {
-            // Magic numbers for our RPG?
-            return id switch
-            {
-                <= 1 << 5 => Equipment.Weapons[id], 
-                >= 1 << 11 => Equipment.Rings[id],
-                _ => Equipment.Armor[id]
-            };
+            if (Rings.TryGetValue(id, out var equipment)) return equipment;
+            if (Armor.TryGetValue(id, out equipment)) return equipment;
+            if (Weapons.TryGetValue(id, out equipment)) return equipment;
+            throw new NotImplementedException($"Unknown equipment ID: {id}");
         }
         // tag (gold, damage, armor) 
         public static Dictionary<int, (int GoldCost, int Damage, int Armor)> Weapons = new()
@@ -52,7 +20,6 @@
             { 1 << 4, (40, 7, 0) }, // Longsword
             { 1 << 5, (74, 8, 0) }  // Greataxe 
         };
-
         // tag (gold, damage, armor) 
         public static Dictionary<int, (int GoldCost, int Damage, int Armor)> Armor = new()
         {
@@ -60,9 +27,8 @@
             { 1 << 7,  ( 31, 0, 2) }, // Chainmail
             { 1 << 8,  ( 53, 0, 3) }, // Splintmail
             { 1 << 9,  ( 75, 0, 4) }, // Bandedmail
-            { 1 << 10, (102, 0, 5) } // Platemail
+            { 1 << 10, (102, 0, 5) }  // Platemail
         };
-
         // tag (gold, damage, armor) 
         public static Dictionary<int, (int GoldCost, int Damage, int Armor)> Rings = new()
         {
@@ -76,12 +42,12 @@
 
             // Two handed combos 
             // Damage + Damage 
-            { 1 << 17, ( 75, 3, 0) },  // +1 +2
+            { 1 << 17, ( 75, 3, 0) }, // +1 +2
             { 1 << 18, (125, 4, 0) }, // +1 +3
             { 1 << 19, (150, 5, 0) }, // +2 +3
 
             // Armor + Armor
-            { 1 << 20, ( 60, 0, 3) },  // +1 +2
+            { 1 << 20, ( 60, 0, 3) }, // +1 +2
             { 1 << 21, (100, 0, 4) }, // +1 +3
             { 1 << 22, (140, 0, 5) }, // +2 +3
                 
