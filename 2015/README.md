@@ -91,7 +91,7 @@
 
 ### Day 22 - Wizard Simulator 20XX
 - **Problem:** A minimization problem, where the solution took the form of a breadth first search.
-- **Solution:** I (over?) built one hell of a pair of classes for the simulation. Starting with an `Entity` class that I broke into `Boss` and `Wizard`, I built the basic rules for the two to interact. The `Boss` got an `Attack` method, while the `Wizard` gained `CastSpell`. After that was setup, I built a `Spell` class that broke down to `Effects`.
+- **Solution:** I (over?) built one hell of a pair of classes for the simulation. Starting with an `Entity` class that I broke into `Boss` and `Wizard`, I built the basic rules for the two to interact. The `Boss` got an `Attack` method, while the `Wizard` gained `CastSpell`. After that was setup, I built a `Spell` class that broke down to `Effects`. Everything went into the simulation and looped until we found our answer.
 
 ### Day 23 - Opening the Turing Lock
 - **Problem:** Basic assembly type instruction set and a short program to decode.
