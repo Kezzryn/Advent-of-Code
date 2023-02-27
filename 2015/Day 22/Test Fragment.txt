@@ -1,0 +1,43 @@
+    /* scripted test battles based on run results.
+    Wizard thePlayer = new (START_HP, START_MANA);
+    Boss theBoss = new (puzzleInput);
+
+    void DoTurn(SpellNames spell)
+    {
+        thePlayer.DoEffects();
+        theBoss.DoEffects();
+        thePlayer.CastSpell(spell, theBoss);
+        thePlayer.DoEffects();
+        theBoss.DoEffects();
+        theBoss.Attack(thePlayer);
+    }
+
+    List<SpellNames> actionsP1 = new()
+    {
+        SpellNames.MagicMissile,
+        SpellNames.Poison,
+        SpellNames.Recharge,
+        SpellNames.MagicMissile,
+        SpellNames.MagicMissile,
+        SpellNames.Shield,
+        SpellNames.Poison,
+        SpellNames.MagicMissile,
+        SpellNames.MagicMissile,
+    };
+
+    List<SpellNames> actionsP2 = new()
+    {
+        SpellNames.Poison,
+        SpellNames.Recharge,
+        SpellNames.Drain,
+        SpellNames.Poison,
+        SpellNames.Recharge,
+        SpellNames.Shield,
+        SpellNames.Poison,
+        SpellNames.Drain,
+        SpellNames.MagicMissile
+    };
+
+    //foreach (SpellNames action in actionsP1) DoTurn(action);
+    //foreach (SpellNames action in actionsP2) DoTurn(action);
+    */
