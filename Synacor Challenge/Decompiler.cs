@@ -66,5 +66,10 @@
                 Console.WriteLine(line);    
             }
         } 
+
+        static public string InstToString(int instruction)
+        {
+            return instructionSet.TryGetValue(instruction, out var value) ? value.inst : $"Unknown: {instruction}";
+        }
     }
 }
