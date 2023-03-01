@@ -97,9 +97,10 @@
 - **Problem:** Basic assembly type instruction set and a short program to decode.
 - **Solution:** Straight forward string parsing with a switch statement.
 
-### Day 24 - It Hangs in the Balance
-- **Problem:** 
-- **Solution:** 
+### [Day 24](/2015/Day%2024/) - It Hangs in the Balance
+- **Problem:** This looks like a knapsack problem, which it is, but.. 
+- **Solution:** After bashing at a couple of ways to search (and watching my ram and CPU usage explode), I realized that what I really needed was to stop at the first depth I found a valid entry, then test the remaining subset of unused items to ensure they could also generate a solution. If both of those are true, then it's just a matter of `Sum()` and `Min()`. I implemented this, and ... it still ate ALL the processor time, but this time on the secondary check. I did a manual check, and then disabled the secondary check to get my answers.
+- Uses a `CartesianProduct()` function from [Eric Lippert](https://ericlippert.com/)
 
 ### Day 25 - Let It Snow
 - **Problem:** 
