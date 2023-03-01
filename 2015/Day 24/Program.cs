@@ -1,88 +1,78 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using AoC_2015_Day_24;
+
 try
 {
+    //find a solution with the lowest number of items. 
+
+    //check to see if there is a solution with the rest of the set. 
+
+    //if both are true, add to a solution set for that number of items. 
+
+    //once we have the X items searched, 
+    // sort by QE and take lowest. 
+
+    const int NUM_BAGS = 4;
+
     const string PUZZLE_INPUT = "PuzzleInput.txt";
+    List<long> puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Select(long.Parse).Reverse().ToList();
 
-    int[] puzzleInput = new[] { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11 };//File.ReadAllLines(PUZZLE_INPUT).Select(int.Parse).ToArray();
+    long targetWeight = puzzleInput.Sum() / NUM_BAGS;
 
-    int[] w = new int[puzzleInput.Length + 1];
-    int[] v = new int[puzzleInput.Length + 1];
-
-    for (int i = 0; i < puzzleInput.Length; i++)
+    long FindCombo(List<long> solutionSpace, int numBags)
     {
-        w[i + 1] = puzzleInput[i];
-        v[i + 1] = puzzleInput[i];
-    }
+        List<List<long>> comboList = new();
 
-    
-    int n = puzzleInput.Length;
-    int W = puzzleInput.Sum() / 3;
-
-    // Input:
-    // Values (stored in array v)
-    // Weights (stored in array w)
-    // Number of distinct items (n)
-    // Knapsack capacity (W)
-    // NOTE: The array "v" and array "w" are assumed to store all relevant values starting at index 1.
-
-    //Initialize all value[i, j] = -1
-    int[,] value = new int[n+1, W+1]; // push this out one, 'cause zero bound vs 1 bound. 
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < W; j++)
+        while (comboList.Count < solutionSpace.Count)
         {
-            value[i, j] = -1;
-        }
-    }
+            comboList.Add(solutionSpace);
+            Console.WriteLine($"SS: {solutionSpace.Count} Testing number of packages. {comboList.Count} numBags: {numBags}");
 
-    /*
-    function knapsack(i: int, j: int): Set<int> {
-        if i == 0 then:
-            return { }
-        if m[i, j] > m[i - 1, j] then:
-            return { i} ∪ knapsack(i - 1, j - w[i])
-    else:
-        return knapsack(i - 1, j)
-    }
-    
-    knapsack(n, W)
-    */
+            var result = comboList.CartesianProduct().Where(x => x.Sum() == targetWeight); //.Where(x => x.Distinct().Count() == comboList.Count && x.Sum() == targetWeight).ToList();
 
-
-    // Define function m so that it represents the maximum value we can get under the condition:
-    // use first i items, total weight limit is j
-    void m(int i, int j)
-    {
-        if (i == 0 || j <= 0)
-        {
-            value[i, j] = 0;
-            return;
-        }
-
-        // m[i-1, j] has not been calculated, we have to call function m
-        if (value[i - 1, j] == -1) m(i - 1, j);
-
-        // item cannot fit in the bag
-        if (w[i] > j)
-        {
-            value[i, j] = value[i - 1, j];
-        }
-        else
-        {
-            // m[i-1,j-w[i]] has not been calculated, we have to call function m
-            if (value[i - 1, j - w[i]] == -1)
+            Console.WriteLine($"CP result generated."); 
+            //var filter = result.Where(x => x.Sum() == targetWeight);
+            if (result.Any())
             {
-                m(i - 1, j - w[i]);
+                Console.WriteLine($"SS: {solutionSpace.Count}: Found {result.Count()} potentially matching bags.");
+                return result.Select(x => x.Aggregate((x, y) => x * y)).Min();
+
+
+                // Removed depth checking after manually confirming that we don't have to worry about that sort of thing. 
+                // TODO figure out how to speed this up, cause right now it runs /forever/ 
+
+                /*
+
+                // depth check. 
+                if (numBags == 2)
+                {
+                    Console.WriteLine("Found 2 bag solution. Returning 1");
+                    return 1;
+                }
+
+                foreach (var r in result)
+                {
+                    Console.WriteLine($"Calling FindCombo for {numBags -1}");
+                    if (FindCombo(solutionSpace.Except(r).ToList(), numBags - 1) != -1)
+                    {
+                        Console.WriteLine($"Found a sub match, returning up!");
+                        return result.Select(x => x.Aggregate((x, y) => x * y)).Min();
+                    }
+                }
+
+                */
             }
-            value[i, j] = int.Max(value[i - 1, j], value[i - 1, j - w[i]] + v[i]);
+            else
+            {
+                Console.WriteLine("No matching bags.");
+            }
         }
-        return;
+        return -1; 
     }
 
-    m(n, W);
+    long part1 = FindCombo(puzzleInput, NUM_BAGS);
 
-    Console.WriteLine("");
+    Console.WriteLine($"The smallest package with the best Quantum Entanglement is {part1}.");
+
 }
 catch (Exception e)
 {
