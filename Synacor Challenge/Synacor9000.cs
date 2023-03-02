@@ -5,18 +5,21 @@ namespace Synacor_Challenge
 {
     internal class Synacor9000
     {
+        // got tired of (ushort)0 (ushort)1
+        private const ushort USHORT_0 = 0;
+        private const ushort USHORT_1 = 1;
+
         const ushort MEMORY_MAX = 32767; // 0 bound address max
         const ushort MODULO = 32768;
-        // 32768 to 32775 are registers. 
         const ushort INVALID_MEMORY = 32776; // start of invalid memory numbers. 
 
-        ushort[] _mainMemory = new ushort[32768]; 
-        ushort[] _registers = new ushort[8];
-        
-        private new Stack<ushort> _stack = new();
+        // memory regions. 
+        private readonly ushort[] _mainMemory = new ushort[32768];
+        private readonly ushort[] _registers = new ushort[8];
+        private readonly Stack<ushort> _stack = new();
 
-        private ushort _instPtr = 0;  // instruction pointer. 
-
+        // instruction pointer. 
+        private ushort _instPtr = 0;
         public Synacor9000() {}
         public void Load(BinaryReader reader)
         {
@@ -29,8 +32,8 @@ namespace Synacor_Challenge
         {
             while (true)
             {
-                if (_mainMemory[_instPtr] == 0) break;
-                Dispatcher(Mem_Read());
+                if (Ptr_Peek() == 0) break;
+                Dispatcher(Ptr_Read());
             }
         }
         private void Dispatcher(ushort instruction)
@@ -53,17 +56,14 @@ namespace Synacor_Challenge
                 case 6 or 7 or 8 or 17 or 18:
                     _instPtr = Jump(instruction);
                     break;
-                case 9 or 10 or 11:
-                    Math_Basic(instruction); 
-                    break;
-                case 12 or 13 or 14:
-                    Math_Bitwise(instruction);
+                case >= 9 and <= 14: 
+                    Math_Synacor(instruction); 
                     break;
                 case 19 or 20:
                     Terminal(instruction);
                     break;
-                case 21:    // noop: 21         no operation
-                    // do nothing. 
+                case 21:
+                    // noop: 21  no operation 
                     break;
                 default:
                     throw new NotImplementedException($"{instruction}");
@@ -71,90 +71,61 @@ namespace Synacor_Challenge
         }
         private void Comparison(ushort instruction)
         {
-            ushort address = Mem_ReadRaw();
-            ushort b = Mem_Read();
-            ushort c = Mem_Read();
+            ushort address = Ptr_ValueAt();
+            ushort b = Ptr_Read();
+            ushort c = Ptr_Read();
 
             ushort value = instruction switch
             {
-                4 => (b == c) ? (ushort)1 : (ushort)0,
-                    // eq: 4 a b c      set <a> to 1 if <b> is equal to <c>; set it to 0 otherwise    
-                5 => (b > c) ? (ushort)1 : (ushort)0,
-                    // gt: 5 a b c      set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
-                _ => throw new NotImplementedException()
+                4 => (b == c) ? USHORT_1 : USHORT_0,        // eq: 4 a b c  set <a> to 1 if <b> is equal to <c>; set it to 0 otherwise    
+                5 => (b  > c) ? USHORT_1 : USHORT_0,        // gt: 5 a b c  set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
+                _ => throw new NotImplementedException()    // Comparison shmarison.
             };
             Mem_Write(address, value);
         }
         private ushort Jump(ushort instruction)
         {
-            ushort a; // ONLY read if needed
-            ushort b; // ONLY read if needed
+            ushort a; // do not pre-assign. ret could break things 
+            ushort b; 
 
             switch (instruction)
             {
-                // jmp: 6 a 	jump to <a>
-                case 6:
-                    return Mem_Read();
-
-                // jt: 7 a b	if <a> is nonzero, jump to <b>
-                case 7:
-                    a = Mem_Read();
-                    b = Mem_Read();
+                case 6:                             // jmp: 6 a     jump to <a>
+                     a = Ptr_Read();
+                    return a;
+                case 7:                             // jt: 7 a b	if <a> is nonzero, jump to <b>
+                    a = Ptr_Read();
+                    b = Ptr_Read();
                     return (a != 0) ? b : _instPtr;
-
-                // jf: 8 a b    if <a> is zero, jump to <b>
-                case 8:
-                    a = Mem_Read();
-                    b = Mem_Read();
+                case 8:                             // jf: 8 a b    if <a> is zero, jump to <b>
+                    a = Ptr_Read();
+                    b = Ptr_Read();
                     return (a == 0) ? b : _instPtr;
-
-                // call: 17 a   write the address of the next instruction to the stack and jump to <a> 
-                case 17:
-                    a = Mem_Read();
+                case 17:                            // call: 17 a   write the address of the next instruction to the stack and jump to <a> 
+                    a = Ptr_Read();
                     _stack.Push(_instPtr); 
                     return a;
-
-                // ret: 18    remove the top element from the stack and jump to it; empty stack = halt
-                case 18:
+                case 18:                            // ret: 18    remove the top element from the stack and jump to it; empty stack = halt
                     if (_stack.Count == 0) throw new Exception("Stack is empty");
                     return _stack.Pop();
-
-                default:
+                default:                            // Jump around, jump around, get up, get up and go thump.
                     throw new NotImplementedException();
             }
         }
-        private void Math_Basic(ushort instruction)
+        private void Math_Synacor(ushort instruction)
         {
-            ushort address = Mem_ReadRaw();
-            ushort b = Mem_Read();
-            ushort c = Mem_Read();
+            ushort address = Ptr_ValueAt();
+            ushort b = Ptr_Read();
+            ushort c = (instruction != 14) ? Ptr_Read() : USHORT_1;
             ushort value = instruction switch
             {
-                9 => (ushort)((b + c) % MODULO),
-                    // add: 9 a b c     assign into <a> the sum of <b> and <c> (modulo 32768)
-                10 => (ushort)((b * c) % MODULO),
-                    // mult: 10 a b c	store into <a> the product of <b> and <c> (modulo 32768)
-                11 => (ushort)(b % c),
-                    // mod: 11 a b c	store into <a> the remainder of <b> divided by <c>
-                _ => throw new NotImplementedException()
-            };
-            Mem_Write(address, value);
-        }
-        private void Math_Bitwise(ushort instruction)
-        {
-            ushort address = Mem_ReadRaw();
-            ushort b = Mem_Read();
-            ushort c = (instruction != 14) ? Mem_Read() : (ushort)0;
-            ushort value = instruction switch
-            {
-                12 => (ushort)(b & c),
-                    // and: 12 a b c	stores into <a> the bitwise and of <b> and <c>
-                13 => (ushort)(b | c),
-                    // or: 13 a b c	    stores into <a> the bitwise or of <b> and <c>
-                14 => (ushort)((ushort)((ushort)~b << 1) >> 1),
-                    // not: 14 a b	    stores 15-bit bitwise inverse of <b> in <a>
-                _ => throw new NotImplementedException()
-                    // Why are we even here? 
+                 9 => (ushort)((b + c) % MODULO),           //  add:  9 a b c   assign into <a> the sum of <b> and <c> (modulo 32768)
+                10 => (ushort)(b * c % MODULO),             // mult: 10 a b c	store into <a> the product of <b> and <c> (modulo 32768)
+                11 => (ushort)(b % c),                      //  mod: 11 a b c	store into <a> the remainder of <b> divided by <c>
+                12 => (ushort)(b & c),                      //  and: 12 a b c   stores into <a> the bitwise and of <b> and <c>
+                13 => (ushort)(b | c),                      //   or: 13 a b c	stores into <a> the bitwise or of <b> and <c>
+                14 => (ushort)((ushort)(~b << c) >> c),     //  not: 14 a b	    stores 15-bit bitwise inverse of <b> in <a>
+                _ => throw new NotImplementedException()    // Math is MATH! 
             };
             Mem_Write(address, value);
         }
@@ -165,66 +136,44 @@ namespace Synacor_Challenge
 
             switch (instruction)
             {
-                // set: 1 a b       set register <a> to the value of <b>
-                case 1:
-                    address = Mem_ReadRaw();
-                    value = Mem_Read();
-                    if (address <= MEMORY_MAX)
-                        throw new Exception($"Bad address for: set {address} {value}");
-                    Mem_Write(address, value);
+                case 1:                         // set: 1 a b       set register <a> to the value of <b>
+                    address = Ptr_ValueAt();
+                    value = Ptr_Read();
                     break;
-
-                // rmem: 15 a b	    read memory at address <b> and write it to <a>
-                case 15:
-                    address = Mem_ReadRaw();
-                    value = Mem_Read();
-                    Mem_Write(address, value);
+                case 15:                        // rmem: 15 a b	    read memory at address <b> and write it to <a>
+                    address = Ptr_ValueAt();
+                    value = Mem_Read(Ptr_Read());
                     break;
-
-                // wmem: 16 a b	    write the value from <b> into memory at address <a>
-                case 16:
-                    address = Mem_ReadRaw();
-                    value = Mem_ReadRaw();
-                    Mem_Write(address, value);
+                case 16:                        // wmem: 16 a b	    write the value from <b> into memory at address <a>
+                    address = Ptr_ValueAt();
+                    value = Ptr_Read();
                     break;
-
-                default:
-                    // Why are we even here? 
-                    throw new NotImplementedException();
+                default:                                    // I don't remember where I came from. 
+                    throw new NotImplementedException();    
             }
+            Mem_Write(address, value);
         }
-        private ushort Mem_Read()
+        private ushort Mem_Read(ushort address)
         {
-            ushort returnValue = Mem_ReadRaw();
-
-            return returnValue switch
-                    {
-                        <= MEMORY_MAX => returnValue,
-                        > MEMORY_MAX and < INVALID_MEMORY => _registers[returnValue % MODULO],
-                        _ => throw new Exception($"{returnValue} is out of bounds")
-                    };
-        }
-        private ushort Mem_ReadRaw()
-        {
-            ushort returnValue = _mainMemory[_instPtr];
-            _instPtr++;
-            return returnValue;
+            return address switch
+                {
+                    <= MEMORY_MAX => _mainMemory[address],
+                    > MEMORY_MAX and < INVALID_MEMORY => _registers[address % MODULO],
+                    _ => throw new Exception($"{address} is out of bounds")
+                };
         }
         private void Mem_Stack(ushort instruction)
         {
             switch (instruction)
-            {   // push: 2 a    push <a> onto the stack
-                case 2:
-                    _stack.Push(Mem_Read());
+            {   
+                case 2:                                     // push: 2 a    push <a> onto the stack
+                    _stack.Push(Ptr_ValueAt());
                     break;
-                // pop: 3 a     remove the top element from the stack and write it into <a>;
-                // empty stack = error 
-                case 3:
+                case 3:                                     //  pop: 3 a    remove the top element from the stack and write it into <a>; empty stack = error 
                     if (_stack.Count == 0) throw new Exception("Stack is empty");
-                    Mem_Write(Mem_ReadRaw(), _stack.Pop());
+                    Mem_Write(Ptr_ValueAt(), _stack.Pop());
                     break;
-                default:
-                    // Why are we even here? 
+                default:                                    // We suck at Jenga
                     throw new NotImplementedException();
             }
         }
@@ -242,25 +191,25 @@ namespace Synacor_Challenge
                     throw new Exception($"{address} is out of bounds");
             };
         }
+        private ushort Ptr_Peek() => Mem_Read(_instPtr);
+        private ushort Ptr_Read() => (Ptr_Peek() <= MEMORY_MAX) ? Mem_Read(_instPtr++) : Mem_Read(Mem_Read(_instPtr++));
+        private ushort Ptr_ValueAt() => _mainMemory[_instPtr++];
         private void Terminal(ushort instruction)
         {
             switch (instruction)
             {
-                // out: 19 a        write the character represented by ascii code <a> to the terminal
-                case 19:
-                    Console.Write((char)Mem_Read());
+                case 19:                                    // out: 19 a    write the character represented by ascii code <a> to the terminal
+                    Console.Write((char)Ptr_Read());
                     break;
-                case 20:
-                    // in: 20 a
-                    // read a character from the terminal and write its ascii code to <a>;
+                case 20:                                    // in: 20 a     read a character from the terminal and write its ascii code to <a>;
                     // it can be assumed that once input starts, it will continue until a newline is encountered;
                     // this means that you can safely read whole lines from the keyboard and trust that they will be fully read
-                    Console.WriteLine($"{instruction} not implemented yet");
-                    _instPtr++;
+                    ushort address = Ptr_Read();
+                    ushort value = (ushort)Console.Read();
+                    Mem_Write(address, value);
                     break;
                 default:
-                    // Why are we even here? 
-                    throw new NotImplementedException();
+                    throw new NotImplementedException();    // PEBCAK 
             }
         }
     }
