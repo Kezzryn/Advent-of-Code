@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Synacor_Challenge
 
@@ -33,7 +34,7 @@ namespace Synacor_Challenge
             while (true)
             {
                 if (Ptr_Peek() == 0) break;
-                Dispatcher(Ptr_Read());
+                Dispatcher(Ptr_ReadValue());
             }
         }
         private void Dispatcher(ushort instruction)
@@ -71,9 +72,9 @@ namespace Synacor_Challenge
         }
         private void Comparison(ushort instruction)
         {
-            ushort address = Ptr_ValueAt();
-            ushort b = Ptr_Read();
-            ushort c = Ptr_Read();
+            ushort address = Ptr_ReadRaw();
+            ushort b = Ptr_ReadValue();
+            ushort c = Ptr_ReadValue();
 
             ushort value = instruction switch
             {
@@ -91,18 +92,18 @@ namespace Synacor_Challenge
             switch (instruction)
             {
                 case 6:                             // jmp: 6 a     jump to <a>
-                     a = Ptr_Read();
+                     a = Ptr_ReadRaw();
                     return a;
                 case 7:                             // jt: 7 a b	if <a> is nonzero, jump to <b>
-                    a = Ptr_Read();
-                    b = Ptr_Read();
+                    a = Ptr_ReadValue();
+                    b = Ptr_ReadValue();
                     return (a != 0) ? b : _instPtr;
                 case 8:                             // jf: 8 a b    if <a> is zero, jump to <b>
-                    a = Ptr_Read();
-                    b = Ptr_Read();
+                    a = Ptr_ReadValue();
+                    b = Ptr_ReadValue();
                     return (a == 0) ? b : _instPtr;
                 case 17:                            // call: 17 a   write the address of the next instruction to the stack and jump to <a> 
-                    a = Ptr_Read();
+                    a = Ptr_ReadValue();
                     _stack.Push(_instPtr); 
                     return a;
                 case 18:                            // ret: 18    remove the top element from the stack and jump to it; empty stack = halt
@@ -114,9 +115,9 @@ namespace Synacor_Challenge
         }
         private void Math_Synacor(ushort instruction)
         {
-            ushort address = Ptr_ValueAt();
-            ushort b = Ptr_Read();
-            ushort c = (instruction != 14) ? Ptr_Read() : USHORT_1;
+            ushort address = Ptr_ReadRaw();
+            ushort b = Ptr_ReadValue();
+            ushort c = (instruction != 14) ? Ptr_ReadValue() : USHORT_1;
             ushort value = instruction switch
             {
                  9 => (ushort)((b + c) % MODULO),           //  add:  9 a b c   assign into <a> the sum of <b> and <c> (modulo 32768)
@@ -130,23 +131,32 @@ namespace Synacor_Challenge
             Mem_Write(address, value);
         }
         private void Mem_Manipulation(ushort instruction)
-        {
+        {/*
+          * Think of them as pointers. In C code:
+
+             rmem a b   a = *b;
+             wmem a b   *a = b
+One of the two parameters is indirect: it's not the destination/source of the move, but it contains the destination/source address of the move
+
+            Oversimplified answer is that rmem is reading memory to a register, wmem is writing a register to memory
+
+        */
             ushort address;
             ushort value;
 
             switch (instruction)
             {
                 case 1:                         // set: 1 a b       set register <a> to the value of <b>
-                    address = Ptr_ValueAt();
-                    value = Ptr_Read();
+                    address = Ptr_ReadRaw();
+                    value = Ptr_ReadValue();
                     break;
                 case 15:                        // rmem: 15 a b	    read memory at address <b> and write it to <a>
-                    address = Ptr_ValueAt();
-                    value = Mem_Read(Ptr_Read());
+                    address = Ptr_ReadRaw();
+                    value = Mem_Read(Ptr_ReadValue());
                     break;
                 case 16:                        // wmem: 16 a b	    write the value from <b> into memory at address <a>
-                    address = Ptr_ValueAt();
-                    value = Ptr_Read();
+                    address = Ptr_ReadValue();
+                    value = Ptr_ReadValue();
                     break;
                 default:                                    // I don't remember where I came from. 
                     throw new NotImplementedException();    
@@ -156,22 +166,25 @@ namespace Synacor_Challenge
         private ushort Mem_Read(ushort address)
         {
             return address switch
-                {
-                    <= MEMORY_MAX => _mainMemory[address],
-                    > MEMORY_MAX and < INVALID_MEMORY => _registers[address % MODULO],
-                    _ => throw new Exception($"{address} is out of bounds")
-                };
+            {
+                <= MEMORY_MAX => _mainMemory[address],
+                > MEMORY_MAX and < INVALID_MEMORY => _registers[address % MODULO],
+                _ => throw new Exception($"{address} is out of bounds")
+            };
         }
         private void Mem_Stack(ushort instruction)
         {
+            ushort a;
             switch (instruction)
             {   
                 case 2:                                     // push: 2 a    push <a> onto the stack
-                    _stack.Push(Ptr_ValueAt());
+                    a = Ptr_ReadValue();
+                    _stack.Push(a);
                     break;
                 case 3:                                     //  pop: 3 a    remove the top element from the stack and write it into <a>; empty stack = error 
                     if (_stack.Count == 0) throw new Exception("Stack is empty");
-                    Mem_Write(Ptr_ValueAt(), _stack.Pop());
+                    a = Ptr_ReadRaw();
+                    Mem_Write(a, _stack.Pop());
                     break;
                 default:                                    // We suck at Jenga
                     throw new NotImplementedException();
@@ -191,20 +204,30 @@ namespace Synacor_Challenge
                     throw new Exception($"{address} is out of bounds");
             };
         }
-        private ushort Ptr_Peek() => Mem_Read(_instPtr);
-        private ushort Ptr_Read() => (Ptr_Peek() <= MEMORY_MAX) ? Mem_Read(_instPtr++) : Mem_Read(Mem_Read(_instPtr++));
-        private ushort Ptr_ValueAt() => _mainMemory[_instPtr++];
+        private ushort Ptr_Peek() => _mainMemory[_instPtr];
+        private ushort Ptr_ReadValue() {
+
+            ushort value = _mainMemory[_instPtr++];
+
+            return value switch
+            {
+                <= MEMORY_MAX => value,
+                > MEMORY_MAX and < INVALID_MEMORY => _registers[value % MODULO],
+                _ => throw new Exception($"{value} is out of bounds")
+            };
+        }
+        private ushort Ptr_ReadRaw() => _mainMemory[_instPtr++];   //Raw value at the pointer location. Used mainly for addressing. 
         private void Terminal(ushort instruction)
         {
             switch (instruction)
             {
                 case 19:                                    // out: 19 a    write the character represented by ascii code <a> to the terminal
-                    Console.Write((char)Ptr_Read());
+                    Console.Write((char)Ptr_ReadValue());
                     break;
                 case 20:                                    // in: 20 a     read a character from the terminal and write its ascii code to <a>;
                     // it can be assumed that once input starts, it will continue until a newline is encountered;
                     // this means that you can safely read whole lines from the keyboard and trust that they will be fully read
-                    ushort address = Ptr_Read();
+                    ushort address = Ptr_ReadValue();
                     ushort value = (ushort)Console.Read();
                     Mem_Write(address, value);
                     break;
