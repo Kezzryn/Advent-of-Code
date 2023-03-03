@@ -1,5 +1,8 @@
 ﻿using System.Drawing;
 
+const char NULL_CHAR = '\0';
+const char START_CHAR = '5';
+
 string KeypadSolver(List<string> input, char[,] keypad)
 {
     Dictionary<Directions, Size> step = new()
@@ -18,7 +21,7 @@ string KeypadSolver(List<string> input, char[,] keypad)
     {
         for (int y= 0; y < keypad.GetUpperBound(1) && breakCheck; y++)
         {
-            if (keypad[x,y] == '5') 
+            if (keypad[x,y] == START_CHAR)
             {
                 cursor = new(x,y);
                 breakCheck = false;
@@ -34,19 +37,19 @@ string KeypadSolver(List<string> input, char[,] keypad)
             switch (direction)
             {
                 case 'U':
-                    if (cursor.Y == keypad.GetUpperBound(1) || (keypad[cursor.X, cursor.Y + step[Directions.Up].Height] == '.')) continue;
+                    if (cursor.Y == keypad.GetUpperBound(1) || (keypad[cursor.X, cursor.Y + step[Directions.Up].Height] == NULL_CHAR)) continue;
                     cursor += step[Directions.Up];
                     break;
                 case 'D':
-                    if (cursor.Y == keypad.GetLowerBound(1) || (keypad[cursor.X, cursor.Y + step[Directions.Down].Height] == '.')) continue;
+                    if (cursor.Y == keypad.GetLowerBound(1) || (keypad[cursor.X, cursor.Y + step[Directions.Down].Height] == NULL_CHAR)) continue;
                     cursor += step[Directions.Down];
                     break;
                 case 'R':
-                    if (cursor.X == keypad.GetUpperBound(0) || (keypad[cursor.X + step[Directions.Right].Width, cursor.Y] == '.')) continue;
+                    if (cursor.X == keypad.GetUpperBound(0) || (keypad[cursor.X + step[Directions.Right].Width, cursor.Y] == NULL_CHAR)) continue;
                     cursor += step[Directions.Right];
                     break;
                 case 'L':
-                    if (cursor.X == keypad.GetLowerBound(0) || (keypad[cursor.X + step[Directions.Left].Width, cursor.Y] == '.')) continue;
+                    if (cursor.X == keypad.GetLowerBound(0) || (keypad[cursor.X + step[Directions.Left].Width, cursor.Y] == NULL_CHAR)) continue;
                     cursor += step[Directions.Left];
                     break;
                 default:
@@ -73,11 +76,11 @@ try
     };
 
     char[,] keypadPart2 = {
-        { '.', '.', '5', '.', '.' },
-        { '.', 'A', '6', '2', '.' },
-        { 'D', 'B', '7', '3', '1' },
-        { '.', 'C', '8', '4', '.' },
-        { '.', '.', '9', '.', '.' }
+        { NULL_CHAR, NULL_CHAR, '5', NULL_CHAR, NULL_CHAR},
+        { NULL_CHAR, 'A',       '6', '2',       NULL_CHAR },
+        { 'D',       'B',       '7', '3',       '1' },
+        { NULL_CHAR, 'C',       '8', '4',       NULL_CHAR },
+        { NULL_CHAR, NULL_CHAR, '9', NULL_CHAR, NULL_CHAR }
     };
 
     string part1Answer = KeypadSolver(puzzleInput, keypadPart1);
@@ -91,4 +94,4 @@ catch (Exception e)
     Console.WriteLine(e);
 }
 
-enum Directions  {  Up = 0, Down = 1, Right = 2, Left = 3 }
+enum Directions  {  Up, Down, Right, Left }

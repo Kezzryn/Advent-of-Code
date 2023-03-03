@@ -12,7 +12,7 @@
     <None Update="PuzzleInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="PuzzleInputTest.txt">
+    <None Update="PuzzleInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

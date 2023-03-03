@@ -4,7 +4,7 @@ static int TaxiDistance(Point a, Point b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    List<string> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Replace(" ", "").Split(',').ToList();
+    List<string> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(',', StringSplitOptions.TrimEntries).ToList();
 
     Size[] step = new[] // See the Complex Numbers solution for a different way of tracking rotation.
     {

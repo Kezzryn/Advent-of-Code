@@ -1,10 +1,10 @@
 ﻿try
 {
-    // a valid triangle has the sum of any two sides greater than the last once. 
-    // Note that this must be true for ALL three combinations. However, we can shortcut this if we
-    // sum the two smallest sides and compare to the remaining side, which is why removing
-    // the OrderBy call breaks the program.
-
+    // A valid triangle has the sum of any two sides greater than the last once. 
+    // Note that this must be true for ALL three combinations. However, this can be shortcut by summing the
+    // two smallest sides and comparing the result to the remaining side.
+    // From wikipedia: This can be stated as: max(a,b,c) < a + b + c - max(a,b,c)
+    
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     int[][] triangles = File.ReadAllLines(PUZZLE_INPUT)
         .Select(x => x.Split(' ',StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
