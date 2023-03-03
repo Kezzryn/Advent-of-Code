@@ -10,8 +10,8 @@
 - **Solution:** Another iterator, but with bounds checking!
 
 ### [Day 3](Day%2003) - Squares With Three Sides
-- **Problem:**
-- **Solution:**
+- **Problem:** Given a list of three numbers, are these measurements for a valid triangle? 
+- **Solution:** Reused a good part of the solution from [2015 Day 2](../2015/Day%2002/) for the first part. This turned out to be a fortuitous decision, as it lead first to the realization that all three combos of sides need to match the (a + b) > c. This can be short cut if you do the math on the two smallest sides. Part two had a bit of a twist, having to read and parse column data. This may have been my first use of the `Range()` object. 1
 
 ### [Day 4](Day%2004) - Security Through Obscurity
 - **Problem:**
