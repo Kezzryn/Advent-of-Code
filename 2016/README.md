@@ -6,8 +6,8 @@
 - **Solution:** Add to a `Point()` with an array of `Size()` to represent each direction, much like we've done in other years. A `HashSet` tracks where we've been.
 
 ### [Day 2](Day%2002) - Bathroom Security
-- **Problem:** 
-- **Solution:**
+- **Problem:** Another pathfinding problem. 
+- **Solution:** Another iterator, but with bounds checking!
 
 ### [Day 3](Day%2003) - Squares With Three Sides
 - **Problem:**
