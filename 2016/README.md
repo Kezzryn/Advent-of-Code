@@ -14,8 +14,8 @@
 - **Solution:** Reused a good part of the solution from [2015 Day 2](../2015/Day%2002/) for the first part. This turned out to be a fortuitous decision, as it lead first to the realization that all three combos of sides need to match the (a + b) > c. This can be short cut if you do the math on the two smallest sides. Part two had a bit of a twist, having to read and parse column data. This may have been my first use of the `Range()` object. 
 
 ### [Day 4](Day%2004) - Security Through Obscurity
-- **Problem:**
-- **Solution:**
+- **Problem:** Our first string parsing puzzle of the season. 
+- **Solution:** LINQ abuse for sorting, grouping and transforming character arrays. My key learning takeaway was the use of `String.Join()` to easily concat lists of strings or characters. Also, the decrypted room names are hilarious.
 
 ### [Day 5](Day%2005) - How About a Nice Game of Chess?
 - **Problem:**
