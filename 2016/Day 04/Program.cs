@@ -16,9 +16,9 @@
 
         string checksumTest = String.Join("", 
             roomName.Replace("-", "")
-                .OrderBy(x => x)        //pre sort so when we re-sort by group things with the same group level come out alphabetical. 
                 .GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
+                .ThenBy(x => x.Key)
                 .SelectMany(x => x)
                 .Distinct()
                 .Take(5));
