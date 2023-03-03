@@ -4,6 +4,7 @@
 ### [Day 1](Day%2001) - No Time for a Taxicab
 - **Problem:** Starting off the year with a distance travelled problem. Part one could have been solved with a simple +/- counter, but part two needs to know where we've been. 
 - **Solution:** Add to a `Point()` with an array of `Size()` to represent each direction, much like we've done in other years. A `HashSet` tracks where we've been.
+- **[Complex Numbers](Day%2001%20Complex%20Numbers):** - Skimming the solution thread, there was a [brief discussion](https://www.reddit.com/r/adventofcode/comments/5fur6q/comment/dangjvv/) about using complex numbers to track rotation. [Complex number guide here](https://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/). 
 
 ### [Day 2](Day%2002) - Bathroom Security
 - **Problem:** Another pathfinding problem. 
