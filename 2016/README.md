@@ -24,8 +24,8 @@
 - **Bonus:** As per the puzzle text: "Be extra proud of your solution if it uses a cinematic "decrypting" animation." [I was left unsupervised](https://www.youtube.com/watch?v=gRoWDbM7zLw)
 
 ### [Day 6](Day%2006) - Signals and Noise
-- **Problem:**
-- **Solution:**
+- **Problem:** Reading columns of strings to perform operations on them. 
+- **Solution:** A quick loop with a `List<StringBuilder>` to reformat the input, then borrowed the LINQ from [Day 4](Day%2004) to count characters.
 
 ### [Day 7](Day%2007) - Internet Protocol Version 7
 - **Problem:**
