@@ -54,10 +54,7 @@ namespace AoC_2016_Day_05
 
         public static void DoBoot()
         {
-            Console.WriteLine("Discorporate Resonance Individual with Determinate Enforced Reasoning v5.71 ... ... Activated.");
-            Console.ReadLine();
             Console.Clear();
-            Console.ReadLine();
             foreach (string message in BootMessages)
             {
                 foreach (string chunk in message.Split("..."))

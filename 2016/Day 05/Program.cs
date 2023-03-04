@@ -74,7 +74,7 @@ try
 
     myTimer.Stop();
     Cinematic.DoCinematic(Cinematic.GRAND_FINALE);
-    Console.ReadLine();
+    
 }
 catch (Exception e)
 {

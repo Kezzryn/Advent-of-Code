@@ -19,8 +19,9 @@
 - **Solution:** LINQ abuse for sorting, grouping and transforming character arrays. My key learning takeaway was the use of `String.Join()` to easily concat lists of strings or characters. Also, the decrypted room names are hilarious.
 
 ### [Day 5](Day%2005) - How About a Nice Game of Chess?
-- **Problem:**
-- **Solution:**
+- **Problem:** More MD5 hashing.
+- **Solution:** I started with the solution from [2015 Day 4](../2015/Day%2004/) and built strings as needed.
+- **Bonus:** As per the puzzle text: "Be extra proud of your solution if it uses a cinematic "decrypting" animation." [I was left unsupervised](https://www.youtube.com/watch?v=gRoWDbM7zLw)
 
 ### [Day 6](Day%2006) - Signals and Noise
 - **Problem:**
