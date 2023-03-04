@@ -16,7 +16,6 @@
 
         string checksumTest = String.Join("", 
             roomName.Replace("-", "")
-                .GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
                 .ThenBy(x => x.Key)
                 .SelectMany(x => x)
