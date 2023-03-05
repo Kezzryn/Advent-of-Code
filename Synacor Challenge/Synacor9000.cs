@@ -1,60 +1,99 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace Synacor_Challenge
 {
     internal partial class Synacor9000
     {
-        const ushort MEMORY_MAX = 32767; // 0 bound address max
-        const ushort MODULO = 32768;
-        const ushort INVALID_MEMORY = 32776; // start of invalid memory numbers. 
+        private const ushort MEMORY_MAX = 32767; // 0 bound address max
+        private const ushort MODULO = 32768;
+        private const ushort INVALID_MEMORY = 32776; // start of invalid memory numbers. 
+
+        public const string DefaultSaveFile = "quicksave.bin";
+        public const string DefaultLoadFile = "challenge.bin";
 
         // memory regions. 
         private readonly ushort[] _mainMemory = new ushort[32768];
         private readonly ushort[] _registers = new ushort[8];
         private readonly Stack<ushort> _stack = new();
 
-        string? _inputBuffer = string.Empty;
-        bool _stopExecution; 
+        private string? _inputBuffer = string.Empty;
+        private bool _stopExecution; 
 
         public Synacor9000() {}
-        public void Load(string loadFileName)
+        public bool Load(string fileName, out string? errorMessage)
         {
-            using BinaryReader reader = new(new FileStream(loadFileName, FileMode.Open, FileAccess.Read));
-
-            while (reader.BaseStream.Position < reader.BaseStream.Length)
+            try
             {
-                ushort address = (ushort)(reader.BaseStream.Position / 2);
-                ushort value = reader.ReadUInt16();
+                if (fileName == string.Empty) fileName = DefaultLoadFile;
+                using BinaryReader reader = new(new FileStream(fileName, FileMode.Open, FileAccess.Read));
 
-                if (address < INVALID_MEMORY)
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
                 {
-                    Mem_Write(address, value);
-                }
-                else
+                    ushort address = (ushort)(reader.BaseStream.Position / 2);
+                    ushort value = reader.ReadUInt16();
+
+                    if (address < INVALID_MEMORY)
+                    {
+                        Mem_Write(address, value);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } // done main memory 
+
+                //try the stack. 
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
                 {
+                    ushort value = reader.ReadUInt16();
+                    if (value == ushort.MaxValue) break;
                     _stack.Push(value);
                 }
-            }
+                
+                if (reader.BaseStream.Position < reader.BaseStream.Length) _instPtr = reader.ReadUInt16();
 
-            // need to add the capacity to load registers and the stack.
-            // registers are easy, they're just higher things.. 
-            // need to restore the state of the _instrPtr as well. 
+                errorMessage = null;
+                return true;
+                // TODO LOAD SCREEN STATE? 
+
+                // need to add the capacity to load registers and the stack.
+                // registers are easy, they're just higher things.. 
+                // need to restore the state of the _instrPtr as well. 
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+                return false;
+            }
         }
-
-        public void Save(string saveFileName)
+        public bool Save(string fileName, out string? errorMessage)
         {
-            using BinaryWriter bw = new(new FileStream(saveFileName, FileMode.OpenOrCreate, FileAccess.Write));
+            try
+            {
+                if (fileName == string.Empty) fileName = DefaultSaveFile;
+                using BinaryWriter bw = new(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write));
 
-            for(ushort i = 0; i < INVALID_MEMORY; i++)
-            {
-                bw.Write(Mem_Read(i));
+                for (ushort i = 0; i < INVALID_MEMORY; i++)
+                {
+                    bw.Write(Mem_Read(i));
+                }
+                foreach (ushort stackValue in _stack.Reverse())
+                {
+                    bw.Write(Mem_Read(stackValue));
+                }
+                bw.Write(ushort.MaxValue); // end of stack marker
+                bw.Write(_instPtr);
+
+                errorMessage = null;
+                return true;
             }
-            foreach (ushort stackValue in _stack.Reverse())
+            catch (Exception e)
             {
-                bw.Write(Mem_Read(stackValue));
+                errorMessage = e.Message;
+                return false;
             }
+            
+            // TODO SAVE SCREEN STATE? 
 
             // A stack can be enumerated without disturbing its contents.
            // foreach (string number in numbers)
@@ -120,25 +159,31 @@ namespace Synacor_Challenge
                 case 20:        // in: 20 a     read a character from the terminal and write its ascii code to <a>;
                     // it can be assumed that once input starts, it will continue until a newline is encountered;
                     // this means that you can safely read whole lines from the keyboard and trust that they will be fully read
-                    ConsoleKeyInfo cki;
+                    const string CMD_EXIT = "exit";
+
                     StringBuilder sb = new();
                     if (string.IsNullOrEmpty(_inputBuffer))
                     {
+                        ConsoleKeyInfo cki;
+                        bool doneInput = false;
                         do
                         {
                             cki = Console.ReadKey();
                             switch (cki.Key)
                             {
-                                case ConsoleKey.F5:
-                                    Console.WriteLine("Quicksave coming soon...");
-                                    //Save("quicksave.bin");
-                                    break;
+                                //case ConsoleKey.F5:
+                                //    Console.WriteLine("Quicksave...");
+                                //   Save("",out _);
+                                //   break;
                                 case ConsoleKey.F7:
-                                    Console.WriteLine("Quickload coming soon...");
-                                    //Load("quicksave.bin");
-                                    break;
+                                    //Console.WriteLine("Quickload...");
+                                    //Load("", out _);
+                                //    break;
                                 case ConsoleKey.Escape:
+                                    sb.Clear();
+                                    sb.Append(CMD_EXIT);
                                     _stopExecution = true;
+                                    doneInput = true;
                                     break;
                                 case ConsoleKey.Backspace:
                                     sb = sb.Remove(sb.Length - 1, 1);
@@ -148,19 +193,39 @@ namespace Synacor_Challenge
                                 case ConsoleKey.Enter:
                                     Console.WriteLine();
                                     sb.Append(NEWLINE);
+                                    doneInput = true;
                                     break;
                                 default:
+                                    if ((cki.Modifiers & ConsoleModifiers.Control) != 0 && cki.Key == ConsoleKey.C)
+                                    {
+                                        sb.Clear();
+                                        sb.Append(CMD_EXIT);
+                                        doneInput = true;
+                                        break;
+                                    }
                                     sb.Append(cki.KeyChar);
                                     break;
                             }
-                            // if ((cki.Modifiers & ConsoleModifiers.Alt) != 0) Console.Write("ALT+");
-                            // if ((cki.Modifiers & ConsoleModifiers.Shift) != 0) Console.Write("SHIFT+");
-                            // if ((cki.Modifiers & ConsoleModifiers.Control) != 0) Console.Write("CTL+");
-                        } while (cki.Key != ConsoleKey.Enter && cki.Key != ConsoleKey.Escape);
+                        } while (!doneInput);
 
                         // don't pass back ENTER only.
                         // capture other stuff. 
-                        _inputBuffer = string.IsNullOrEmpty(sb.ToString()) || sb.ToString()[0] == NEWLINE ? string.Empty : sb.ToString();
+                        if (string.IsNullOrEmpty(sb.ToString()) || sb.ToString()[0] == NEWLINE)
+                        {
+                            _inputBuffer = string.Empty;
+                        } 
+                        else
+                        {
+                            _inputBuffer = sb.ToString();
+                            switch (_inputBuffer[..^1].ToLower()) // strip newline
+                            {
+                                case CMD_EXIT:
+                                    _stopExecution = true;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     } // end reading from the console. 
 
                     if (_stopExecution || string.IsNullOrEmpty(_inputBuffer))
@@ -170,11 +235,6 @@ namespace Synacor_Challenge
                     }
                     else
                     {
-                        switch (_inputBuffer)
-                        {
-                            default:
-                        }
-
                         ushort value = _inputBuffer[0];
                         ushort address = Ptr_ReadRaw();
 
@@ -182,7 +242,7 @@ namespace Synacor_Challenge
                        
                         Mem_Write(address, value);
                     }
-                    
+
                     break;
                 default:
                     throw new NotImplementedException();    // PEBCAK 
