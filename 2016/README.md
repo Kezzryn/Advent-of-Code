@@ -28,11 +28,12 @@
 - **Solution:** A quick loop with a `List<StringBuilder>` to reformat the input, then borrowed the LINQ from [Day 4](Day%2004) to count characters.
 
 ### [Day 7](Day%2007) - Internet Protocol Version 7
-- **Problem:**
-- **Solution:**
+- **Problem:** String parsing and comparison.
+- **Solution:** I really feel like I'm abusing LINQ. But if it works it's correct, right?
+- **Future Fun:** - Re-implement with `Regex`.
 
 ### [Day 8](Day%2008) - Two-Factor Authentication
-- **Problem:**
+- **Problem:** 
 - **Solution:**
 
 ### [Day 9](Day%2009) - Explosives in Cyberspace
