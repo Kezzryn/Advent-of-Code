@@ -1,6 +1,6 @@
 ﻿namespace Synacor_Challenge
 {
-    internal static class Decompiler
+    internal partial class Synacor9000
     {
         static public readonly Dictionary<int, (string instString, int numParam)> instructionSet = new()
         {
@@ -88,6 +88,25 @@
                 writer.Write($"{Convert.ToString(address,16),8}{address,8}{((instKey.instString is null) ? "" : instKey.instString),8}{value1,8}{value2,8}{value3,8}");
                 writer.WriteLine($"{Convert.ToString(param1,16),20}{Convert.ToString(param2,16),20}{Convert.ToString(param3, 16),20}");
             }
-        } 
+        }
+
+        public void Step(int numSteps = 1)
+        {
+            for (int i = 1; i <= numSteps; i++)
+            {
+                Dispatcher(Ptr_ReadValue());
+            }
+        }
+
+        public void PrintStatus()
+        {
+            // dump currently executing instrution, it's values and values of the registers
+            //
+            // registers, cu
+            // 
+        }
+
+        public void SetRegister(int address, ushort value) => _registers[address] = value;
+        public void SetPtr(ushort value)  => _instPtr = value;
     }
 }

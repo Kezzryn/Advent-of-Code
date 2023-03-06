@@ -3,10 +3,11 @@
     internal partial class Synacor9000
     {
         /*
-         * This file contains the implementation for
-         * 1) Opcodes for the VM machine
-         * 2) Memory read/write helper functions. 
-         * 3) Instruction pointer and helper functions.
+         * This file contains the implementation for:
+         * 1) Instruction dispatcher 
+         * 2) Opcodes for the VM machine
+         * 3) Memory read/write helper functions. 
+         * 4) Instruction pointer and helper functions.
          */
 
         // got tired of doing (ushort)0 (ushort)1 in places.
@@ -14,8 +15,39 @@
         private const ushort USHORT_1 = 1;
 
         private ushort _instPtr = 0;    // instruction pointer. 
-
-        private void Comparison(ushort instruction)
+        private void Dispatcher(ushort instruction)
+        {
+            switch (instruction)
+            {
+                case 0:
+                    _stopExecution = true;
+                    break;
+                case 1 or 15 or 16:
+                    Op_Memory(instruction);
+                    break;
+                case 2 or 3:
+                    Op_Stack(instruction);
+                    break;
+                case 4 or 5:
+                    Op_Comparison(instruction);
+                    break;
+                case 6 or 7 or 8 or 17 or 18:
+                    _instPtr = Op_Jump(instruction);
+                    break;
+                case >= 9 and <= 14:
+                    Op_Math(instruction);
+                    break;
+                case 19 or 20:
+                    Op_Terminal(instruction);
+                    break;
+                case 21:
+                    // noop: 21  no operation 
+                    break;
+                default:
+                    throw new NotImplementedException($"{instruction}");
+            }
+        }
+        private void Op_Comparison(ushort instruction)
         {
             ushort address = Ptr_ReadRaw();
             ushort b = Ptr_ReadValue();
@@ -29,7 +61,7 @@
             };
             Mem_Write(address, value);
         }
-        private ushort Jump(ushort instruction)
+        private ushort Op_Jump(ushort instruction)
         {
             ushort a; // do not pre-assign. ret could break things 
             ushort b;
@@ -58,7 +90,7 @@
                     throw new NotImplementedException();
             }
         }
-        private void Math_Synacor(ushort instruction)
+        private void Op_Math(ushort instruction)
         {
             ushort address = Ptr_ReadRaw();
             ushort b = Ptr_ReadValue();
@@ -75,7 +107,7 @@
             };
             Mem_Write(address, value);
         }
-        private void Mem_Stack(ushort instruction)
+        private void Op_Stack(ushort instruction)
         {
             ushort a;
             switch (instruction)
@@ -93,7 +125,7 @@
                     throw new NotImplementedException();
             }
         }
-        private void Mem_Manipulation(ushort instruction)
+        private void Op_Memory(ushort instruction)
         {/*
           * Think of them as pointers. In C code:
 
@@ -125,6 +157,38 @@ One of the two parameters is indirect: it's not the destination/source of the mo
                     throw new NotImplementedException();
             }
             Mem_Write(address, value);
+        }
+        private void Op_Terminal(ushort instruction)
+        {
+            switch (instruction)
+            {
+                case 19:         // out: 19 a    write the character represented by ascii code <a> to the terminal
+                    Console.Write((char)Ptr_ReadValue());
+                    break;
+                case 20:        // in: 20 a     read a character from the terminal and write its ascii code to <a>;
+                    // it can be assumed that once input starts, it will continue until a newline is encountered;
+                    // this means that you can safely read whole lines from the keyboard and trust that they will be fully read
+
+                    if (string.IsNullOrEmpty(_inputBuffer)) _inputBuffer = GetConsoleInput();
+
+                    if (_stopExecution || string.IsNullOrEmpty(_inputBuffer))
+                    {
+                        _instPtr--; // back this up to what should be the instruction, so if/when we resume we don't freak out.
+                        break;
+                    }
+                    else
+                    {
+                        ushort value = _inputBuffer[0];
+                        ushort address = Ptr_ReadRaw();
+
+                        _inputBuffer = _inputBuffer.Length > 1 ? _inputBuffer[1..] : string.Empty;
+
+                        Mem_Write(address, value);
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException();    // PEBCAK 
+            }
         }
         private ushort Mem_Read(ushort address)
         {
@@ -162,6 +226,5 @@ One of the two parameters is indirect: it's not the destination/source of the mo
             };
         }
         private ushort Ptr_ReadRaw() => Mem_Read(_instPtr++);   //Raw value at the pointer location. Used mainly for addressing. 
-   
     }
 }
