@@ -33,8 +33,9 @@
 - **Future Fun:** - Re-implement with `Regex`.
 
 ### [Day 8](Day%2008) - Two-Factor Authentication
-- **Problem:** 
-- **Solution:**
+- **Problem:** We have another visualization to do.
+- **Solution:** 2D Array of bits with a pair of transformation functions. The rotate one was interesting. I initally did two seperate functions, one for row the other for column. I ended up merging them with a bit of trickery to flip the row/col indexers depending on what is needed.
+- **Future Fun:** Reimplment as a one dimentional array. Perhaps bitshifting? 
 
 ### [Day 9](Day%2009) - Explosives in Cyberspace
 - **Problem:**
