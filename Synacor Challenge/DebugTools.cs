@@ -5,7 +5,7 @@ namespace Synacor_Challenge
     internal partial class Synacor9000
     {
         private readonly Queue<string> _commandTrace = new();
-
+        private bool _doTrace = false;
         static public readonly Dictionary<int, (string instString, int numParam)> instructionSet = new()
         {
             {  0, ("halt",  0) },
@@ -31,69 +31,153 @@ namespace Synacor_Challenge
             { 20, ("in",    1) },
             { 21, ("noop",  0) }
         };
-        static public void DumpIt(BinaryReader reader, StreamWriter writer)
+
+        public bool DebugDispatcher(string instruction, out List<string> returnValue)
         {
-            reader.BaseStream.Seek(0, SeekOrigin.Begin);
-            while (reader.BaseStream.Position < reader.BaseStream.Length)
+            bool success = true;
+            var split = instruction.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            returnValue = new();
+
+            // command
+            // sub command 
+            // args - each command/sub command is responsable for splitting, all the top guarentees is the values are there.
+            string command = split[0];
+            string sub_cmd = (split.GetUpperBound(0) >= 1) ? split[1] : "nosub";
+            string args = instruction[(split[0].Length + split[1].Length + 1)..].Trim();
+            Console.WriteLine($"{instruction} => |{command}| |{sub_cmd}| |{args}|");
+
+            switch (command)
             {
-                ushort value = reader.ReadUInt16();
-
-                ushort address = (ushort)(reader.BaseStream.Position / 2);
-                ushort param1 = 0;
-                ushort param2 = 0;
-                ushort param3 = 0;
-                string value1 = "";
-                string value2 = "";
-                string value3 = "";
-
-                if (instructionSet.TryGetValue(value, out var instKey))
-                {
-                    if (instKey.numParam >= 0)
+                case "set":
+                    var argsparse = args.Split(' ').Select(ushort.Parse).ToArray();
+                    switch (sub_cmd)
                     {
-                        //value1 = "";
+                        case "register":
+                            _registers[argsparse[0]] = argsparse[1];
+                            break;
+                        case "instptr":
+                            _instPtr = argsparse[0];
+                            break;
+                        case "input":
+                            _inputBuffer = args;
+                            if (_inputBuffer[^1] != NEWLINE) _inputBuffer += NEWLINE;
+                            break;
+                        case "memory":
+                            _mainMemory[argsparse[0]] = argsparse[1];
+                            break;
+                        default:
+                            returnValue.Add($"Unknown instruction {instruction}");
+                            break;
+                    };
+                    break;
+                case "dump":
+                    switch (sub_cmd)
+                    {
+                        case "binary":
+                            success = DumpBinary("", "", out string resultDumpBin);
+                            returnValue.Add(resultDumpBin);
+                            break;
+                        case "trace":
+                            success = DumpCommandTrace("", out string resultDumpTrace);
+                            returnValue.Add(resultDumpTrace);
+                            break;
+                        case "state":
+                            returnValue.Add(GetCurrentState());
+                            break;
+                        default:
+                            returnValue.Add($"Unknown instruction {instruction}");
+                            break;
                     }
-                    if (instKey.numParam >= 1)
+                    break;
+                case "toggle":
+                    _doTrace = !_doTrace;
+                    returnValue.Add($"Command trace is now {(_doTrace ? "on" : "off")}.");
+                    break;
+                case "step":
+                    // read param
+                    Step();
+                    break;
+                case "break":
+                /*
+                 * add [address]
+                 * remove [address]
+                 * clear 
+                 * show/print
+                 */
+                default:
+                    returnValue.Add($"Unknown instruction {instruction}");
+                    break;
+            }
+
+            return success;
+        }
+
+        static private bool DumpBinary(string inFile, string outFile, out string resultMessage)
+        {
+            try
+            {
+                if (inFile == string.Empty) inFile = DefaultLoadFile;
+                if (outFile == string.Empty) outFile = $"Full_Dump_{DateTime.Now:yyyyMMddHHmmss}.txt";
+
+                using BinaryReader reader = new(new FileStream(inFile, FileMode.Open, FileAccess.Read));
+                using StreamWriter writer = new(new FileStream(outFile, FileMode.OpenOrCreate, FileAccess.Write));
+
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                {
+                    ushort value = reader.ReadUInt16();
+                    ushort address = (ushort)((reader.BaseStream.Position / 2) - 1); // zero bound
+
+                    StringBuilder sb = new();
+
+                    if (instructionSet.TryGetValue(value, out var instKey))
                     {
-                        param1 = reader.ReadUInt16();
-                        value1 = param1.ToString();
-                        if (value == 19)
+                        sb.Append($"{address,8}");
+                        sb.Append($"{instructionSet[value].instString,5}");
+
+                        if (instKey.instString == "out")
                         {
-                            if (param1 >= 32768)
+                            do
                             {
-                                value2 = $"reg[{param1 % 32768}]";
-                            } 
-                            else
+                                value = reader.ReadUInt16();
+                                sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : ((char)value == '\n') ? "\\n" : (char)value);
+                            }
+                            while (reader.PeekChar() == 19);
+                        }
+                        else
+                        {
+                            for (int i = 1; i <= 3; i++)
                             {
-                                value2 = (param1 == '\n') ? "\\n" : ((char)param1).ToString();
+                                string lineValue = "";
+                                if (instKey.numParam >= i)
+                                {
+                                    value = reader.ReadUInt16();
+                                    lineValue = (value >= MODULO) ? $"reg[{value % MODULO}]" : $"{value}";
+                                }
+                                sb.Append($"{lineValue, 8}");
                             }
                         }
                     }
-                    if (instKey.numParam >= 2)
+                    else
                     {
-                        param2 = reader.ReadUInt16();
-                        value2 = param2.ToString();
+                        sb.Append(value);
                     }
-                    if (instKey.numParam >= 3)
-                    {
-                        param3 = reader.ReadUInt16();
-                        value3 = param3.ToString();
-                    }
-                    if (instKey.numParam >= 4 || instKey.numParam < 0)
-                    {
-                        throw new NotImplementedException($"Unknown instkey {instKey.numParam}");
-                    }
-                } 
-                else
-                {
-                    value1 = value.ToString();
+
+                    writer.WriteLine(sb);
                 }
 
-                writer.Write($"{Convert.ToString(address,16),8}{address,8}{((instKey.instString is null) ? "" : instKey.instString),8}{value1,8}{value2,8}{value3,8}");
-                writer.WriteLine($"{Convert.ToString(param1,16),20}{Convert.ToString(param2,16),20}{Convert.ToString(param3, 16),20}");
+                resultMessage = $"Dump of {inFile} to {outFile} done.";
+                return true;
+            }
+            catch (Exception e)
+            {
+                resultMessage = e.Message;
+                return false;
             }
         }
 
-        public void StepUntil(ushort targetInst)
+        public void BreakOnInstr(ushort targetInst)
         {
             ushort instr;// = Mem_Read(_instPtr);
             do
@@ -113,32 +197,43 @@ namespace Synacor_Challenge
         {   
             for (int i = 1; i <= numSteps; i++)
             {
-                _commandTrace.Enqueue(CurrentState());
+                if (_doTrace) _commandTrace.Enqueue(GetCurrentState());
                 Dispatcher(Ptr_ReadValue());
             }
         }
-        public void DumpCommands()
+        private bool DumpCommandTrace(string outFile, out string resultsMessage)
         {
-            string fileName = $"commandDump_{DateTime.Now:yyyyMMddHHmmss}.txt";
-
-            using StreamWriter sw = new(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write));
-
-            while (_commandTrace.Count > 0)
+            try
             {
-                sw.WriteLine(_commandTrace.Dequeue());  
+                if (outFile == string.Empty) outFile = $"commandDump_{DateTime.Now:yyyyMMddHHmmss}.txt";
+
+                using StreamWriter sw = new(new FileStream(outFile, FileMode.OpenOrCreate, FileAccess.Write));
+                sw.WriteLine("    addr inst val_1 val_2 val_3 :  32768 32769 32770 32771 32772 32773 32774 32775");
+                while (_commandTrace.Count > 0)
+                {
+                    sw.WriteLine(_commandTrace.Dequeue());  
+                }
+                sw.Close();
+                    resultsMessage = $"Dumped commands to {outFile}";
+                    return true;
+            } 
+            catch  (Exception e)
+            {
+                resultsMessage = e.Message;
+                return false;
             }
-            sw.Close();
         }
 
-        private string CurrentState()
+        private string GetCurrentState()
         {
+            // change header in DumpCommandTrace if changed. 
             StringBuilder sb = new();
             int numParam = instructionSet[Mem_Read(_instPtr)].numParam;
 
             sb.Append($"{_instPtr,8}");
 
             sb.Append($"{instructionSet[Mem_Read(_instPtr)].instString, 5}");
-            sb.Append($"{((numParam >= 1)  ? Mem_Read((ushort)(_instPtr + 1)): ""),6}");
+            sb.Append($"{((numParam >= 1) ? Mem_Read((ushort)(_instPtr + 1)) : ""),6}");
             sb.Append($"{((numParam >= 2) ? Mem_Read((ushort)(_instPtr + 2)) : ""),6}");
             sb.Append($"{((numParam >= 3) ? Mem_Read((ushort)(_instPtr + 3)) : ""),6}");
             sb.Append($" : ");
@@ -147,21 +242,6 @@ namespace Synacor_Challenge
                 sb.Append($"{_registers[i],6}");
             }
             return sb.ToString();
-        }
-
-        public void PrintStatus()
-        {
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.CursorLeft = 0;
-            Console.Write(CurrentState());
-        }
-
-        public void SetRegister(int address, ushort value) => _registers[address] = value;
-        public void SetPtr(ushort value)  => _instPtr = value;
-        public void SetInputBuffer(string value)
-        {
-            _inputBuffer = value;
-            if (_inputBuffer[^1] != NEWLINE) _inputBuffer += NEWLINE;
         }
     }
 }

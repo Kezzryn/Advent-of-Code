@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Answercodes.user" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="challenge.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -28,7 +28,5 @@
                 Dispatcher(Ptr_ReadValue());
             }
         }
-      
-      
     }
 }

@@ -14,13 +14,13 @@ Dictionary<ConsoleKey, string> quickCommands = new()
         { ConsoleKey.F1, "help" },
         { ConsoleKey.F2, @"load extras\challenge.bin" },
         { ConsoleKey.F3, "run" },
-        { ConsoleKey.F4, "breakat 1798" },
-        { ConsoleKey.F5, "save quicksave.syn9k" },
-        { ConsoleKey.F6, "load quicksave.syn9k" },
-        { ConsoleKey.F7, "load teleporter.syn9k" },
-        { ConsoleKey.F8, "setinput use teleporter" },
+        { ConsoleKey.F4, "" },
+        { ConsoleKey.F5, "" },
+        { ConsoleKey.F6, "" },
+        { ConsoleKey.F7, "" },
+        { ConsoleKey.F8, "load teleporter.syn9k" },
         { ConsoleKey.Escape, "exit" },
-        { ConsoleKey.RightArrow, "step" }
+        { ConsoleKey.RightArrow, "! step" }
     };
 
 try
@@ -53,10 +53,16 @@ try
                 Console.WriteLine("Bye!");
                 break;
             case "load":
-                if (!syn9k.Load((args == string.Empty) ? Synacor9000.DefaultLoadFile : args, out string? error)) WriteError(error!);
+                if (syn9k.Load((args == string.Empty) ? Synacor9000.DefaultLoadFile : args, out string results))
+                    Console.WriteLine(results);
+                else 
+                    WriteError(results);
                 break;
             case "save":
-                if (!syn9k.Save((args == string.Empty) ? Synacor9000.DefaultSaveFile : args, out error)) WriteError(error!);
+                if (syn9k.Save((args == string.Empty) ? Synacor9000.DefaultSaveFile : args, out results))
+                    Console.WriteLine(results);
+                else
+                    WriteError(results); ;
                 break;
             case "run":
                 Console.SetCursorPosition(curPos["gamearea"].Left, curPos["gamearea"].Top);
@@ -70,68 +76,20 @@ try
                     Console.WriteLine($"{cmds.Key} {cmds.Value}");
                 }
                 break;
-            case "step":
-                Console.SetCursorPosition(curPos["debug"].Left, curPos["debug"].Top);
-                syn9k.PrintStatus();
+            case "!": // pass all debugger commands through.
                 Console.SetCursorPosition(curPos["gamearea"].Left, curPos["gamearea"].Top);
-
-                syn9k.Step((args == string.Empty) ? 1 : int.Parse(args));
+                bool debugResult = syn9k.DebugDispatcher(command[1..].Trim(), out List<string> debugResponse);
                 curPos["gamearea"] = Console.GetCursorPosition();
-                break;
-            case "status":
-                int tempTop = Console.CursorTop;
-                int tempLeft = Console.CursorLeft;
 
-                syn9k.PrintStatus();
+                Console.SetCursorPosition(curPos["debug"].Left, curPos["debug"].Top);
+                foreach (string s in debugResponse)
+                {
+                    if (debugResult)
+                        Console.WriteLine(s.PadRight(Console.BufferWidth -1));
+                    else
+                        WriteError(s.PadRight(Console.BufferWidth - 1));
+                }
 
-                Console.CursorTop = tempTop;
-                Console.CursorLeft = tempLeft;
-                break;
-            case "setreg":
-                if (split.GetUpperBound(0) < 2)
-                {
-                    Console.WriteLine("Not enough arguments for setreg.");
-                    break;
-                }
-                ushort address = ushort.Parse(split[1]);
-                ushort value = ushort.Parse(split[2]);
-                syn9k.SetRegister(address, value);
-                break;
-            case "setptr":
-                if (split.GetUpperBound(0) < 1)
-                {
-                    Console.WriteLine("Not enough arguments for setptr.");
-                    break;
-                }
-                address = ushort.Parse(split[1]);
-                syn9k.SetPtr(address);   
-                break;
-            case "setinput":
-                if (split.GetUpperBound(0) < 1)
-                {
-                    Console.WriteLine("Not enough arguments for setinput.");
-                    break;
-                }
-                syn9k.SetInputBuffer(String.Join(" ", split[1..]));
-                break;
-            case "dump":
-                syn9k.DumpCommands();
-                break;
-            case "forward":
-                if (split.GetUpperBound(0) < 1)
-                {
-                    Console.WriteLine("Not enough arguments for forward.");
-                    break;
-                }
-                syn9k.StepUntil(ushort.Parse(split[1]));
-                break;
-            case "breakat":
-                if (split.GetUpperBound(0) < 1)
-                {
-                    Console.WriteLine("Not enough arguments for forward.");
-                    break;
-                }
-                syn9k.BreakOnAddress(ushort.Parse(split[1]));
                 break;
             default:
                 Console.WriteLine($"Command not recognized: {split[0]}");

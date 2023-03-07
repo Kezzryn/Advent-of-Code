@@ -4,22 +4,24 @@
     {
         /*
          * This file contains the save/load functionality.
-         * This is implemented as a simple stream dump of each memory location, main, registers, stack and instPtr in order and seperated by FFFF.
+         * This is implemented as a simple stream dump of each memory location, main, registers, stack and instPtr in order and seperated by FFFF. The load will read back in the same order.
+         * The only partial load supported is one of main memory only.
          */
         private const ushort MARKER = ushort.MaxValue;
 
-        public bool Load(string fileName, out string? errorMessage)
+        public bool Load(string fileName, out string resultMessage)
         {
             try
             {
                 string[] stageText = { "main memory", "registers", "stack", "pointer", "end of file" };
+                resultMessage = "";
 
                 if (fileName == string.Empty) fileName = DefaultLoadFile;
                 using BinaryReader reader = new(new FileStream(fileName, FileMode.Open, FileAccess.Read));
-
+                
                 int stage = 0;
                 int memPos = 0;
-                Console.WriteLine($"Loading stage {stage} {stageText[stage]}");
+                resultMessage += $"Loading stage {stage} {stageText[stage]}\n";
                 while (reader.BaseStream.Position < reader.BaseStream.Length)
                 {
                     ushort value = reader.ReadUInt16();
@@ -27,7 +29,7 @@
                     {
                         stage++;
                         memPos = 0;
-                        Console.WriteLine($"Loading stage {stage} {stageText[stage]}");
+                        resultMessage += $"Loading stage {stage} {stageText[stage]}\n";
                     }
                     else
                     {
@@ -65,17 +67,17 @@
                         _registers[i] = USHORT_0;  
                     }
                 }
-                Console.WriteLine($"Load of {fileName} done.");
-                errorMessage = null;
+
+                resultMessage = $"Load of {fileName} done.";
                 return true;
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                resultMessage = e.Message;
                 return false;
             }
         }
-        public bool Save(string fileName, out string? errorMessage)
+        public bool Save(string fileName, out string resultMessage)
         {
             try
             {
@@ -104,13 +106,12 @@
                 bw.Write(_instPtr);
                 bw.Write(MARKER); // ptr done
 
-                Console.WriteLine($"Save of {fileName} done.");
-                errorMessage = null;
+                resultMessage = $"Save of {fileName} done.";
                 return true;
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                resultMessage = e.Message;
                 return false;
             }
         }
