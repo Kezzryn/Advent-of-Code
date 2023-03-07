@@ -38,8 +38,8 @@
 - **Future Fun:** Reimplment as a one dimentional array. Perhaps bitshifting? 
 
 ### [Day 9](Day%2009) - Explosives in Cyberspace
-- **Problem:**
-- **Solution:**
+- **Problem:** Oh, Zip bomb puzzle. How big is the uncompressed file to get? 
+- **Solution:** Part one was simple iteration over the file. Part two turned out to be a reursion problem that was solved by changing a couple lines of code in my initial function to be recursive instead.
 
 ### [Day 10](Day%2010) - Balance Bots
 - **Problem:**
