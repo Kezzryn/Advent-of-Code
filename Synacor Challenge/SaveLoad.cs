@@ -10,9 +10,10 @@
 
         public bool Load(string fileName, out string? errorMessage)
         {
-            string[] stageText = { "main memory", "registers", "stack", "pointer", "end of file" };
             try
             {
+                string[] stageText = { "main memory", "registers", "stack", "pointer", "end of file" };
+
                 if (fileName == string.Empty) fileName = DefaultLoadFile;
                 using BinaryReader reader = new(new FileStream(fileName, FileMode.Open, FileAccess.Read));
 
@@ -51,12 +52,22 @@
                     }
                 }
 
-                // Any other variables that need resetting? 
+                // Any other variables that need resetting?
                 _inputBuffer = string.Empty;
 
+                // We had a basic bin. Clear out the non-main mem stuff.
+                if (stage == 0) 
+                {
+                    _stack.Clear();
+                    _instPtr = USHORT_0;
+                    for (int i = 0 ; i < _registers.Length; i++)
+                    {
+                        _registers[i] = USHORT_0;  
+                    }
+                }
+                Console.WriteLine($"Load of {fileName} done.");
                 errorMessage = null;
                 return true;
-                
             }
             catch (Exception e)
             {
@@ -93,6 +104,7 @@
                 bw.Write(_instPtr);
                 bw.Write(MARKER); // ptr done
 
+                Console.WriteLine($"Save of {fileName} done.");
                 errorMessage = null;
                 return true;
             }

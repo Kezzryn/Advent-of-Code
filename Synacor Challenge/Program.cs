@@ -9,35 +9,43 @@ static void WriteError(string message)
     Console.ForegroundColor = ccFC;
     Console.WriteLine(message);
 }
+Dictionary<ConsoleKey, string> quickCommands = new()
+    {
+        { ConsoleKey.F1, "help" },
+        { ConsoleKey.F2, @"load extras\challenge.bin" },
+        { ConsoleKey.F3, "run" },
+        { ConsoleKey.F4, "breakat 1798" },
+        { ConsoleKey.F5, "save quicksave.syn9k" },
+        { ConsoleKey.F6, "load quicksave.syn9k" },
+        { ConsoleKey.F7, "load teleporter.syn9k" },
+        { ConsoleKey.F8, "setinput use teleporter" },
+        { ConsoleKey.Escape, "exit" },
+        { ConsoleKey.RightArrow, "step" }
+    };
 
 try
 {
     const string PROMPT = "SynOS > ";
     const string TITLE = "SynOS 9000";
 
-    Dictionary<ConsoleKey, string> quickCommands = new()
-    {
-        { ConsoleKey.F1, "help" },
-        { ConsoleKey.F2, "load" },
-        { ConsoleKey.F3, "run" },
-        { ConsoleKey.F4, "debugger" },
-        { ConsoleKey.F5, "save quicksave.syn9k" },
-        { ConsoleKey.F6, "load teleporter.syn9k" },
-        { ConsoleKey.F7, "load quicksave.syn9k" },
-        { ConsoleKey.F8, "help" },
-        { ConsoleKey.Escape, "exit" },
-
-    };
-
     Synacor9000 syn9k = new();
     bool isDone = false;
 
     Console.Title = TITLE;
     Console.TreatControlCAsInput = true;
-    
+
+    Dictionary<string, (int Left, int Top)> curPos = new()
+    {
+        { "console", (0, Console.WindowTop +20) },
+        { "gamearea", (0, 0) },
+        { "debug", (0, Console.WindowTop +25) },
+    };
+
     void DoSomething(string command)
     {
         string[] split = command.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        string args = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
+
         switch (split[0])
         {
             case "exit" or "quit":
@@ -45,29 +53,15 @@ try
                 Console.WriteLine("Bye!");
                 break;
             case "load":
-                string fileName = (split.GetUpperBound(0) >= 1) ? split[1] : Synacor9000.DefaultLoadFile;
-                if (syn9k.Load(fileName, out string? error))
-                {
-                    Console.WriteLine($"{split[0]} of {fileName} done.");
-                }
-                else
-                {
-                    WriteError(error!);
-                }
+                if (!syn9k.Load((args == string.Empty) ? Synacor9000.DefaultLoadFile : args, out string? error)) WriteError(error!);
                 break;
             case "save":
-                fileName = (split.GetUpperBound(0) >= 1) ? split[1] : Synacor9000.DefaultSaveFile;
-                if (syn9k.Save(fileName, out error))
-                {
-                    Console.WriteLine($"{split[0]} of {fileName} done.");
-                }
-                else
-                {
-                    WriteError(error!);
-                }
+                if (!syn9k.Save((args == string.Empty) ? Synacor9000.DefaultSaveFile : args, out error)) WriteError(error!);
                 break;
             case "run":
+                Console.SetCursorPosition(curPos["gamearea"].Left, curPos["gamearea"].Top);
                 syn9k.Run();
+                curPos["gamearea"] = Console.GetCursorPosition();
                 break;
             case "help":
                 Console.WriteLine("Yea, we need some, but for now, here are the defined quick keys:");
@@ -75,7 +69,69 @@ try
                 {
                     Console.WriteLine($"{cmds.Key} {cmds.Value}");
                 }
+                break;
+            case "step":
+                Console.SetCursorPosition(curPos["debug"].Left, curPos["debug"].Top);
+                syn9k.PrintStatus();
+                Console.SetCursorPosition(curPos["gamearea"].Left, curPos["gamearea"].Top);
 
+                syn9k.Step((args == string.Empty) ? 1 : int.Parse(args));
+                curPos["gamearea"] = Console.GetCursorPosition();
+                break;
+            case "status":
+                int tempTop = Console.CursorTop;
+                int tempLeft = Console.CursorLeft;
+
+                syn9k.PrintStatus();
+
+                Console.CursorTop = tempTop;
+                Console.CursorLeft = tempLeft;
+                break;
+            case "setreg":
+                if (split.GetUpperBound(0) < 2)
+                {
+                    Console.WriteLine("Not enough arguments for setreg.");
+                    break;
+                }
+                ushort address = ushort.Parse(split[1]);
+                ushort value = ushort.Parse(split[2]);
+                syn9k.SetRegister(address, value);
+                break;
+            case "setptr":
+                if (split.GetUpperBound(0) < 1)
+                {
+                    Console.WriteLine("Not enough arguments for setptr.");
+                    break;
+                }
+                address = ushort.Parse(split[1]);
+                syn9k.SetPtr(address);   
+                break;
+            case "setinput":
+                if (split.GetUpperBound(0) < 1)
+                {
+                    Console.WriteLine("Not enough arguments for setinput.");
+                    break;
+                }
+                syn9k.SetInputBuffer(String.Join(" ", split[1..]));
+                break;
+            case "dump":
+                syn9k.DumpCommands();
+                break;
+            case "forward":
+                if (split.GetUpperBound(0) < 1)
+                {
+                    Console.WriteLine("Not enough arguments for forward.");
+                    break;
+                }
+                syn9k.StepUntil(ushort.Parse(split[1]));
+                break;
+            case "breakat":
+                if (split.GetUpperBound(0) < 1)
+                {
+                    Console.WriteLine("Not enough arguments for forward.");
+                    break;
+                }
+                syn9k.BreakOnAddress(ushort.Parse(split[1]));
                 break;
             default:
                 Console.WriteLine($"Command not recognized: {split[0]}");
@@ -102,6 +158,7 @@ try
                 case ConsoleKey.F7:
                 case ConsoleKey.F8:
                 case ConsoleKey.Escape:
+                case ConsoleKey.RightArrow:
                     if (quickCommands.TryGetValue(cki.Key, out string? cmd))
                     {
                         Console.Write(cmd);
@@ -134,14 +191,16 @@ try
     }
 
     Console.Clear();
-    Console.WriteLine("Welcome to the puzzle.");
 
     while (!isDone)
     {
-            Console.WriteLine();
-            Console.Write(PROMPT);
-            string input = ReadLine();
-            if (!string.IsNullOrEmpty(input)) DoSomething(input);
+        Console.SetCursorPosition(curPos["console"].Left, curPos["console"].Top);
+        Console.WriteLine(new string(' ', Console.WindowWidth)); 
+        Console.Write(PROMPT);
+        Console.Write(new string(' ', Console.WindowWidth - PROMPT.Length));
+        Console.CursorLeft = PROMPT.Length;
+        string input = ReadLine();
+        if (!string.IsNullOrEmpty(input)) DoSomething(input);
     }
 }
 catch (Exception e)

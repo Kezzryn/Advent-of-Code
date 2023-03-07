@@ -9,10 +9,12 @@ namespace Synacor_Challenge
          * Nearly all of this is for opcode 20, but some does touch on flow control. 
          */
 
+        private const char NEWLINE = '\n';
+
         private string _inputBuffer = string.Empty;
         private string GetConsoleInput()
         {
-            const char NEWLINE = '\n';
+            
             const string CMD_EXIT = "exit";
 
             string returnValue;
@@ -59,6 +61,34 @@ namespace Synacor_Challenge
                         // backspace moves the cursor back, so whitespace to clear, then \b to back the cursor up again. 
                         Console.Write(" \b");
                         break;
+                    case ConsoleKey.A:
+                    case ConsoleKey.B:
+                    case ConsoleKey.C:
+                    case ConsoleKey.D:
+                    case ConsoleKey.E:
+                    case ConsoleKey.F:
+                    case ConsoleKey.G:
+                    case ConsoleKey.H:
+                    case ConsoleKey.I:
+                    case ConsoleKey.J:
+                    case ConsoleKey.K:
+                    case ConsoleKey.L:
+                    case ConsoleKey.M:
+                    case ConsoleKey.N:
+                    case ConsoleKey.O:
+                    case ConsoleKey.P:
+                    case ConsoleKey.Q:
+                    case ConsoleKey.R:
+                    case ConsoleKey.S:
+                    case ConsoleKey.T:
+                    case ConsoleKey.U:
+                    case ConsoleKey.V:
+                    case ConsoleKey.W:
+                    case ConsoleKey.X:
+                    case ConsoleKey.Y:
+                    case ConsoleKey.Z:
+                        sb.Append(cki.KeyChar);
+                        break;
                     default:
                         if ((cki.Modifiers & ConsoleModifiers.Control) != 0 && cki.Key == ConsoleKey.C)
                         {
@@ -67,7 +97,6 @@ namespace Synacor_Challenge
                             doneInput = true;
                             break;
                         }
-                        sb.Append(cki.KeyChar);
                         break;
                 }
             } while (!doneInput);

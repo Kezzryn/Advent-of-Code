@@ -1,7 +1,11 @@
-﻿namespace Synacor_Challenge
+﻿using System.Text;
+
+namespace Synacor_Challenge
 {
     internal partial class Synacor9000
     {
+        private readonly Queue<string> _commandTrace = new();
+
         static public readonly Dictionary<int, (string instString, int numParam)> instructionSet = new()
         {
             {  0, ("halt",  0) },
@@ -27,7 +31,6 @@
             { 20, ("in",    1) },
             { 21, ("noop",  0) }
         };
-
         static public void DumpIt(BinaryReader reader, StreamWriter writer)
         {
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -90,23 +93,76 @@
             }
         }
 
-        public void Step(int numSteps = 1)
+        public void StepUntil(ushort targetInst)
         {
+            ushort instr;// = Mem_Read(_instPtr);
+            do
+            {
+                Step();
+                instr = Mem_Read(_instPtr);
+            } while (instr != targetInst);
+        }
+        public void BreakOnAddress(ushort targetInst)
+        {
+            do
+            {
+                Step();
+            } while (_instPtr != targetInst);
+        }
+        public void Step(int numSteps = 1)
+        {   
             for (int i = 1; i <= numSteps; i++)
             {
+                _commandTrace.Enqueue(CurrentState());
                 Dispatcher(Ptr_ReadValue());
             }
+        }
+        public void DumpCommands()
+        {
+            string fileName = $"commandDump_{DateTime.Now:yyyyMMddHHmmss}.txt";
+
+            using StreamWriter sw = new(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write));
+
+            while (_commandTrace.Count > 0)
+            {
+                sw.WriteLine(_commandTrace.Dequeue());  
+            }
+            sw.Close();
+        }
+
+        private string CurrentState()
+        {
+            StringBuilder sb = new();
+            int numParam = instructionSet[Mem_Read(_instPtr)].numParam;
+
+            sb.Append($"{_instPtr,8}");
+
+            sb.Append($"{instructionSet[Mem_Read(_instPtr)].instString, 5}");
+            sb.Append($"{((numParam >= 1)  ? Mem_Read((ushort)(_instPtr + 1)): ""),6}");
+            sb.Append($"{((numParam >= 2) ? Mem_Read((ushort)(_instPtr + 2)) : ""),6}");
+            sb.Append($"{((numParam >= 3) ? Mem_Read((ushort)(_instPtr + 3)) : ""),6}");
+            sb.Append($" : ");
+            for (int i = 0; i < 8; i++)
+            {
+                sb.Append($"{_registers[i],6}");
+            }
+            return sb.ToString();
         }
 
         public void PrintStatus()
         {
-            // dump currently executing instrution, it's values and values of the registers
-            //
-            // registers, cu
-            // 
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.CursorLeft = 0;
+            Console.Write(CurrentState());
         }
 
         public void SetRegister(int address, ushort value) => _registers[address] = value;
         public void SetPtr(ushort value)  => _instPtr = value;
+        public void SetInputBuffer(string value)
+        {
+            _inputBuffer = value;
+            if (_inputBuffer[^1] != NEWLINE) _inputBuffer += NEWLINE;
+        }
     }
 }
+
