@@ -3,6 +3,29 @@ using System.Text;
 
 try
 {
+    const string PROMPT = "> ";
+    const string TITLE = "SynOS 9000";
+
+    Dictionary<ConsoleKey, string> quickCommands = new()
+        {
+            { ConsoleKey.F2,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} extras\\challenge.bin" },
+            { ConsoleKey.F3,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Run}" },
+            { ConsoleKey.F5,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Save}" },
+            { ConsoleKey.F8,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} teleporter.syn9k" },
+            { ConsoleKey.Escape,    $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Exit}" }
+        };
+    //Dictionary<string, (int Left, int Top)> curPos = new()
+    //    {
+    //        { "console", (0, Console.WindowTop +20) },
+    //        { "gamearea", (0, 0) },
+    //        { "debug", (0, Console.WindowTop +25) },
+    //    };
+
+    Synacor9000 syn9k = new();
+
+    bool isDone = false;
+    bool isLoaded = false;
+    bool isRunning = false;
 
     static void WriteError(string message)
     {
@@ -24,86 +47,78 @@ try
     {
         Console.Write(message);
     }
-    static void WriteDebuggerOutput(string message, bool isError)
+    static void WriteDebuggerOutput(string message, bool isSuccess)
     {
-        if (isError)
-            WriteError(message);
-        else
+        if (isSuccess)
             Console.WriteLine(message);
+        else
+            WriteError(message);
+    }
+    void WriteHelp()
+    {
+        const int spc = -8;
+        Console.WriteLine($"{TITLE} command list:");
+        Console.WriteLine($"{"F1",spc} This message.");
+        foreach (var cmd in ProgCmds.Command_Descriptions)
+        {
+            Console.WriteLine($"{cmd.Key, spc} {cmd.Value}");
+        }
+        Console.WriteLine();
+        Console.WriteLine($"All text that is not preceeded by {ProgCmds.COMMAND_CHAR} is passed without modification to the running program.");
+        Console.WriteLine("Quick-keys:");
+        foreach(KeyValuePair<ConsoleKey, string> cmd in quickCommands)
+        {
+            Console.WriteLine($"{cmd.Key} {cmd.Value}");
+        }
+        Console.WriteLine();
     }
 
-    Dictionary<ConsoleKey, string> quickCommands = new()
-        {
-            { ConsoleKey.F1, "!help" },
-            { ConsoleKey.F2, @"!load extras\challenge.bin" },
-            { ConsoleKey.F3, "!run" },
-            { ConsoleKey.F4, "" },
-            { ConsoleKey.F5, "!save" },
-            { ConsoleKey.F6, "" },
-            { ConsoleKey.F7, "" },
-            { ConsoleKey.F8, "!load teleporter.syn9k" },
-            { ConsoleKey.Escape, "!exit" },
-            { ConsoleKey.RightArrow, "!step" }
-        };
-
-    const string PROMPT = "> ";
-    const string TITLE = "SynOS 9000";
-    const char COMMAND_CHAR = '!';
-
-    Synacor9000 syn9k = new();
-    bool isDone = false;
-
-    bool isLoaded = false;
-    bool isRunning = false;
-
-    Dictionary<string, (int Left, int Top)> curPos = new()
-        {
-            { "console", (0, Console.WindowTop +20) },
-            { "gamearea", (0, 0) },
-            { "debug", (0, Console.WindowTop +25) },
-        };
-
-    void DoSomething(string command)
+    void DoConsoleCommand(string command)
     {
-        string[] split = command[1..].ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        command = command.Trim(ProgCmds.COMMAND_CHAR).ToLower();
+
+        string[] split = command.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         string args = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
 
         switch (split[0])
         {
-            case "exit" or "quit":
+            case ProgCmds.Exit:
                 isDone = true;
                 break;
-            case "load":
+            case ProgCmds.Load:
                 isLoaded = syn9k.Load((args == string.Empty) ? Synacor9000.DefaultLoadFile : args, out string results);
                 if (isLoaded)
                     WriteMessage(results);
                 else
                     WriteError(results);
                 break;
-            case "save":
+            case ProgCmds.Run:
+                if (isLoaded)
+                {
+                    WriteMessage("Running the program.");
+                    isRunning = true;
+                }
+                else
+                {
+                    WriteError("No program loaded.");
+                }
+                break;
+            case ProgCmds.Save:
+                if (!isRunning)
+                {
+                    WriteError("No running program to save.");
+                    break;
+                }
+
                 if (syn9k.Save((args == string.Empty) ? Synacor9000.DefaultSaveFile : args, out results))
                     WriteMessage(results);
                 else
                     WriteError(results);
                 break;
-            case "run":
-                isRunning = true;
-                WriteMessage("*** Running the program.");
-                break;
-            case "help":
-                WriteMessage("Yea, we need some, but for now, here are the defined quick keys:");
-                foreach (var cmds in quickCommands)
-                {
-                    WriteMessage($"{cmds.Key} {cmds.Value}");
-                }
-                break;
             default:
-                // pass all debugger commands through.
-                // Console.SetCursorPosition(curPos["gamearea"].Left, curPos["gamearea"].Top);
-                bool debugResult = syn9k.DebugDispatcher(command[1..].Trim(), out List<string> debugResponse);
-                //curPos["gamearea"] = Console.GetCursorPosition();
+                // pass all unknown !commands commands through. Maybe they're for the debugger?
+                bool debugResult = syn9k.DebugDispatcher(command, out List<string> debugResponse);
 
-                //Console.SetCursorPosition(curPos["debug"].Left, curPos["debug"].Top);
                 foreach (string s in debugResponse)
                 {
                     WriteDebuggerOutput(s.PadRight(Console.BufferWidth - 1), debugResult);
@@ -111,7 +126,7 @@ try
                 break;
         }
     }
-    string ReadLine()
+    string ReadInput()
     {
         ConsoleKeyInfo cki;
         StringBuilder sb = new();
@@ -122,6 +137,9 @@ try
             switch (cki.Key)
             {
                 case ConsoleKey.F1:
+                    WriteHelp();
+                    doneInput = true;
+                    break;
                 case ConsoleKey.F2:
                 case ConsoleKey.F3:
                 case ConsoleKey.F4:
@@ -130,7 +148,6 @@ try
                 case ConsoleKey.F7:
                 case ConsoleKey.F8:
                 case ConsoleKey.Escape:
-                case ConsoleKey.RightArrow:
                     if (quickCommands.TryGetValue(cki.Key, out string? cmd))
                     {
                         Console.Write(cmd);
@@ -164,37 +181,33 @@ try
 
     Console.Title = TITLE;
     Console.Clear();
+    WriteHelp();
+
     while (!isDone)
     {
-        // Console.SetCursorPosition(curPos["console"].Left, curPos["console"].Top);
-        // Console.WriteLine(new string(' ', Console.WindowWidth)); 
-
-        // Console.Write(new string(' ', Console.WindowWidth - PROMPT.Length));
-        //  Console.CursorLeft = PROMPT.Length;
-
         Console.Write(PROMPT);
-        string input = ReadLine();
+        string input = ReadInput();
 
         if (string.IsNullOrEmpty(input)) continue;
 
-        if (input.StartsWith(COMMAND_CHAR))
+        if (input.StartsWith(ProgCmds.COMMAND_CHAR))
         {
-            DoSomething(input);
+            DoConsoleCommand(input);
             input = string.Empty;
         }
 
         if (isLoaded && isRunning)
         {
-            syn9k.TakeCommand(input);
+            syn9k.SetProgramInput(input);
 
             isRunning = syn9k.Run() != Synacor9000.State.Halted;
 
-            while (syn9k.ReadOutput(out string output))
+            while (syn9k.GetProgramOutput(out string output))
             {
                 WriteProgramOutput(output);
             }
 
-            if (!isRunning) WriteMessage("Program Ended");
+            if (!isRunning) WriteMessage("Program halted.");
         }
     }
 
@@ -203,4 +216,22 @@ try
 catch (Exception e)
 {
     Console.WriteLine(e);
+}
+
+static class ProgCmds
+{
+    public const char COMMAND_CHAR = '!';
+    public const string Load = "load";
+    public const string Save = "save";
+    public const string Run = "run";
+    public const string Exit = "exit";
+
+    public static Dictionary<string, string> Command_Descriptions = new()
+    {
+        { Load, $"Loads a file. Default: {Synacor9000.DefaultLoadFile}" },
+        { Save, $"Saves the running program state. Default: {Synacor9000.DefaultSaveFile}" },
+        { Run,  "Starts the loaded program" },
+        { Exit, "Ends the program." }
+    };
+
 }

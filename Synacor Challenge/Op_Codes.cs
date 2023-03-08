@@ -20,7 +20,9 @@
             switch (instruction)
             {
                 case 0:
-                    return Synacor9000.State.Halted;
+                    // halt: 0  stop execution and terminate the program
+                    _instPtr--; // back up to the halt command so if this is re-run without being reset it doesn't freak out.
+                    return State.Halted;
                 case 1 or 15 or 16:
                     Op_Memory(instruction);
                     break;
@@ -40,7 +42,7 @@
                     return Op_Terminal(instruction);
                 case 21:
                     // noop: 21  no operation 
-                    break;
+                    return State.Running;   //redundent, but explicit. 
                 default:
                     throw new NotImplementedException($"{instruction}");
             }
