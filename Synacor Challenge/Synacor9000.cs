@@ -1,4 +1,6 @@
-﻿namespace Synacor_Challenge
+﻿using System.Text;
+
+namespace Synacor_Challenge
 {
     internal partial class Synacor9000
     {
@@ -14,19 +16,40 @@
         private readonly ushort[] _registers = new ushort[8];
         private readonly Stack<ushort> _stack = new();
 
-        private bool _stopExecution; 
+        // IO buffers and builders
+        private string _inputBuffer = string.Empty;
+        private readonly Queue<string> _outputBuffer = new();
+        private readonly StringBuilder _sbOutput = new();
 
         public Synacor9000() {}
-   
-        public void Run()
+        public enum State
         {
-            _stopExecution = false;
-            _inputBuffer = string.Empty;
-
-            while (!_stopExecution)
+            Running,
+            Halted,
+            Paused_For_Input
+        };
+        public State Run()
+        {
+            State currentState;
+            do
             {
-                Dispatcher(Ptr_ReadValue());
-            }
+                currentState = Dispatcher(Ptr_ReadValue());
+            } while (currentState == State.Running);
+
+            return currentState;
+        }
+        public bool ReadOutput(out string output)
+        {
+            output = string.Empty;
+            if (_outputBuffer.Count == 0) return false;
+
+            output = _outputBuffer.Dequeue();
+            return true;
+        }
+        public void TakeCommand(string input)
+        {
+            _inputBuffer = input;
+            if (_inputBuffer != string.Empty && _inputBuffer[^1] != '\n') _inputBuffer += '\n';
         }
     }
 }

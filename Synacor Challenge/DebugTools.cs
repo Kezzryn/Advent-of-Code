@@ -59,8 +59,7 @@ namespace Synacor_Challenge
                             _instPtr = argsparse[0];
                             break;
                         case "input":
-                            _inputBuffer = args;
-                            if (_inputBuffer[^1] != NEWLINE) _inputBuffer += NEWLINE;
+                            TakeCommand(args);
                             break;
                         case "memory":
                             _mainMemory[argsparse[0]] = argsparse[1];
@@ -111,7 +110,6 @@ namespace Synacor_Challenge
 
             return success;
         }
-
         static private bool DumpBinary(string inFile, string outFile, out string resultMessage)
         {
             try
@@ -176,7 +174,6 @@ namespace Synacor_Challenge
                 return false;
             }
         }
-
         public void BreakOnInstr(ushort targetInst)
         {
             ushort instr;// = Mem_Read(_instPtr);

@@ -15,13 +15,12 @@
         private const ushort USHORT_1 = 1;
 
         private ushort _instPtr = 0;    // instruction pointer. 
-        private void Dispatcher(ushort instruction)
+        private State Dispatcher(ushort instruction)
         {
             switch (instruction)
             {
                 case 0:
-                    _stopExecution = true;
-                    break;
+                    return Synacor9000.State.Halted;
                 case 1 or 15 or 16:
                     Op_Memory(instruction);
                     break;
@@ -38,14 +37,14 @@
                     Op_Math(instruction);
                     break;
                 case 19 or 20:
-                    Op_Terminal(instruction);
-                    break;
+                    return Op_Terminal(instruction);
                 case 21:
                     // noop: 21  no operation 
                     break;
                 default:
                     throw new NotImplementedException($"{instruction}");
             }
+            return State.Running;
         }
         private void Op_Comparison(ushort instruction)
         {
@@ -158,37 +157,42 @@ One of the two parameters is indirect: it's not the destination/source of the mo
             }
             Mem_Write(address, value);
         }
-        private void Op_Terminal(ushort instruction)
+        private State Op_Terminal(ushort instruction)
         {
             switch (instruction)
             {
                 case 19:         // out: 19 a    write the character represented by ascii code <a> to the terminal
-                    Console.Write((char)Ptr_ReadValue());
+                    char c = (char)Ptr_ReadValue();
+
+                    _sbOutput.Append(c);
+                    if (c == '\n')
+                    {
+                        _outputBuffer.Enqueue(_sbOutput.ToString()); 
+                        _sbOutput.Clear();
+                    } 
                     break;
                 case 20:        // in: 20 a     read a character from the terminal and write its ascii code to <a>;
                     // it can be assumed that once input starts, it will continue until a newline is encountered;
                     // this means that you can safely read whole lines from the keyboard and trust that they will be fully read
 
-                    if (string.IsNullOrEmpty(_inputBuffer)) _inputBuffer = GetConsoleInput();
-
-                    if (_stopExecution || string.IsNullOrEmpty(_inputBuffer))
+                    if (string.IsNullOrEmpty(_inputBuffer))
                     {
                         _instPtr--; // back this up to what should be the instruction, so if/when we resume we don't freak out.
-                        break;
+                        return State.Paused_For_Input;
                     }
-                    else
-                    {
-                        ushort value = _inputBuffer[0];
-                        ushort address = Ptr_ReadRaw();
 
-                        _inputBuffer = _inputBuffer.Length > 1 ? _inputBuffer[1..] : string.Empty;
+                    ushort value = _inputBuffer[0];
+                    ushort address = Ptr_ReadRaw();
 
-                        Mem_Write(address, value);
-                    }
+                    _inputBuffer = _inputBuffer.Length > 1 ? _inputBuffer[1..] : string.Empty;
+
+                    Mem_Write(address, value);
+
                     break;
                 default:
                     throw new NotImplementedException();    // PEBCAK 
             }
+            return State.Running;
         }
         private ushort Mem_Read(ushort address)
         {
