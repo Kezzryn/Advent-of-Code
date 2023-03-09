@@ -6,7 +6,8 @@ namespace Synacor_Challenge
     {
         private readonly Queue<string> _commandTrace = new();
         private bool _doTrace = false;
-        private int _traceDepth = 200;
+        private bool _doTraceEcho = false;
+        private int _traceDepth = 500;
 
         private readonly HashSet<ushort> _breakAddr = new();
         private readonly HashSet<int> _breakInst = new();
@@ -47,7 +48,7 @@ namespace Synacor_Challenge
             "trace toggle",
             "trace depth [value]",
             "step [value]",
-            "break addr [value]",
+            "break addy [value]",
             "break instr [0-21]",
             "break clear",
             "break show",
@@ -72,20 +73,24 @@ namespace Synacor_Challenge
                     returnValue = commandList;
                     break;
                 case "set":
-                    var argsparse = args.Split(' ').Select(ushort.Parse).ToArray();
+                    var argsparse = args.Split(' ');
                     switch (sub_cmd)
                     {
                         case "register":
-                            _registers[argsparse[0]] = argsparse[1];
+                            _registers[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
+                            returnValue.Add($"registr: {argsparse[0]} set to: {argsparse[1]}");
                             break;
                         case "instptr":
-                            _instPtr = argsparse[0];
+                            _instPtr = ushort.Parse(argsparse[0]);
+                            returnValue.Add($"instPtr: set to: {argsparse[0]}");
                             break;
                         case "input":
                             SetProgramInput(args);
+                            returnValue.Add($"inputBuffer: set to: {args}");
                             break;
                         case "memory":
-                            _mainMemory[argsparse[0]] = argsparse[1];
+                            _mainMemory[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
+                            returnValue.Add($"address: {argsparse[0]} set to: {argsparse[1]}");
                             break;
                         default:
                             success = false;
@@ -95,8 +100,9 @@ namespace Synacor_Challenge
                     break;
                 case "dump":
                     // todo filenames
-                    string loadFile = string.Empty;
-                    string saveFile = string.Empty;
+                    var dumpArgs = args.Split(' ');
+                    string loadFile = (dumpArgs.GetUpperBound(0) >= 0) ? dumpArgs[0] : string.Empty;
+                    string saveFile = (dumpArgs.GetUpperBound(0) >= 1) ? dumpArgs[1] : string.Empty;
                     switch (sub_cmd)
                     {
                         case "binary":
@@ -128,6 +134,10 @@ namespace Synacor_Challenge
                             _traceDepth = traceDepth;
                             returnValue.Add($"Trace depth is now the last {_traceDepth} commands.");
                             break;
+                        case "echo":
+                            _doTraceEcho = !_doTraceEcho;
+                            returnValue.Add($"Command trace console echo is now {(_doTraceEcho ? "on" : "off")}.");
+                            break;
                         default:
                             success = false;
                             returnValue.Add($"Unknown instruction {instruction}");
@@ -135,9 +145,10 @@ namespace Synacor_Challenge
                     }
                     break;
                 case "step":
-                    int numSteps = int.TryParse(args, out int step_parse) ? step_parse : 1;
-                    Step(numSteps);
-                    returnValue.Add($"Stepped {numsteps}");
+                    // Oh look the only thing without subcommands, just to fuck us up on the parsing.
+                    int numSteps = int.TryParse(sub_cmd, out int step_parse) ? step_parse : 1;
+                    State stepState = Step(numSteps);
+                    returnValue.Add($"Stepped {numSteps} state {stepState}");
                     break;
                 case "break":
                     ushort value = ushort.TryParse(args, out ushort break_parse) ? break_parse : USHORT_0;
@@ -164,7 +175,7 @@ namespace Synacor_Challenge
                         case "run":
                             ushort instr;// = Mem_Read(_instPtr);
                             bool isDone = false;
-                            State stepState;
+                            // State stepState; declared in "step" 
                             do
                             {
                                 stepState = Step();
@@ -187,7 +198,10 @@ namespace Synacor_Challenge
                                     isDone = true;
                                 }
                             } while (!isDone);
-
+                            while (GetProgramOutput(out string output))
+                            {
+                                returnValue.Add($"PROGRAM OUT: {output}"); ;
+                            }
                             break;
                         default:
                             success = false;
@@ -220,20 +234,24 @@ namespace Synacor_Challenge
                     ushort address = (ushort)((reader.BaseStream.Position / 2) - 1); // zero bound
 
                     StringBuilder sb = new();
+                    sb.Append($"{address,8}");
 
                     if (instructionSet.TryGetValue(value, out var instKey))
                     {
-                        sb.Append($"{address,8}");
                         sb.Append($"{instructionSet[value].instString,5}");
 
                         if (instKey.instString == "out")
                         {
-                            do
-                            {
-                                value = reader.ReadUInt16();
-                                sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : ((char)value == '\n') ? "\\n" : (char)value);
-                            }
-                            while (reader.PeekChar() == 19);
+                            //string lineValue = (value >= MODULO) ? $"reg[{value % MODULO}]" : $"{value}";
+                            //sb.Append($"{lineValue,8}");
+                            value = reader.ReadUInt16();
+                            sb.Append($"{(value == '\n' ? "\\n" : (char)value),8}");
+                            //    do
+                            //    {
+                            //        value = reader.ReadUInt16();
+                            //        sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : ((char)value == '\n') ? "\\n" : value.ToString());
+                            //    }
+                            //    while (reader.PeekChar() == 19);
                         }
                         else
                         {
@@ -251,7 +269,7 @@ namespace Synacor_Challenge
                     }
                     else
                     {
-                        sb.Append(value);
+                        sb.Append($"{value,8}"); // instr & param spacer
                     }
 
                     writer.WriteLine(sb);
@@ -276,6 +294,7 @@ namespace Synacor_Challenge
                     _commandTrace.Enqueue(GetCurrentState());
                     if (_commandTrace.Count > _traceDepth) _commandTrace.Dequeue();
                 }
+                if (_doTraceEcho) Console.WriteLine(GetCurrentState());
                 returnValue = Dispatcher(Ptr_ReadValue());
                 
                 if (returnValue != State.Running) break;
@@ -321,6 +340,12 @@ namespace Synacor_Challenge
             {
                 sb.Append($"{_registers[i],6}");
             }
+            sb.Append($" : ");
+            foreach(ushort value in _stack.Reverse())
+            {
+                sb.Append($"{value,6}");
+            }
+
             return sb.ToString();
         }
     }

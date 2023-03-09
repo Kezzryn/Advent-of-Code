@@ -11,8 +11,11 @@ try
             { ConsoleKey.F2,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} extras\\challenge.bin" },
             { ConsoleKey.F3,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Run}" },
             { ConsoleKey.F5,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Save}" },
+            { ConsoleKey.F7,        $"{ProgCmds.COMMAND_CHAR}dump binary" },
             { ConsoleKey.F8,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} teleporter.syn9k" },
-            { ConsoleKey.Escape,    $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Exit}" }
+            { ConsoleKey.Escape,    $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Exit}" },
+            { ConsoleKey.RightArrow,$"{ProgCmds.COMMAND_CHAR}step 50" },
+            { ConsoleKey.UpArrow,   $"{ProgCmds.COMMAND_CHAR}step 500" }
         };
     //Dictionary<string, (int Left, int Top)> curPos = new()
     //    {
@@ -118,7 +121,11 @@ try
             default:
                 // pass all unknown !commands commands through. Maybe they're for the debugger?
                 bool debugResult = syn9k.DebugDispatcher(command, out List<string> debugResponse);
-
+                if (isRunning)
+                {
+                    isRunning = false;
+                    WriteMessage("Stopping run for debugging.");
+                }
                 foreach (string s in debugResponse)
                 {
                     WriteDebuggerOutput(s.PadRight(Console.BufferWidth - 1), debugResult);
@@ -147,7 +154,15 @@ try
                 case ConsoleKey.F6:
                 case ConsoleKey.F7:
                 case ConsoleKey.F8:
+                case ConsoleKey.F9:
+                case ConsoleKey.F10:
+                case ConsoleKey.F11:
+                case ConsoleKey.F12:
                 case ConsoleKey.Escape:
+                case ConsoleKey.RightArrow:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.DownArrow:
                     if (quickCommands.TryGetValue(cki.Key, out string? cmd))
                     {
                         Console.Write(cmd);
@@ -198,7 +213,7 @@ try
 
         if (isLoaded && isRunning)
         {
-            syn9k.SetProgramInput(input);
+            if (input != string.Empty) syn9k.SetProgramInput(input);
 
             isRunning = syn9k.Run() != Synacor9000.State.Halted;
 
