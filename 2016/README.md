@@ -42,8 +42,8 @@
 - **Solution:** Part one was simple iteration over the file. Part two turned out to be a reursion problem that was solved by changing a couple lines of code in my initial function to be recursive instead.
 
 ### [Day 10](Day%2010) - Balance Bots
-- **Problem:**
-- **Solution:**
+- **Problem:** Bot giving chips to each other.
+- **Solution:** I had initially thought this would be a binary tree problem, but it feels more like a sort. Solved it with a simulation. 
 
 ### [Day 11](Day%2011) - Radioisotope Thermoelectric Generators
 - **Problem:**
