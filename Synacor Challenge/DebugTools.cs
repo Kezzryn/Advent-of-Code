@@ -4,13 +4,17 @@ namespace Synacor_Challenge
 {
     internal partial class Synacor9000
     {
+        // trace tools.
         private readonly Queue<string> _commandTrace = new();
         private bool _doTrace = false;
         private bool _doTraceEcho = false;
-        private int _traceDepth = 500;
+        private bool _doTraceStack = false;
+        private int _traceDepth = 1500;
 
+        // break tools. 
         private readonly HashSet<ushort> _breakAddr = new();
         private readonly HashSet<int> _breakInst = new();
+
         static private readonly Dictionary<int, (string instString, int numParam)> instructionSet = new()
         {
             {  0, ("halt",  0) },
@@ -44,6 +48,7 @@ namespace Synacor_Challenge
             "set input [value]",
             "dump binary [load file] [save file]",
             "dump trace [save file]",
+            "dump memory [address]",
             "dump state",
             "trace toggle",
             "trace depth [value]",
@@ -65,7 +70,7 @@ namespace Synacor_Challenge
             // args - each command/sub command is responsable for splitting, all the top guarentees is the variables are not null. (but they might be Empty)
             string command = split[0];
             string sub_cmd = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
-            string args = instruction[(split[0].Length + split[1].Length + 1)..].Trim();
+            string args = (split.GetUpperBound(0) >= 2) ? instruction[(split[0].Length + split[1].Length + 1)..].Trim() : string.Empty;
 
             switch (command)
             {
@@ -99,7 +104,7 @@ namespace Synacor_Challenge
                     };
                     break;
                 case "dump":
-                    // todo filenames
+                    // todo better filenames
                     var dumpArgs = args.Split(' ');
                     string loadFile = (dumpArgs.GetUpperBound(0) >= 0) ? dumpArgs[0] : string.Empty;
                     string saveFile = (dumpArgs.GetUpperBound(0) >= 1) ? dumpArgs[1] : string.Empty;
@@ -116,6 +121,13 @@ namespace Synacor_Challenge
                         case "state":
                             returnValue.Add(GetCurrentState());
                             break;
+                        case "memory":
+                            if (ushort.TryParse(dumpArgs[0], out ushort address))
+                                returnValue.Add(Mem_Read(address).ToString());
+                            else
+                                returnValue.Add($"Unable to convert {dumpArgs[0]} to ushort.");
+                                success = false;
+                            break;
                         default:
                             success = false;
                             returnValue.Add($"Unknown instruction {instruction}");
@@ -126,13 +138,17 @@ namespace Synacor_Challenge
                     int traceDepth = int.TryParse(args, out int trace_parse) ? trace_parse : 200;
                     switch (sub_cmd)
                     {
-                        case "toggle":
+                        case "cmd":
                             _doTrace = !_doTrace;
                             returnValue.Add($"Command trace is now {(_doTrace ? "on" : "off")}.");
                             break;
                         case "depth":
                             _traceDepth = traceDepth;
                             returnValue.Add($"Trace depth is now the last {_traceDepth} commands.");
+                            break;
+                        case "stack":
+                            _doTraceStack = !_doTraceStack;
+                            returnValue.Add($"Stack trace is now {(_doTraceStack ? "on" : "off")}.");
                             break;
                         case "echo":
                             _doTraceEcho = !_doTraceEcho;
@@ -148,7 +164,7 @@ namespace Synacor_Challenge
                     // Oh look the only thing without subcommands, just to fuck us up on the parsing.
                     int numSteps = int.TryParse(sub_cmd, out int step_parse) ? step_parse : 1;
                     State stepState = Step(numSteps);
-                    returnValue.Add($"Stepped {numSteps} state {stepState}");
+                    if (!_doTraceEcho) returnValue.Add($"Stepped {numSteps} state {stepState}");
                     break;
                 case "break":
                     ushort value = ushort.TryParse(args, out ushort break_parse) ? break_parse : USHORT_0;
@@ -173,7 +189,7 @@ namespace Synacor_Challenge
                             if (_breakAddr.Count > 0) foreach(var s in _breakAddr) returnValue.Add($"addr: {s}");
                             break;
                         case "run":
-                            ushort instr;// = Mem_Read(_instPtr);
+                            ushort instr;
                             bool isDone = false;
                             // State stepState; declared in "step" 
                             do
@@ -242,16 +258,8 @@ namespace Synacor_Challenge
 
                         if (instKey.instString == "out")
                         {
-                            //string lineValue = (value >= MODULO) ? $"reg[{value % MODULO}]" : $"{value}";
-                            //sb.Append($"{lineValue,8}");
                             value = reader.ReadUInt16();
-                            sb.Append($"{(value == '\n' ? "\\n" : (char)value),8}");
-                            //    do
-                            //    {
-                            //        value = reader.ReadUInt16();
-                            //        sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : ((char)value == '\n') ? "\\n" : value.ToString());
-                            //    }
-                            //    while (reader.PeekChar() == 19);
+                            sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : (value == '\n' ? "\\n" : (char)value));
                         }
                         else
                         {
@@ -325,25 +333,30 @@ namespace Synacor_Challenge
         }
         private string GetCurrentState()
         {
-            // change header in DumpCommandTrace if changed. 
+            // change header in DumpCommandTrace if format changes. 
             StringBuilder sb = new();
             int numParam = instructionSet[Mem_Read(_instPtr)].numParam;
 
             sb.Append($"{_instPtr,8}");
-
             sb.Append($"{instructionSet[Mem_Read(_instPtr)].instString,5}");
+
             sb.Append($"{((numParam >= 1) ? Mem_Read((ushort)(_instPtr + 1)) : ""),6}");
             sb.Append($"{((numParam >= 2) ? Mem_Read((ushort)(_instPtr + 2)) : ""),6}");
             sb.Append($"{((numParam >= 3) ? Mem_Read((ushort)(_instPtr + 3)) : ""),6}");
             sb.Append($" : ");
+
             for (int i = 0; i < 8; i++)
             {
                 sb.Append($"{_registers[i],6}");
             }
-            sb.Append($" : ");
-            foreach(ushort value in _stack.Reverse())
+
+            if (_doTraceStack)
             {
-                sb.Append($"{value,6}");
+                sb.Append($" : ");
+                foreach (ushort value in _stack.Reverse())
+                {
+                    sb.Append($"{value,6}");
+                }
             }
 
             return sb.ToString();

@@ -20,13 +20,16 @@ namespace Synacor_Challenge
         private string _inputBuffer = string.Empty;
         private readonly Queue<string> _outputBuffer = new();
         private readonly StringBuilder _sbOutput = new();
+
         public enum State
         {
             Running,
             Halted,
             Paused_For_Input
         };
+
         public Synacor9000() {}
+
         public State Run()
         {
             State currentState;
@@ -37,6 +40,7 @@ namespace Synacor_Challenge
 
             return currentState;
         }
+
         public bool GetProgramOutput(out string output)
         {
             output = string.Empty;
@@ -45,6 +49,7 @@ namespace Synacor_Challenge
             output = _outputBuffer.Dequeue();
             return true;
         }
+
         public void SetProgramInput(string input)
         {
             _inputBuffer = input;

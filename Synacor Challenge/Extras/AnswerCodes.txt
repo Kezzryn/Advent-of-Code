@@ -4,6 +4,24 @@
 4) Tablet code:		EVdVCiuTfjkM
 5) Maze code:		cnXVssWxhXGO
 Coin puzzle:		B R S Cn Co
-6) Teleported:		LSCOJhZsQYXP
-7) 
-8)
+6) Teleport 1:		LSCOJhZsQYXP
+7) Teleport 2:		plzAsKTPdyqQ
+8) Orb
+
+
+
+Method around teleporter: 
+
+Set register 7 to anything non 0
+
+5483  set  reg[0]       4        
+5486  set  reg[1]       1        
+
+Set to 0, 0  to short circut the validator
+
+Disable the failure check 
+5495   jf  reg[1]    5579  
+
+5495 21
+5496 21
+5497 21

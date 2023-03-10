@@ -8,14 +8,16 @@ try
 
     Dictionary<ConsoleKey, string> quickCommands = new()
         {
-            { ConsoleKey.F2,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} extras\\challenge.bin" },
-            { ConsoleKey.F3,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Run}" },
-            { ConsoleKey.F5,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Save}" },
-            { ConsoleKey.F7,        $"{ProgCmds.COMMAND_CHAR}dump binary" },
-            { ConsoleKey.F8,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} teleporter.syn9k" },
             { ConsoleKey.Escape,    $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Exit}" },
-            { ConsoleKey.RightArrow,$"{ProgCmds.COMMAND_CHAR}step 50" },
-            { ConsoleKey.UpArrow,   $"{ProgCmds.COMMAND_CHAR}step 500" }
+            { ConsoleKey.F8,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} teleporter.syn9k" },
+            { ConsoleKey.F2,        $"{ProgCmds.COMMAND_CHAR}break addy 5482" },
+            { ConsoleKey.F3,        $"{ProgCmds.COMMAND_CHAR}set input use teleporter" },
+            { ConsoleKey.F4,        $"{ProgCmds.COMMAND_CHAR}set register 7 1" },
+            { ConsoleKey.F5,        $"{ProgCmds.COMMAND_CHAR}break run" },
+            { ConsoleKey.F6,        $"{ProgCmds.COMMAND_CHAR}trace echo" },
+            { ConsoleKey.F9,        $"{ProgCmds.COMMAND_CHAR}step" },
+            { ConsoleKey.F10,       $"{ProgCmds.COMMAND_CHAR}step 5" },
+            { ConsoleKey.F11,       $"{ProgCmds.COMMAND_CHAR}step 50" }
         };
     //Dictionary<string, (int Left, int Top)> curPos = new()
     //    {
@@ -75,7 +77,6 @@ try
         }
         Console.WriteLine();
     }
-
     void DoConsoleCommand(string command)
     {
         command = command.Trim(ProgCmds.COMMAND_CHAR).ToLower();
@@ -147,30 +148,6 @@ try
                     WriteHelp();
                     doneInput = true;
                     break;
-                case ConsoleKey.F2:
-                case ConsoleKey.F3:
-                case ConsoleKey.F4:
-                case ConsoleKey.F5:
-                case ConsoleKey.F6:
-                case ConsoleKey.F7:
-                case ConsoleKey.F8:
-                case ConsoleKey.F9:
-                case ConsoleKey.F10:
-                case ConsoleKey.F11:
-                case ConsoleKey.F12:
-                case ConsoleKey.Escape:
-                case ConsoleKey.RightArrow:
-                case ConsoleKey.LeftArrow:
-                case ConsoleKey.UpArrow:
-                case ConsoleKey.DownArrow:
-                    if (quickCommands.TryGetValue(cki.Key, out string? cmd))
-                    {
-                        Console.Write(cmd);
-                        sb.Clear();
-                        sb.Append(cmd);
-                        doneInput = true;
-                    }
-                    break;
                 case ConsoleKey.Backspace:
                     if (sb.Length > 0) sb = sb.Remove(sb.Length - 1, 1);
                     // backspace moves the cursor back, so whitespace, then \b to back the cursor up again.
@@ -186,6 +163,16 @@ try
                         isDone = true;
                         break;
                     }
+
+                    if (quickCommands.TryGetValue(cki.Key, out string? cmd))
+                    {
+                        Console.Write(cmd);
+                        sb.Clear();
+                        sb.Append(cmd);
+                        doneInput = true;
+                        break;
+                    }
+
                     sb.Append(cki.KeyChar);
                     break;
             }
