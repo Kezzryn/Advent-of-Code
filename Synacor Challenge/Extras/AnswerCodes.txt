@@ -5,7 +5,7 @@
 5) Maze code:		cnXVssWxhXGO
 Coin puzzle:		B R S Cn Co
 6) Teleport 1:		LSCOJhZsQYXP
-7) Teleport 2:		plzAsKTPdyqQ
+7) Teleport 2:							plzAsKTPdyqQ <--- WRONG. Reality warped. 
 8) Orb
 
 

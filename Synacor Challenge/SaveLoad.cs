@@ -47,7 +47,6 @@
                             case 3: // pointer. 
                                 _instPtr = value;
                                 break;
-                            //case 4:
                             default:
                                 throw new NotImplementedException($"Too many stages. Stage = {stage}");
                         }
@@ -57,7 +56,7 @@
                 // Any other variables that need resetting?
                 _inputBuffer = string.Empty;
 
-                // We had a basic bin. Clear out the non-main mem stuff.
+                // We have a basic bin. Clear out the non-main mem stuff.
                 if (stage == 0) 
                 {
                     _stack.Clear();
@@ -77,6 +76,7 @@
                 return false;
             }
         }
+
         public bool Save(string fileName, out string resultMessage)
         {
             try

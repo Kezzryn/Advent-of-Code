@@ -8,16 +8,17 @@ try
 
     Dictionary<ConsoleKey, string> quickCommands = new()
         {
-            { ConsoleKey.Escape,    $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Exit}" },
-            { ConsoleKey.F8,        $"{ProgCmds.COMMAND_CHAR}{ProgCmds.Load} teleporter.syn9k" },
-            { ConsoleKey.F2,        $"{ProgCmds.COMMAND_CHAR}break addy 5482" },
-            { ConsoleKey.F3,        $"{ProgCmds.COMMAND_CHAR}set input use teleporter" },
-            { ConsoleKey.F4,        $"{ProgCmds.COMMAND_CHAR}set register 7 1" },
-            { ConsoleKey.F5,        $"{ProgCmds.COMMAND_CHAR}break run" },
-            { ConsoleKey.F6,        $"{ProgCmds.COMMAND_CHAR}trace echo" },
-            { ConsoleKey.F9,        $"{ProgCmds.COMMAND_CHAR}step" },
-            { ConsoleKey.F10,       $"{ProgCmds.COMMAND_CHAR}step 5" },
-            { ConsoleKey.F11,       $"{ProgCmds.COMMAND_CHAR}step 50" }
+            { ConsoleKey.Escape,    $"{ProgCmds.CMD_CHAR}{ProgCmds.Exit}" },
+            { ConsoleKey.F2,        $"{ProgCmds.CMD_CHAR}break addy 5482" },
+            { ConsoleKey.F3,        $"{ProgCmds.CMD_CHAR}set input use teleporter" },
+            { ConsoleKey.F4,        $"{ProgCmds.CMD_CHAR}set register 7 1" },
+            { ConsoleKey.F5,        $"{ProgCmds.CMD_CHAR}break run" },
+            { ConsoleKey.F6,        $"{ProgCmds.CMD_CHAR}trace echo" },
+            { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP}" },
+            { ConsoleKey.F8,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} teleporter.syn9k" },
+            { ConsoleKey.F9,        $"{ProgCmds.CMD_CHAR}step" },
+            { ConsoleKey.F10,       $"{ProgCmds.CMD_CHAR}step 5" },
+            { ConsoleKey.F11,       $"{ProgCmds.CMD_CHAR}step 50" }
         };
     //Dictionary<string, (int Left, int Top)> curPos = new()
     //    {
@@ -40,6 +41,7 @@ try
         Console.ForegroundColor = ccFC;
         Console.WriteLine(message);
     }
+
     static void WriteMessage(string message)
     {
         //ConsoleColor ccFC = Console.ForegroundColor;
@@ -48,10 +50,12 @@ try
         //Console.ForegroundColor = ccFC;
         Console.WriteLine(message);
     }
+
     static void WriteProgramOutput(string message)
     {
         Console.Write(message);
     }
+
     static void WriteDebuggerOutput(string message, bool isSuccess)
     {
         if (isSuccess)
@@ -59,6 +63,7 @@ try
         else
             WriteError(message);
     }
+
     void WriteHelp()
     {
         const int spc = -8;
@@ -69,7 +74,8 @@ try
             Console.WriteLine($"{cmd.Key, spc} {cmd.Value}");
         }
         Console.WriteLine();
-        Console.WriteLine($"All text that is not preceeded by {ProgCmds.COMMAND_CHAR} is passed without modification to the running program.");
+        Console.WriteLine($"All text that is not preceeded by {ProgCmds.CMD_CHAR} is passed without modification to the running program.");
+        Console.WriteLine();
         Console.WriteLine("Quick-keys:");
         foreach(KeyValuePair<ConsoleKey, string> cmd in quickCommands)
         {
@@ -77,9 +83,10 @@ try
         }
         Console.WriteLine();
     }
+
     void DoConsoleCommand(string command)
     {
-        command = command.Trim(ProgCmds.COMMAND_CHAR).ToLower();
+        command = command.Trim(ProgCmds.CMD_CHAR).ToLower();
 
         string[] split = command.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         string args = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
@@ -119,6 +126,12 @@ try
                 else
                     WriteError(results);
                 break;
+            case ProgCmds.Solve_TP:
+                WriteMessage($"The teleporter code is: {Synacor9000.TeleporterSolver()}");
+                break;
+            case ProgCmds.Solve_ORB:
+                WriteMessage($"The orb solution code is: {Synacor9000.OrbSolver()}");
+                break;
             default:
                 // pass all unknown !commands commands through. Maybe they're for the debugger?
                 bool debugResult = syn9k.DebugDispatcher(command, out List<string> debugResponse);
@@ -134,6 +147,7 @@ try
                 break;
         }
     }
+
     string ReadInput()
     {
         ConsoleKeyInfo cki;
@@ -192,7 +206,7 @@ try
 
         if (string.IsNullOrEmpty(input)) continue;
 
-        if (input.StartsWith(ProgCmds.COMMAND_CHAR))
+        if (input.StartsWith(ProgCmds.CMD_CHAR))
         {
             DoConsoleCommand(input);
             input = string.Empty;
@@ -222,18 +236,22 @@ catch (Exception e)
 
 static class ProgCmds
 {
-    public const char COMMAND_CHAR = '!';
+    public const char CMD_CHAR = '!';
     public const string Load = "load";
     public const string Save = "save";
     public const string Run = "run";
     public const string Exit = "exit";
+    public const string Solve_TP = "solve_teleporter";
+    public const string Solve_ORB = "solve_orb";
 
     public static Dictionary<string, string> Command_Descriptions = new()
     {
         { Load, $"Loads a file. Default: {Synacor9000.DefaultLoadFile}" },
         { Save, $"Saves the running program state. Default: {Synacor9000.DefaultSaveFile}" },
         { Run,  "Starts the loaded program" },
-        { Exit, "Ends the program." }
+        { Exit, "Ends the program." },
+        { Solve_TP, "Generates the solution to the teleporter puzzle." },
+        { Solve_ORB, "Generates the solution to the orb puzzle." }
     };
 
 }

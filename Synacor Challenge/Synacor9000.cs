@@ -4,7 +4,7 @@ namespace Synacor_Challenge
 {
     internal partial class Synacor9000
     {
-        private const ushort MEMORY_MAX = 32767; // 0 bound address max
+        private const ushort MAIN_MEMORY_MAX = 32767; // 0 bound address max
         private const ushort MODULO = 32768;
         private const ushort INVALID_MEMORY = 32776; // start of invalid memory numbers. 
 
@@ -29,6 +29,11 @@ namespace Synacor_Challenge
         };
 
         public Synacor9000() {}
+
+        public Synacor9000(string fileName, out string resultMessage)
+        {
+            Load(fileName, out resultMessage);
+        }
 
         public State Run()
         {

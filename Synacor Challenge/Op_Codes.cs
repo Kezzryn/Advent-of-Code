@@ -14,14 +14,15 @@
         private const ushort USHORT_0 = 0;
         private const ushort USHORT_1 = 1;
 
-        private ushort _instPtr = 0;    // instruction pointer. 
+        // instruction pointer.
+        private ushort _instPtr = 0;    
+
         private State Dispatcher(ushort instruction)
         {
             switch (instruction)
             {
-                case 0:
-                    // halt: 0  stop execution and terminate the program
-                    _instPtr--; // back up to the halt command so if this is re-run without being reset it doesn't freak out.
+                case 0:                     // halt: 0  stop execution and terminate the program
+                    _instPtr--;             // back up to the halt command so if this is re-run without being reset it doesn't freak out.
                     return State.Halted;
                 case 1 or 15 or 16:
                     Op_Memory(instruction);
@@ -40,14 +41,14 @@
                     break;
                 case 19 or 20:
                     return Op_Terminal(instruction);
-                case 21:
-                    // noop: 21  no operation 
+                case 21:                    // noop: 21  no operation 
                     return State.Running;   //redundent, but explicit. 
                 default:
                     throw new NotImplementedException($"{instruction}");
             }
             return State.Running;
         }
+        
         private void Op_Comparison(ushort instruction)
         {
             ushort address = Ptr_ReadRaw();
@@ -57,11 +58,12 @@
             ushort value = instruction switch
             {
                 4 => (b == c) ? USHORT_1 : USHORT_0,        // eq: 4 a b c  set <a> to 1 if <b> is equal to <c>; set it to 0 otherwise    
-                5 => (b > c) ? USHORT_1 : USHORT_0,        // gt: 5 a b c  set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
-                _ => throw new NotImplementedException()    // Comparison shmarison.
+                5 => (b > c) ? USHORT_1 : USHORT_0,         // gt: 5 a b c  set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
+                _ => throw new NotImplementedException()    // Comparison shmarizon.
             };
             Mem_Write(address, value);
         }
+       
         private ushort Op_Jump(ushort instruction)
         {
             ushort a; // do not pre-assign. ret could break things 
@@ -91,6 +93,7 @@
                     throw new NotImplementedException();
             }
         }
+       
         private void Op_Math(ushort instruction)
         {
             ushort address = Ptr_ReadRaw();
@@ -98,7 +101,7 @@
             ushort c = (instruction != 14) ? Ptr_ReadValue() : USHORT_1;
             ushort value = instruction switch
             {
-                9 => (ushort)((b + c) % MODULO),           //  add:  9 a b c   assign into <a> the sum of <b> and <c> (modulo 32768)
+                9 => (ushort)((b + c) % MODULO),            //  add:  9 a b c   assign into <a> the sum of <b> and <c> (modulo 32768)
                 10 => (ushort)(b * c % MODULO),             // mult: 10 a b c	store into <a> the product of <b> and <c> (modulo 32768)
                 11 => (ushort)(b % c),                      //  mod: 11 a b c	store into <a> the remainder of <b> divided by <c>
                 12 => (ushort)(b & c),                      //  and: 12 a b c   stores into <a> the bitwise and of <b> and <c>
@@ -108,6 +111,7 @@
             };
             Mem_Write(address, value);
         }
+       
         private void Op_Stack(ushort instruction)
         {
             ushort a;
@@ -122,21 +126,13 @@
                     a = Ptr_ReadRaw();
                     Mem_Write(a, _stack.Pop());
                     break;
-                default:                                    // We suck at Jenga
-                    throw new NotImplementedException();
+                default:                                    
+                    throw new NotImplementedException();    // We suck at Jenga
             }
         }
+       
         private void Op_Memory(ushort instruction)
-        {/*
-          * Think of them as pointers. In C code:
-
-             rmem a b   a = *b;
-             wmem a b   *a = b
-One of the two parameters is indirect: it's not the destination/source of the move, but it contains the destination/source address of the move
-
-            Oversimplified answer is that rmem is reading memory to a register, wmem is writing a register to memory
-
-        */
+        {
             ushort address;
             ushort value;
 
@@ -154,11 +150,12 @@ One of the two parameters is indirect: it's not the destination/source of the mo
                     address = Ptr_ReadValue();
                     value = Ptr_ReadValue();
                     break;
-                default:                                    // I don't remember where I came from. 
+                default:                        // I don't know where I came from or where I'm going. 
                     throw new NotImplementedException();
             }
             Mem_Write(address, value);
         }
+       
         private State Op_Terminal(ushort instruction)
         {
             switch (instruction)
@@ -196,41 +193,44 @@ One of the two parameters is indirect: it's not the destination/source of the mo
             }
             return State.Running;
         }
+        
         private ushort Mem_Read(ushort address)
         {
             return address switch
             {
-                <= MEMORY_MAX => _mainMemory[address],
-                > MEMORY_MAX and < INVALID_MEMORY => _registers[address % MODULO],
-                _ => throw new Exception($"{address} is out of bounds")
+                <= MAIN_MEMORY_MAX => _mainMemory[address],
+                > MAIN_MEMORY_MAX and < INVALID_MEMORY => _registers[address % MODULO],
+                _ => throw new Exception($"{address} is out of bounds")     // I need my glasses...
             };
         }
+       
         private void Mem_Write(ushort address, ushort value)
         {
             switch (address)
             {
-                case <= MEMORY_MAX:
+                case <= MAIN_MEMORY_MAX:
                     _mainMemory[address] = value;
                     break;
-                case > MEMORY_MAX and < INVALID_MEMORY:
+                case > MAIN_MEMORY_MAX and < INVALID_MEMORY:
                     _registers[address % MODULO] = value;
                     break;
                 default:
-                    throw new Exception($"{address} is out of bounds");
+                    throw new Exception($"{address} is out of bounds");     // We're not an elephant.
             };
         }
+       
         private ushort Ptr_ReadValue()
         {
-
             ushort value = _mainMemory[_instPtr++];
 
             return value switch
             {
-                <= MEMORY_MAX => value,
-                > MEMORY_MAX and < INVALID_MEMORY => _registers[value % MODULO],
-                _ => throw new Exception($"{value} is out of bounds")
+                <= MAIN_MEMORY_MAX => value,
+                > MAIN_MEMORY_MAX and < INVALID_MEMORY => _registers[value % MODULO],
+                _ => throw new Exception($"{value} is out of bounds")   // Point that somewhere else!
             };
         }
-        private ushort Ptr_ReadRaw() => Mem_Read(_instPtr++);   //Raw value at the pointer location. Used mainly for addressing. 
+       
+        private ushort Ptr_ReadRaw() => Mem_Read(_instPtr++);   //Raw value at the pointer address. Used mainly for addressing. 
     }
 }
