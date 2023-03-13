@@ -259,7 +259,7 @@ namespace Synacor_Challenge
                         if (instKey.instString == "out")
                         {
                             value = reader.ReadUInt16();
-                            sb.Append((value >= MODULO) ? $"reg[{value % MODULO}]" : (value == '\n' ? "\\n" : (char)value));
+                            sb.Append($"{((value >= MODULO) ? $"reg[{value % MODULO}]" : (value == '\n' ? "\\n" : (char)value)),8}");
                         }
                         else
                         {

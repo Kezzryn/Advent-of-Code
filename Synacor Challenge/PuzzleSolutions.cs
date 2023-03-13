@@ -1,122 +1,65 @@
-﻿using System.Diagnostics;
-
-namespace Synacor_Challenge
+﻿namespace Synacor_Challenge
 {
-    internal partial class Synacor9000
+    internal class PuzzleSolutions
     {
-        public static int TeleporterSolver()
+        private const ushort USHORT_32767 = 32767;
+        private const ushort MODULO = 32768;
+        private const ushort USHORT_1 = 1;
+        const ushort TARGET_VALUE = 6;
+        private ushort regSeven;
+        private readonly Dictionary<(ushort, ushort), ushort> memo = new();
+
+      //  public static int RegToInt((ushort r0, ushort r1) r) => RegToInt(r.r0, r.r1);
+      //  public static int RegToInt(ushort r0, ushort r1) => (r0 << 16) | (r1 & 0xffff);
+      //  private static (ushort reg0, ushort reg1) IntToReg(int i) => ((ushort)(i >> 16), (ushort)i);
+        private static ushort SubOne(ushort a) => (ushort)((a + USHORT_32767) % MODULO);
+        private static ushort AddOne(ushort a) => (ushort)((a + USHORT_1) % MODULO);
+
+        public void TeleporterSolver(Object? obj)
         {
-            const int TARGET_VALUE = 6; //Mem_Read(5494);
+            ushort start;
+            ushort end;
+            (start, end) = (Tuple<ushort, ushort>)obj!;
 
-            int regZero = 0;
-            int regOne = 0;
-            int regSeven = 0;
+            ushort answer;
 
-            Stack<int> stack = new(); 
-
-            for (int testValue = 3; testValue <= MAIN_MEMORY_MAX; testValue++)
+            for (ushort testValue = start; testValue <= end; testValue++)
             {
+                memo.Clear();
                 regSeven = testValue;
-                Stopwatch sw = Stopwatch.StartNew();
-                
-                regZero = 4;
-                regOne = 1;
-                regSeven = testValue;
-                //Merged(4, 1, testValue);   
-                Func6027();
+                answer = Ack(4, 1);
 
-                sw.Stop();
-                Console.WriteLine($"Reg[0] = {regZero}  Stopwatch {sw.ElapsedMilliseconds}");
-                if (regZero == TARGET_VALUE) return testValue;
-            }
-
-            return -1;
-
-            int Ackermann(int r0, int r1, int r7)   
-            {
-                // counting down to zero 
-                if (r0 != 0)   //Func6035();               //    6027   jt reg[0]    6035              if reg[0] != 0 jump 6035
+                if (answer == TARGET_VALUE)
                 {
-                    //counting down to zero 
-                    if (r1 != 0)                            //    6035   jt reg[1]    6048              if reg[1] != 0 jump 6048
-                    {
-                        //stack.Push(r0);                    //    6048 push reg[0]
-                        
-                        r1--; // (regOne + 32767) % MODULO   //    6050  add reg[1] reg[1]   32767       32767 as literal
-                        r1 = Ackermann(r0, r1, r7);                               //    6054 call   6027                      
-                        //r1 = r0;                       //    6056  set reg[1] reg[0]
-                        //r0 = stack.Pop();                  //    6059  pop reg[0]
-                        r0--; // = (regZero + 32767) % MODULO;   //    6061  add reg[0] reg[0]   32767       32767 as literal
-                        r0 = Ackermann(r0, r1, r7);                               //    6065 call    6027                
-                                                                //    6067  ret       
-                    }
-                    r0--; // = (regZero + 32767) % MODULO;       //    6038  add reg[0]  reg[0]   32767      reg[0]= reg[0] + literal value
-                    r1 = r7;                          //    6042  set reg[1]  reg[7]              copy reg[7] to reg[1]
-                    r0 = Ackermann(r0, r1, r7);                                   //    6045 call   6027                      recursive call.
+                    Console.WriteLine($"Found it! {testValue}");
+                    return;
                 }
-                return r1 + 1;                           //    6030  add reg[0]  reg[1]       1      add 1 + reg[1]
-                                                                //    6034  ret          
+                else
+                {
+                    Console.WriteLine($"Ack(4, 1, {testValue}) == {answer} is not {TARGET_VALUE}");
+                }
+                //                if ((testValue % 100) == 0) Console.WriteLine($"Testing: {testValue}");
             }
-
-
-            void Func6027()
-            {
-                if (regZero != 0) Func6035();           //    6027   jt reg[0]    6035              if reg[0] != 0 jump 6035
-                regZero = regOne + 1;                   //    6030  add reg[0]  reg[1]       1      add 1 + reg[1]
-                                                        //    6034  ret          
-            }
-
-            void Func6035()
-            {
-                if (regOne != 0) Func6048();            //    6035   jt reg[1]    6048              if reg[1] != 0 jump 6048
-
-                regZero = (regZero + 32767) % MODULO;   //    6038  add reg[0]  reg[0]   32767      reg[0]= reg[0] + literal value
-                regOne = regSeven;                      //    6042  set reg[1]  reg[7]              copy reg[7] to reg[1]
-                Func6027();                             //    6045 call   6027                      recursive call.
-                                                        //    6047  ret
-            }
-
-            void Func6048()
-            {
-                stack.Push(regZero);                    //    6048 push reg[0]
-                regOne = (regZero + 32767) % MODULO;    //    6050  add reg[1] reg[1]   32767       32767 as literal
-                Func6027();                             //    6054 call   6027                      
-                regOne = regZero;                       //    6056  set reg[1] reg[0]
-                regZero = stack.Pop();                  //    6059  pop reg[0]
-                regZero = (regZero + 32767) % MODULO;   //    6061  add reg[0] reg[0]   32767       32767 as literal
-                Func6027();                             //    6065 call    6027                
-                                                        //    6067  ret
-            }
+            Console.WriteLine($"Nothing in: {start} to {end}");
         }
+        ushort Ack(ushort r0, ushort r1)
+        {
+            if (memo.TryGetValue((r0, r1), out ushort memoReg)) return memoReg;
 
+            // Thanks to Wolfgang Ziegler (https://github.com/z1c0) for the (0,_) notation. I did not know you could do that. 
+            ushort ret = (r0, r1) switch
+            {
+                (0, _) => AddOne(r1),
+                (_, 0) => Ack(SubOne(r0), regSeven),
+                _ => Ack(SubOne(r0), Ack(r0, SubOne(r1)))
+            };
+
+            memo.TryAdd((r0, r1), ret);
+            return memo[(r0, r1)];
+        }
         public static int OrbSolver()
         {
             return -1;
         }
     }
 }
-
-/*
-Stack overflow.
-Repeat 6020 times:
---------------------------------
-   at Synacor_Challenge.Synacor9000.<TeleporterSolver>g__Func6027|28_0(<>c__DisplayClass28_0 ByRef)
-   at Synacor_Challenge.Synacor9000.<TeleporterSolver>g__Func6048|28_2(<>c__DisplayClass28_0 ByRef)
-   at Synacor_Challenge.Synacor9000.<TeleporterSolver>g__Func6035|28_1(<>c__DisplayClass28_0 ByRef)
---------------------------------
-   at Synacor_Challenge.Synacor9000.<TeleporterSolver>g__Func6027|28_0(<>c__DisplayClass28_0 ByRef)
-   at Synacor_Challenge.Synacor9000.TeleporterSolver()
-   at Program.<<Main>$>g__DoConsoleCommand|0_5(System.String, <>c__DisplayClass0_0 ByRef)
-   at Program.<Main>$(System.String[])
- */
-
-/*
-Stack overflow.
-Repeat 16049 times:
---------------------------------
-   at Synacor_Challenge.Synacor9000.<TeleporterSolver>g__Merged|28_0(<>c__DisplayClass28_0 ByRef)
---------------------------------
-   at Synacor_Challenge.Synacor9000.TeleporterSolver()
-   at Program.<<Main>$>g__DoConsoleCommand|0_5(System.String, <>c__DisplayClass0_0 ByRef)
-   at Program.<Main>$(System.String[])
-*/

@@ -14,9 +14,9 @@ try
             { ConsoleKey.F4,        $"{ProgCmds.CMD_CHAR}set register 7 1" },
             { ConsoleKey.F5,        $"{ProgCmds.CMD_CHAR}break run" },
             { ConsoleKey.F6,        $"{ProgCmds.CMD_CHAR}trace echo" },
-            { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP}" },
+            { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP} 1 10" },
             { ConsoleKey.F8,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} teleporter.syn9k" },
-            { ConsoleKey.F9,        $"{ProgCmds.CMD_CHAR}step" },
+            { ConsoleKey.F9,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP} 25730 25740"},
             { ConsoleKey.F10,       $"{ProgCmds.CMD_CHAR}step 5" },
             { ConsoleKey.F11,       $"{ProgCmds.CMD_CHAR}step 50" }
         };
@@ -28,6 +28,7 @@ try
     //    };
 
     Synacor9000 syn9k = new();
+    PuzzleSolutions solveTP = new();
 
     bool isDone = false;
     bool isLoaded = false;
@@ -89,7 +90,7 @@ try
         command = command.Trim(ProgCmds.CMD_CHAR).ToLower();
 
         string[] split = command.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        string args = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
+        string args = (split.GetUpperBound(0) >= 1) ? command[command.IndexOf(split[1])..] : string.Empty;
 
         switch (split[0])
         {
@@ -127,10 +128,21 @@ try
                     WriteError(results);
                 break;
             case ProgCmds.Solve_TP:
-                WriteMessage($"The teleporter code is: {Synacor9000.TeleporterSolver()}");
+                //18 MB seems to be min stack space that allows for solving
+                Thread tp = new(new ParameterizedThreadStart(solveTP.TeleporterSolver), 18000000); 
+                ushort[] range;
+                try
+                {
+                    range = args.Split(' ').Select(ushort.Parse).ToArray();
+                }
+                catch (Exception _)
+                {
+                    range = new ushort[] { 1, 2 };
+                }
+                tp.Start(new Tuple<ushort, ushort>(range[0], range[1]));
                 break;
             case ProgCmds.Solve_ORB:
-                WriteMessage($"The orb solution code is: {Synacor9000.OrbSolver()}");
+                WriteMessage($"The orb solution code is: {PuzzleSolutions.OrbSolver()}");
                 break;
             default:
                 // pass all unknown !commands commands through. Maybe they're for the debugger?

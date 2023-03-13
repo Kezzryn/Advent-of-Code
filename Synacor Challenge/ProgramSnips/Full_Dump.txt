@@ -690,12 +690,12 @@
     1523 call    1458                
     1525  pop  reg[1]                
     1527  ret                        
-    1528  out       耀
+    1528  out  reg[0]
     1530  ret                        
     1531 push  reg[1]                
     1533  set  reg[1]  reg[2]        
     1536 call    2125                
-    1538  out       耀
+    1538  out  reg[0]
     1540  pop  reg[1]                
     1542  ret                        
     1543 push  reg[1]                
@@ -904,7 +904,7 @@
     2097  jmp    2112                
     2099   jf  reg[5]    2112        
     2102  pop  reg[0]                
-    2104  out       耀
+    2104  out  reg[0]
     2106  add  reg[5]  reg[5]   32767
     2110  jmp    2099                
     2112  pop  reg[5]                

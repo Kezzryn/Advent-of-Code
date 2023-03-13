@@ -43,24 +43,24 @@ Teleporter hit:
     5720  ret           
 
 ### 6027                                    validator? 
-    6027   jt  reg[0]    6035               if reg[0] != 0 jump 6035
-    6030  add  reg[0]  reg[1]       1       else add 1 + reg[1] and return
+    6027   jt  reg[0]    6035               if reg[0] != 0 jump 6035 JUMP DOES NOT AUTO-RETURN HERE
+    6030  add  reg[0]  reg[1]       1       add 1 + reg[1] and return don't forget modulo math!
     6034  ret                        
 
 ### 6035    
     6035   jt  reg[1]    6048               if reg[1] != 0 jump 6048
-    6038  add  reg[0]  reg[0]   32767       reg[0]= reg[0] + literal value
+    6038  add  reg[0]  reg[0]   32767       reg[0 ]= reg[0] + literal value is subtraction operation
     6042  set  reg[1]  reg[7]               copy reg[7] to reg[1]
     6045 call    6027                       recursive call.
     6047  ret 
 
 ### 6048
     6048 push  reg[0]                
-    6050  add  reg[1]  reg[1]   32767       32767 as literal
+    6050  add  reg[1]  reg[1]   32767       32767 as literal modulo math is subtraction  
     6054 call    6027                       recursive call... 
     6056  set  reg[1]  reg[0]        
     6059  pop  reg[0]                
-    6061  add  reg[0]  reg[0]   32767       32767 as literal
+    6061  add  reg[0]  reg[0]   32767       32767 as literal modulo math is subtraction  
     6065 call    6027                
     6067  ret                        
 

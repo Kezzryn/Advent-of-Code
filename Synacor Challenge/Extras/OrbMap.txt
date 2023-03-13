@@ -1,0 +1,16 @@
+[ * ] - [ 8 ] - [ - ] - [ 1 ] -> Vault 30
+  |       |       |       |
+[ 4 ] - [ * ] - [ 11] - [ * ]
+  |       |       |       |
+[ + ] - [ 4 ] - [ - ] - [ 18]
+  ^       |       |       |
+[ 22]-> [ - ] - [ 9 ] - [ * ]
+  |
+Start
+
+Notes:
+Cannot return to the start. 
+Cannot leave the vault square.
+Weight cannot go negative.
+
+
