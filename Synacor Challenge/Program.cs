@@ -1,4 +1,5 @@
 ﻿using Synacor_Challenge;
+using System.Diagnostics;
 using System.Text;
 
 try
@@ -14,9 +15,9 @@ try
             { ConsoleKey.F4,        $"{ProgCmds.CMD_CHAR}set register 7 1" },
             { ConsoleKey.F5,        $"{ProgCmds.CMD_CHAR}break run" },
             { ConsoleKey.F6,        $"{ProgCmds.CMD_CHAR}trace echo" },
-            { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP} 1 10" },
+            { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP}" },
             { ConsoleKey.F8,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} teleporter.syn9k" },
-            { ConsoleKey.F9,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP} 25730 25740"},
+            { ConsoleKey.F9,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_ORB}" },
             { ConsoleKey.F10,       $"{ProgCmds.CMD_CHAR}step 5" },
             { ConsoleKey.F11,       $"{ProgCmds.CMD_CHAR}step 50" }
         };
@@ -28,7 +29,6 @@ try
     //    };
 
     Synacor9000 syn9k = new();
-    PuzzleSolutions solveTP = new();
 
     bool isDone = false;
     bool isLoaded = false;
@@ -128,18 +128,72 @@ try
                     WriteError(results);
                 break;
             case ProgCmds.Solve_TP:
-                //18 MB seems to be min stack space that allows for solving
-                Thread tp = new(new ParameterizedThreadStart(solveTP.TeleporterSolver), 18000000); 
-                ushort[] range;
-                try
+                WriteMessage($"Searching space and time.");
+                Stopwatch sw = Stopwatch.StartNew();
+
+                /*
+                 * 
+                 * 
+                  PAckAsync(int reg7)
+        {
+            // This is a procedural Ackermann implementation. 
+            // Copied verbatum from Andy Christianson at https://github.com/NiXXeD/
+            // A solution that I wouldn't have arrived at, but is obvious in hindsight. 
+
+            // r0 goes from 4 to 0.  r1 can be between 0 and 32768, so that's our max search space.
+            int[,] cache = new int[5, 32769];
+
+            //   (0, _) => AddOne(r1)
+            for (int i = 0; i <= 32768; i++)
+            {
+                cache[0, i] = (i + 1) % 32768;
+            }
+
+            // fill in each row of our solution space based on date from the previous rows.
+            for (int r0 = 1; r0 <= 4; r0++)
+            {
+                //  (_, 0) => Ack(SubOne(r0), regSeven)
+                cache[r0, 0] = cache[r0 - 1, reg7];
+
+                // This one took me a hot minute. The second part represents the state that only exists in the first few calls of the function. 
+                // After that's out of the way, r1 increases to the max of 32768 before rolling over to 0, which we handle on the previous line.
+                // but, because we're counting up and not down, we need 
+                for (int r1 = 1; (r1 < 32768 && r0 < 4) || (r1 < 2 && r0 == 4); r1++)
                 {
-                    range = args.Split(' ').Select(ushort.Parse).ToArray();
+                    if (cancellationToken.IsCancellationRequested) return Task.FromCanceled<int>(cancellationToken);
+                    //Ack(SubOne(r0), Ack(r0, SubOne(r1)))
+                    cache[r0, r1] = cache[r0 - 1, cache[r0, r1 - 1]];
                 }
-                catch (Exception _)
+            }
+
+            //and echo back the input that gave us the correct result. 
+            return Task.FromResult(cache[4, 1] == TARGET_VALUE ? reg7 : -1);
+        }
+                 */
+
+                int TP_Code = PuzzleSolutions.Solve().Result;
+                sw.Stop();
+
+
+                WriteMessage($"The teleporter solution code found in {sw.ElapsedMilliseconds / 1000} seconds. {TP_Code}");
+                WriteMessage($"Rewiring teleporter.");
+                List<string> rewire = new()
                 {
-                    range = new ushort[] { 1, 2 };
+                    $"set register 7 {TP_Code}",
+                    "set register 0 6",
+                    "set memory 5489 21",
+                    "set memory 5490 21"
+                };
+                foreach(string tp_Command in rewire)
+                {
+                    List<string> tp_responses = new();
+                    bool res = syn9k.DebugDispatcher(tp_Command, out tp_responses);
+                    foreach(string debug_response in tp_responses)
+                    {
+                        WriteDebuggerOutput(debug_response, res);
+                    }
                 }
-                tp.Start(new Tuple<ushort, ushort>(range[0], range[1]));
+
                 break;
             case ProgCmds.Solve_ORB:
                 WriteMessage($"The orb solution code is: {PuzzleSolutions.OrbSolver()}");
