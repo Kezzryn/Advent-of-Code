@@ -46,8 +46,8 @@
 - **Solution:** I had initially thought this would be a binary tree problem, but it feels more like a sort. Solved it with a simulation. 
 
 ### [Day 11](Day%2011) - Radioisotope Thermoelectric Generators
-- **Problem:**
-- **Solution:**
+- **Problem:** It's the [Wolf, goat and cabbage](https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem) problem. We need to move items from A to B, with a limited transport shuttle, and some items cannot be left next to other items.
+- **Solution:** I implmented a basic BFS with a priority queue and state table to provide basic pruning. That took care of part one. Part two added four more items, and spiked my running time to about about 120-130 seconds. Skimming the solutions thread, the key realizaton is the pairs are interchangeable. Store states that are *equivlent* which is different than *equal*. I tweaked my `HashState()` function to return a total count of lone generators, lone chips and paired items, replacing the simpler hash of each I had implemented. That single change knocked part two down to approximatly 500 milliseconds. Yay pruning!
 
 ### [Day 12](Day%2012) - Leonardo's Monorail
 - **Problem:**
