@@ -13,6 +13,7 @@
 ### [Day 3](Day%2003) - Squares With Three Sides
 - **Problem:** Given a list of three numbers, are these measurements for a valid triangle? 
 - **Solution:** Reused a good part of the solution from [2015 Day 2](../2015/Day%2002/) for the first part. This turned out to be a fortuitous decision, as it lead first to the realization that all three combos of sides need to match the (a + b) > c. This can be short cut if you do the math on the two smallest sides.
+
   Part two had a bit of a twist, having to read and parse column data. This may have been my first use of the `Range()` object. 
 
 ### [Day 4](Day%2004) - Security Through Obscurity
@@ -49,6 +50,7 @@
 ### [Day 11](Day%2011) - Radioisotope Thermoelectric Generators
 - **Problem:** It's the [Wolf, goat and cabbage](https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem) problem. We need to move items from A to B, with a limited transport shuttle, and some items cannot be left next to other items.
 - **Solution:** I solved part one by implementing a basic BFS with a priority queue and state table to provide basic pruning.
+
   Part two added four more items and spiked my running time to about 120-130 seconds. Skimming the solutions thread, the key realization is the pairs are interchangeable. Store states that are *equivalent* which is different than *equal*. I tweaked my `HashState()` function to return a total count of lone generators, lone chips and paired items by floor, replacing the simpler hash of each I had implemented. That single change knocked part two down to run in approximately 500 milliseconds. Yay pruning!
 
 ### [Day 12](Day%2012) - Leonardo's Monorail
@@ -59,7 +61,9 @@
 ### [Day 13](Day%2013) - A Maze of Twisty Little Cubicles
 - **Problem:** Nifty. A maze to solve, but this time we get a forumala to generate our maze, rather than the maze as input.
 - **Solution:** I pulled the code from [2022 Day 12](../2022/Day%2012/) and added in a generator with our maze forumula. I took a look at the C# `BitArray()` object, but it didn't have any ways to sum or total the bits with it so, before I went and wrote a simple `foreach` loop, I googled "counting bits".
-  [What dark magic is this?](http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel) I have no idea how or why that works, but it does. I asked Chat GPT to [explain it to me.](Day%2013/Fast Bit Counting.txt)
+
+  [What dark magic is this?](http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel) I have no idea how or why that works, but it does. I asked Chat GPT to [explain it to me.](Day%2013/Fast%20Bit%20Counting.txt)
+
   It turned out to be faster for me to call the function than to cache the results in a `Dictionary()`. After some additional digging I found the `BitOperations.PopCount()` function, which does the same thing with the bonus of hardware acceleration, if available. For part two, I already had the code to limit the steps, which combined with a loop through the range of X and Y, handed me the answer.
 
 ### [Day 14](Day%2014) - One-Time Pad
