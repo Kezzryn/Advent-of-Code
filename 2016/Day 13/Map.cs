@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 
 namespace AoC_2016_Day_13
 {
@@ -29,9 +30,11 @@ namespace AoC_2016_Day_13
 
         public bool GenMapPoint(int x, int y)
         {
+            uint v = (uint)((x * x) + (3 * x) + (2 * x * y) + y + (y * y) + _designer_number);
+            return (BitOperations.PopCount(v) % 2) == 0;
+            /*
             // This is bonkers. I do not understand it, but it works.
-            int v = (x * x) + (3 * x) + (2 * x * y) + y + (y * y) + _designer_number;
-
+            // Also this is the same algrothm implemented in the software fallback of the PopCount function.
             // http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
             // The best method for counting bits in a 32 - bit integer v is the following:
 
@@ -40,6 +43,7 @@ namespace AoC_2016_Day_13
             int c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
             
             return (c % 2) == 0;
+            */
         }
 
         public static int TaxiDistance(Point a, Point b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
