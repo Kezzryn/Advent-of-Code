@@ -55,8 +55,8 @@
 - **Future Fun:** Decode the program and write it as a native function.
 
 ### [Day 13](Day%2013) - A Maze of Twisty Little Cubicles
-- **Problem:**
-- **Solution:**
+- **Problem:** Nifty. A maze to solve, but this time we get a forumala to generate our maze, rather than the maze as input.
+- **Solution:** I pulled the code from [2022 Day 12](../2022/Day%2012/) and added in a generator with our maze forumula. I took a look at the C# `BitArray()` object, but it didn't have any ways to sum or total the bits with it so, before I went and wrote a simple `foreach` loop, I googled "counting bits". [What dark magic is this?](http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel) I have no idea how or why that works, but it does. It turned out to be faster for me to call the function than to cache the results in a `Dictionary()`. For part two, I already had the code to limit the steps, which combined with a loop through X and Y, handed me the answer.
 
 ### [Day 14](Day%2014) - One-Time Pad
 - **Problem:**
