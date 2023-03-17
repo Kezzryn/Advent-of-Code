@@ -23,7 +23,7 @@
 ### [Day 5](Day%2005) - How About a Nice Game of Chess?
 - **Problem:** More MD5 hashing.
 - **Solution:** I started with the solution from [2015 Day 4](../2015/Day%2004/) and built strings as needed.
-- **Bonus:** As per the puzzle text: "Be extra proud of your solution if it uses a cinematic "decrypting" animation." [I was left unsupervised](https://www.youtube.com/watch?v=gRoWDbM7zLw)
+- **Bonus:** As per the puzzle text: "Be extra proud of your solution if it uses a cinematic "decrypting" animation." [I was left unsupervised](https://www.youtube.com/watch?v=gRoWDbM7zLw).
 
 ### [Day 6](Day%2006) - Signals and Noise
 - **Problem:** Reading columns of strings to perform operations on them. 
@@ -67,7 +67,7 @@
   It turned out to be faster for me to call the function than to cache the results in a `Dictionary()`. After some additional digging I found the `BitOperations.PopCount()` function, which does the same thing with the bonus of hardware acceleration, if available. For part two, I already had the code to limit the steps, which combined with a loop through the range of X and Y, handed me the answer.
 
 ### [Day 14](Day%2014) - One-Time Pad
-- **Problem:**
+- **Problem:** 
 - **Solution:**
 
 ### [Day 15](Day%2015) - Timing is Everything
