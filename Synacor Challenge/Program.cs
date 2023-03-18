@@ -11,7 +11,7 @@ try
         {
             { ConsoleKey.Escape,    $"{ProgCmds.CMD_CHAR}{ProgCmds.Exit}" },
             { ConsoleKey.F2,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} challenge.bin" },
-            { ConsoleKey.F3,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load}run" },
+            { ConsoleKey.F3,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Run}" },
             { ConsoleKey.F5,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} teleporter.syn9k" },
             { ConsoleKey.F6,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Solve_TP}" },
             { ConsoleKey.F7,        $"{ProgCmds.CMD_CHAR}{ProgCmds.Load} orb.syn9k" },
@@ -41,10 +41,7 @@ try
 
     static void WriteMessage(string message)
     {
-        //ConsoleColor ccFC = Console.ForegroundColor;
-        //Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("*** : ");
-        //Console.ForegroundColor = ccFC;
         Console.WriteLine(message);
     }
 
@@ -154,7 +151,6 @@ try
                         WriteDebuggerOutput(debug_response, res);
                     }
                 }
-
                 break;
             case ProgCmds.Solve_ORB:
                 List<string> solution = PuzzleSolutions.Solve_Orb();

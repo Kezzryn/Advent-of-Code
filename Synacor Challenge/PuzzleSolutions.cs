@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Synacor_Challenge
 {
@@ -28,7 +27,7 @@ namespace Synacor_Challenge
 
         public static async Task<int> Solve_Teleporter()
         {
-            const int INTERVAL = 1000;
+            const int INTERVAL = 999;
             const int MAX = 32767;
             CancellationTokenSource cancelTokenSource = new();
             CancellationToken cancel_token = cancelTokenSource.Token;
@@ -39,12 +38,12 @@ namespace Synacor_Challenge
             int regSeven = 1;
             while (!isDone)
             {
-                Console.WriteLine($"Loading taskgroup: {regSeven}");
+                Console.WriteLine($"Evaluating quantum fluctuations for values {regSeven,5} to {regSeven + INTERVAL,5}");
                 for (int i = regSeven; i < (regSeven + INTERVAL) && i < MAX; i++)
                 {
                     ack.Add(PAckAsync(i, cancel_token));
                 }
-                regSeven += INTERVAL;
+                regSeven += INTERVAL + 1;
 
                 while (ack.Count > 0)
                 {
@@ -56,7 +55,7 @@ namespace Synacor_Challenge
 
                     cancelTokenSource.Cancel();
 
-                    Thread.Sleep(1000); //give time for all the threads to shut down.
+                    Thread.Sleep(250); //give time for all the threads to shut down.
                     cancelTokenSource.Dispose();
                     break;
                 }

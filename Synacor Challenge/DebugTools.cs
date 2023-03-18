@@ -59,15 +59,18 @@ namespace Synacor_Challenge
             "break show",
             "break run"
         };
+
         public bool DebugDispatcher(string instruction, out List<string> returnValue)
         {
+            // monster case statement to parse and execute Debug commands against the currently loaded binary. 
+            // instruction format is expected to be:
+            // command sub_cmd args
+            // each command/sub command is responsable for splitting out its own args. All the top level guarentees is the variables are not null.          
+
             bool success = true;
             var split = instruction.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             returnValue = new();
 
-            // command
-            // sub command 
-            // args - each command/sub command is responsable for splitting, all the top guarentees is the variables are not null. (but they might be Empty)
             string command = split[0];
             string sub_cmd = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
             string args = (split.GetUpperBound(0) >= 2) ? instruction[(split[0].Length + split[1].Length + 1)..].Trim() : string.Empty;
@@ -83,7 +86,7 @@ namespace Synacor_Challenge
                     {
                         case "register":
                             _registers[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
-                            returnValue.Add($"registr: {argsparse[0]} set to: {argsparse[1]}");
+                            returnValue.Add($"register: {argsparse[0]} set to: {argsparse[1]}");
                             break;
                         case "instptr":
                             _instPtr = ushort.Parse(argsparse[0]);
@@ -191,7 +194,7 @@ namespace Synacor_Challenge
                         case "run":
                             ushort instr;
                             bool isDone = false;
-                            // State stepState; declared in "step" 
+                            // State stepState; declared in "step" instruction
                             do
                             {
                                 stepState = Step();
@@ -234,6 +237,7 @@ namespace Synacor_Challenge
         }
         static private bool DumpBinary(string inFile, string outFile, out string resultMessage)
         {
+            // renders a binary Synacor Challenge file into human readable text.
             try
             {
                 if (inFile == string.Empty) inFile = DefaultLoadFile;
@@ -292,8 +296,10 @@ namespace Synacor_Challenge
                 return false;
             }
         }
+       
         private State Step(int numSteps = 1)
         {
+            // performs [numSteps] instructions. 
             State returnValue = State.Running;
             for (int i = 1; i <= numSteps; i++)
             {
@@ -309,8 +315,10 @@ namespace Synacor_Challenge
             }
             return returnValue;
         }
+       
         private bool DumpCommandTrace(string outFile, out string resultsMessage)
         {
+            // Writes contents of the command trace queue to a file, emptying it in the process. 
             try
             {
                 if (outFile == string.Empty) outFile = $"commandDump_{DateTime.Now:yyyyMMddHHmmss}.txt";
@@ -331,9 +339,13 @@ namespace Synacor_Challenge
                 return false;
             }
         }
+       
         private string GetCurrentState()
         {
-            // change header in DumpCommandTrace if format changes. 
+            // Returns a string that contains the current pointer, the currnet instruction, the registers,
+            // and optionally, the contents of the stack. 
+
+            // NB! Change header in DumpCommandTrace if format changes.
             StringBuilder sb = new();
             int numParam = instructionSet[Mem_Read(_instPtr)].numParam;
 
