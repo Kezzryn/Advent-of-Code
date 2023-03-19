@@ -1,6 +1,9 @@
 Teleporter hit: 
 
-### 5451
+### 5445
+    5445 push  reg[0]                
+    5447 push  reg[1]                
+    5449 push  reg[2]                
     5451   jf  reg[7]    5605	5605		<- Safe path. 
     5454 push  reg[0]                       <- Reg 8 reset path. 
     5456 push  reg[1]                

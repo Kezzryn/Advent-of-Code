@@ -53,9 +53,9 @@ try
     static void WriteDebuggerOutput(string message, bool isSuccess)
     {
         if (isSuccess)
-            Console.WriteLine(message);
+            Console.WriteLine(message.PadRight(Console.BufferWidth - 1));
         else
-            WriteError(message);
+            WriteError(message.PadRight(Console.BufferWidth - 1));
     }
 
     void WriteHelp()
@@ -144,11 +144,10 @@ try
                 };
                 foreach (string tp_Command in rewire)
                 {
-                    List<string> tp_responses = new();
-                    bool res = syn9k.DebugDispatcher(tp_Command, out tp_responses);
-                    foreach (string debug_response in tp_responses)
+                    bool res = syn9k.DebugDispatcher(tp_Command);
+                    while (syn9k.GetDebugOutput(out string output))
                     {
-                        WriteDebuggerOutput(debug_response, res);
+                        WriteDebuggerOutput(output, res);
                     }
                 }
                 break;
@@ -160,15 +159,15 @@ try
                 break;
             default:
                 // pass all unknown !commands commands through. Maybe they're for the debugger?
-                bool debugResult = syn9k.DebugDispatcher(command, out List<string> debugResponse);
+                bool debugResult = syn9k.DebugDispatcher(command);
                 if (isRunning)
                 {
                     isRunning = false;
                     WriteMessage("Stopping run for debugging.");
                 }
-                foreach (string s in debugResponse)
+                while (syn9k.GetDebugOutput(out string output))
                 {
-                    WriteDebuggerOutput(s.PadRight(Console.BufferWidth - 1), debugResult);
+                    WriteDebuggerOutput(output, debugResult);
                 }
                 break;
         }

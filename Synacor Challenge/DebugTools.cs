@@ -15,7 +15,7 @@ namespace Synacor_Challenge
         private readonly HashSet<ushort> _breakAddr = new();
         private readonly HashSet<int> _breakInst = new();
 
-        static private readonly Dictionary<int, (string instString, int numParam)> instructionSet = new()
+        static private readonly Dictionary<int, (string instString, int numParam)> _instructionSet = new()
         {
             {  0, ("halt",  0) },
             {  1, ("set",   2) },
@@ -40,202 +40,209 @@ namespace Synacor_Challenge
             { 20, ("in",    1) },
             { 21, ("noop",  0) }
         };
-        static private readonly List<string> commandList = new()
+        static private readonly List<string> _commandList = new()
         {
-            "set register [0-7] [value]",
-            "set instptr [value]",
-            "set memory [value]",
-            "set input [value]",
+            "break addy [value]",
+            "break clear",
+            "break instr [0-21]",
+            "break run",
+            "break show",
             "dump binary [load file] [save file]",
-            "dump trace [save file]",
             "dump memory [address]",
             "dump state",
-            "trace toggle",
-            "trace depth [value]",
+            "dump trace [save file]",
+            "set input [value]",
+            "set instptr [value]",
+            "set memory [value]",
+            "set register [0-7] [value]",
             "step [value]",
-            "break addy [value]",
-            "break instr [0-21]",
-            "break clear",
-            "break show",
-            "break run"
+            "trace cmd",
+            "trace depth [value]",
+            "trace echo",
+            "trace stack"
         };
 
-        public bool DebugDispatcher(string instruction, out List<string> returnValue)
+        private readonly Queue<string> _debugOutputBuffer = new();
+
+        public bool DebugDispatcher(string instruction)
         {
             // monster case statement to parse and execute Debug commands against the currently loaded binary. 
             // instruction format is expected to be:
             // command sub_cmd args
-            // each command/sub command is responsable for splitting out its own args. All the top level guarentees is the variables are not null.          
+            // each command/sub command is responsable for splitting out its own args.
+            // All the top level guarantees is the variables are not null.
 
             bool success = true;
             var split = instruction.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            returnValue = new();
 
             string command = split[0];
             string sub_cmd = (split.GetUpperBound(0) >= 1) ? split[1] : string.Empty;
             string args = (split.GetUpperBound(0) >= 2) ? instruction[(split[0].Length + split[1].Length + 1)..].Trim() : string.Empty;
 
+            State stepState; // used in "break run" and "step" commands
+
             switch (command)
             {
-                case "help":
-                    returnValue = commandList;
-                    break;
-                case "set":
-                    var argsparse = args.Split(' ');
-                    switch (sub_cmd)
-                    {
-                        case "register":
-                            _registers[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
-                            returnValue.Add($"register: {argsparse[0]} set to: {argsparse[1]}");
-                            break;
-                        case "instptr":
-                            _instPtr = ushort.Parse(argsparse[0]);
-                            returnValue.Add($"instPtr: set to: {argsparse[0]}");
-                            break;
-                        case "input":
-                            SetProgramInput(args);
-                            returnValue.Add($"inputBuffer: set to: {args}");
-                            break;
-                        case "memory":
-                            _mainMemory[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
-                            returnValue.Add($"address: {argsparse[0]} set to: {argsparse[1]}");
-                            break;
-                        default:
-                            success = false;
-                            returnValue.Add($"Unknown instruction {instruction}");
-                            break;
-                    };
-                    break;
-                case "dump":
-                    // todo better filenames
-                    var dumpArgs = args.Split(' ');
-                    string loadFile = (dumpArgs.GetUpperBound(0) >= 0) ? dumpArgs[0] : string.Empty;
-                    string saveFile = (dumpArgs.GetUpperBound(0) >= 1) ? dumpArgs[1] : string.Empty;
-                    switch (sub_cmd)
-                    {
-                        case "binary":
-                            success = DumpBinary(loadFile, saveFile, out string resultDumpBin);
-                            returnValue.Add(resultDumpBin);
-                            break;
-                        case "trace":
-                            success = DumpCommandTrace(saveFile, out string resultDumpTrace);
-                            returnValue.Add(resultDumpTrace);
-                            break;
-                        case "state":
-                            returnValue.Add(GetCurrentState());
-                            break;
-                        case "memory":
-                            if (ushort.TryParse(dumpArgs[0], out ushort address))
-                                returnValue.Add(Mem_Read(address).ToString());
-                            else
-                                returnValue.Add($"Unable to convert {dumpArgs[0]} to ushort.");
-                                success = false;
-                            break;
-                        default:
-                            success = false;
-                            returnValue.Add($"Unknown instruction {instruction}");
-                            break;
-                    }
-                    break;
-                case "trace":
-                    int traceDepth = int.TryParse(args, out int trace_parse) ? trace_parse : 200;
-                    switch (sub_cmd)
-                    {
-                        case "cmd":
-                            _doTrace = !_doTrace;
-                            returnValue.Add($"Command trace is now {(_doTrace ? "on" : "off")}.");
-                            break;
-                        case "depth":
-                            _traceDepth = traceDepth;
-                            returnValue.Add($"Trace depth is now the last {_traceDepth} commands.");
-                            break;
-                        case "stack":
-                            _doTraceStack = !_doTraceStack;
-                            returnValue.Add($"Stack trace is now {(_doTraceStack ? "on" : "off")}.");
-                            break;
-                        case "echo":
-                            _doTraceEcho = !_doTraceEcho;
-                            returnValue.Add($"Command trace console echo is now {(_doTraceEcho ? "on" : "off")}.");
-                            break;
-                        default:
-                            success = false;
-                            returnValue.Add($"Unknown instruction {instruction}");
-                            break;
-                    }
-                    break;
-                case "step":
-                    // Oh look the only thing without subcommands, just to fuck us up on the parsing.
-                    int numSteps = int.TryParse(sub_cmd, out int step_parse) ? step_parse : 1;
-                    State stepState = Step(numSteps);
-                    if (!_doTraceEcho) returnValue.Add($"Stepped {numSteps} state {stepState}");
-                    break;
                 case "break":
                     ushort value = ushort.TryParse(args, out ushort break_parse) ? break_parse : USHORT_0;
                     switch (sub_cmd)
                     {
-                        case "inst":
-                            _breakInst.Add(value);
-                            returnValue.Add($"Added instruction breakpoint {value}");
-                            break;
                         case "addy":
                             _breakAddr.Add(value);
-                            returnValue.Add($"Added address breakpoint {value}");
+                            _debugOutputBuffer.Enqueue($"Added address breakpoint {value}");
                             break;
                         case "clear":
                             _breakAddr.Clear();
                             _breakInst.Clear();
-                            returnValue.Add($"Cleared all breakpoints.");
+                            _debugOutputBuffer.Enqueue($"Cleared all breakpoints.");
                             break;
-                        case "show":
-                            returnValue.Add("Current breakpoints:");
-                            if (_breakInst.Count > 0) foreach(var s in _breakInst) returnValue.Add($"inst: {s}");
-                            if (_breakAddr.Count > 0) foreach(var s in _breakAddr) returnValue.Add($"addr: {s}");
+                        case "inst":
+                            _breakInst.Add(value);
+                            _debugOutputBuffer.Enqueue($"Added instruction breakpoint {value}");
                             break;
                         case "run":
                             ushort instr;
                             bool isDone = false;
-                            // State stepState; declared in "step" instruction
                             do
                             {
                                 stepState = Step();
                                 if (stepState != State.Running)
                                 {
-                                    returnValue.Add($"Program entered {stepState}");
+                                    _debugOutputBuffer.Enqueue($"Program entered {stepState}");
                                     isDone = true;
                                 }
 
                                 instr = Mem_Read(_instPtr);
                                 if (_breakInst.Contains(instr))
                                 {
-                                    returnValue.Add($"Break on instruction {instructionSet[instr].instString}");
+                                    _debugOutputBuffer.Enqueue($"Break on instruction {_instructionSet[instr].instString}");
                                     isDone = true;
                                 }
 
                                 if (_breakAddr.Contains(_instPtr))
                                 {
-                                    returnValue.Add($"Break on address {_instPtr}");
+                                    _debugOutputBuffer.Enqueue($"Break on address {_instPtr}");
                                     isDone = true;
                                 }
                             } while (!isDone);
+
                             while (GetProgramOutput(out string output))
                             {
-                                returnValue.Add($"PROGRAM OUT: {output}"); ;
+                                _debugOutputBuffer.Enqueue($"PROGRAM OUT: {output}");
                             }
+
+                            break;
+                        case "show":
+                            _debugOutputBuffer.Enqueue("Current breakpoints:");
+                            if (_breakInst.Count > 0) foreach (var s in _breakInst) _debugOutputBuffer.Enqueue($"inst: {s}");
+                            if (_breakAddr.Count > 0) foreach (var s in _breakAddr) _debugOutputBuffer.Enqueue($"addr: {s}");
                             break;
                         default:
                             success = false;
-                            returnValue.Add($"Unknown instruction {instruction}");
+                            _debugOutputBuffer.Enqueue($"Unknown instruction {instruction}");
+                            break;
+                    }
+                    break;
+                case "dump":
+                    // TODO better filename parsing
+                    var dumpArgs = args.Split(' ');
+                    string loadFile = (dumpArgs.GetUpperBound(0) >= 0) ? dumpArgs[0] : string.Empty;
+                    string saveFile = (dumpArgs.GetUpperBound(0) >= 1) ? dumpArgs[1] : string.Empty;
+                    switch (sub_cmd)
+                    {
+                        case "binary":
+                            success = DumpBinary(loadFile, saveFile);
+                            break;
+                        case "memory":
+                            if (ushort.TryParse(dumpArgs[0], out ushort address))
+                                _debugOutputBuffer.Enqueue(Mem_Read(address).ToString());
+                            else
+                                _debugOutputBuffer.Enqueue($"Unable to convert {dumpArgs[0]} to ushort.");
+                            success = false;
+                            break;
+                        case "state":
+                            _debugOutputBuffer.Enqueue(GetCurrentState());
+                            break;
+                        case "trace":
+                            success = DumpCommandTrace(saveFile);
+                            break;
+                        default:
+                            success = false;
+                            _debugOutputBuffer.Enqueue($"Unknown instruction {instruction}");
+                            break;
+                    }
+                    break;
+                case "help":
+                    foreach (string s in _commandList) _debugOutputBuffer.Enqueue(s);
+                    break;
+                case "set":
+                    var argsparse = args.Split(' ');
+                    switch (sub_cmd)
+                    {
+                        case "input":
+                            SetProgramInput(args);
+                            _debugOutputBuffer.Enqueue($"inputBuffer: set to: {args}");
+                            break;
+                        case "instptr":
+                            _instPtr = ushort.Parse(argsparse[0]);
+                            _debugOutputBuffer.Enqueue($"instPtr: set to: {argsparse[0]}");
+                            break;
+                        case "memory":
+                            _mainMemory[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
+                            _debugOutputBuffer.Enqueue($"address: {argsparse[0]} set to: {argsparse[1]}");
+                            break;
+                        case "register":
+                            _registers[ushort.Parse(argsparse[0])] = ushort.Parse(argsparse[1]);
+                            _debugOutputBuffer.Enqueue($"register: {argsparse[0]} set to: {argsparse[1]}");
+                            break;
+                        default:
+                            success = false;
+                            _debugOutputBuffer.Enqueue($"Unknown instruction {instruction}");
+                            break;
+                    };
+                    break;
+                case "step":
+                    // Oh look the only thing without subcommands, just to mess us our nice scheme.
+                    int numSteps = int.TryParse(sub_cmd, out int step_parse) ? step_parse : 1;
+                    stepState = Step(numSteps);
+                    if (!_doTraceEcho) _debugOutputBuffer.Enqueue($"Stepped {numSteps} state {stepState}");
+                    break;
+
+                case "trace":
+                    int traceDepth = int.TryParse(args, out int trace_parse) ? trace_parse : 200;
+                    switch (sub_cmd)
+                    {
+                        case "cmd":
+                            _doTrace = !_doTrace;
+                            _debugOutputBuffer.Enqueue($"Command trace is now {(_doTrace ? "on" : "off")}.");
+                            break;
+                        case "depth":
+                            _traceDepth = traceDepth;
+                            _debugOutputBuffer.Enqueue($"Trace depth is now the last {_traceDepth} commands.");
+                            break;
+                        case "echo":
+                            _doTraceEcho = !_doTraceEcho;
+                            _debugOutputBuffer.Enqueue($"Command trace console echo is now {(_doTraceEcho ? "on" : "off")}.");
+                            break;
+                        case "stack":
+                            _doTraceStack = !_doTraceStack;
+                            _debugOutputBuffer.Enqueue($"Stack trace is now {(_doTraceStack ? "on" : "off")}.");
+                            break;
+                        default:
+                            success = false;
+                            _debugOutputBuffer.Enqueue($"Unknown instruction {instruction}");
                             break;
                     }
                     break;
                 default:
                     success = false;
-                    returnValue.Add($"Unknown instruction {instruction}");
+                    _debugOutputBuffer.Enqueue($"Unknown instruction {instruction}");
                     break;
             }
             return success;
         }
-        static private bool DumpBinary(string inFile, string outFile, out string resultMessage)
+
+        private bool DumpBinary(string inFile, string outFile)
         {
             // renders a binary Synacor Challenge file into human readable text.
             try
@@ -256,9 +263,9 @@ namespace Synacor_Challenge
                     StringBuilder sb = new();
                     sb.Append($"{address,8}");
 
-                    if (instructionSet.TryGetValue(value, out var instKey))
+                    if (_instructionSet.TryGetValue(value, out var instKey))
                     {
-                        sb.Append($"{instructionSet[value].instString,5}");
+                        sb.Append($"{_instructionSet[value].instString,5}");
 
                         if (instKey.instString == "out")
                         {
@@ -287,16 +294,16 @@ namespace Synacor_Challenge
                     writer.WriteLine(sb);
                 }
 
-                resultMessage = $"Dump of {inFile} to {outFile} done.";
+                _debugOutputBuffer.Enqueue($"Dump of {inFile} to {outFile} done.");
                 return true;
             }
             catch (Exception e)
             {
-                resultMessage = e.Message;
+                _debugOutputBuffer.Enqueue(e.Message);
                 return false;
             }
         }
-       
+
         private State Step(int numSteps = 1)
         {
             // performs [numSteps] instructions. 
@@ -308,15 +315,15 @@ namespace Synacor_Challenge
                     _commandTrace.Enqueue(GetCurrentState());
                     if (_commandTrace.Count > _traceDepth) _commandTrace.Dequeue();
                 }
-                if (_doTraceEcho) Console.WriteLine(GetCurrentState());
+                if (_doTraceEcho) _debugOutputBuffer.Enqueue(GetCurrentState());
                 returnValue = Dispatcher(Ptr_ReadValue());
-                
+
                 if (returnValue != State.Running) break;
             }
             return returnValue;
         }
-       
-        private bool DumpCommandTrace(string outFile, out string resultsMessage)
+
+        private bool DumpCommandTrace(string outFile)
         {
             // Writes contents of the command trace queue to a file, emptying it in the process. 
             try
@@ -330,16 +337,16 @@ namespace Synacor_Challenge
                     sw.WriteLine(_commandTrace.Dequeue());
                 }
                 sw.Close();
-                resultsMessage = $"Dumped commands to {outFile}";
+                _debugOutputBuffer.Enqueue($"Dumped commands to {outFile}");
                 return true;
             }
             catch (Exception e)
             {
-                resultsMessage = e.Message;
+                _debugOutputBuffer.Enqueue(e.Message);
                 return false;
             }
         }
-       
+
         private string GetCurrentState()
         {
             // Returns a string that contains the current pointer, the currnet instruction, the registers,
@@ -347,10 +354,10 @@ namespace Synacor_Challenge
 
             // NB! Change header in DumpCommandTrace if format changes.
             StringBuilder sb = new();
-            int numParam = instructionSet[Mem_Read(_instPtr)].numParam;
+            int numParam = _instructionSet[Mem_Read(_instPtr)].numParam;
 
             sb.Append($"{_instPtr,8}");
-            sb.Append($"{instructionSet[Mem_Read(_instPtr)].instString,5}");
+            sb.Append($"{_instructionSet[Mem_Read(_instPtr)].instString,5}");
 
             sb.Append($"{((numParam >= 1) ? Mem_Read((ushort)(_instPtr + 1)) : ""),6}");
             sb.Append($"{((numParam >= 2) ? Mem_Read((ushort)(_instPtr + 2)) : ""),6}");
@@ -372,6 +379,15 @@ namespace Synacor_Challenge
             }
 
             return sb.ToString();
+        }
+
+        public bool GetDebugOutput(out string output)
+        {
+            output = string.Empty;
+            if (_debugOutputBuffer.Count == 0) return false;
+
+            output = _debugOutputBuffer.Dequeue();
+            return true;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Synacor_Challenge
 
     internal static class PuzzleSolutions
     {
-        const int TARGET_VALUE = 6;
+        const int TELEPORTER_TARGET_VALUE = 6;
 
         public static async Task<int> Solve_Teleporter()
         {
@@ -98,7 +98,7 @@ namespace Synacor_Challenge
             }
 
             //and echo back the input that gave us the correct result. 
-            return Task.FromResult(cache[4, 1] == TARGET_VALUE ? reg7 : -1);
+            return Task.FromResult(cache[4, 1] == TELEPORTER_TARGET_VALUE ? reg7 : -1);
         }
 
         public static List<string> Solve_Orb()
