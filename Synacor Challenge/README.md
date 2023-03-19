@@ -3,21 +3,21 @@
 ## NOTE: As of the time of this commit, the [original site](https://challenge.synacor.com/) appears to have been taken offline. Reddit user [/u/Aneurysm9](https://www.reddit.com/r/adventofcode/comments/11pjsxk/comment/jbzkpo3/) has posted a [repository](https://github.com/Aneurysm9/vm_challenge) with the puzzle binary, documentation and hashes of their solution codes.
 
 ### Introduction
+In the December of 2022 I learned about the [Advent of Code](https://adventofcode.com/). Advent of Code is a yearly series coding puzzles by Eric Wastl. Those puzzles reignited my enjoyment of coding for fun. I've been maintainting a legacy system so these puzzles doubled as a way to modernize my skill set. I choose to learn C# as it aligns with my professional goals.
+
+During my brief time with the Advent of Code (AoC) community I learned of the Synacor Challenge, another puzzle created by the same author. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
+
 In the words of the former website: 
 
 >This challenge was given by Synacor at php[tek] and OSCON in years past. Now, we are opening it up to everyone!  
 This is a programming challenge, but you can use any language you like. As you complete sections, come back here to check your answer codes.  
 The winner during each convention got Apple gift cards and fame. While we're not giving away physical prizes any more, we still hope you'll find the challenges fun and interesting!
 
-In the December of 2022, I learned about [Advent of Code](https://adventofcode.com/) (AoC) coding puzzles from a co-worker. That fortuitous mention reignited my enjoyment of coding for fun. I've been maintainting a legacy system, so these puzzles doubled as a way to modernize my skill set. I choose to learn C# as it aligns with my professional goals.
-
-During my brief time with the AoC community I learned of the Synacor Challenge. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
-
 The overall setup is straightforward: Given a personalized binary and an architecture sheet, extract the eight codes from the puzzle and submit them to the website.
 
 I've had some minor experience working with binaries, but I've never actually done anything like this before.
 
-Since completing the challenge, I have read the writeups for several solutions. I found they tended to narrowly focus on the puzzles, and not what went into building the framework required to solve the puzzles. Below is my journey, which I hope will be of interest of anybody who started this puzzle with an experience level similar to my own.
+Below is my journey, which I hope will be of interest of anybody who started this puzzle with an experience level similar to my own.
 
 ***Everything after this is filled with spoilers.***
 
@@ -26,19 +26,19 @@ One final note. All the challenge codes sown below are hashed with MD5. If you t
 Here we go! 
 
 ### Code 1 - RTFM!
-There are two files provided, `challenge.bin` and `arch-spec`. Leaving the bin file alone, I opened up the arch-spec and read it over. It provided definitions for the memory, the numbers, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was the comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunatly, this format lines up with my development tools and hardware.
+There are two files provided, `challenge.bin` and `arch-spec`. Leaving the bin file alone, I opened up `arch-spec` and read it over. It provided definitions for the memory, mow math works, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was a comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunatly, this format lines up with my development tools and hardware, and was total non-issue.
 
 Creating a new C# console project, I read through the specification again, then started laying out some basics as I felt out what I would need to implement the program.
 
 The specification states all numbers are unsigned 15 bit integers. I set aside `int` and welcomed my new best friend, `ushort`. `ushort` is a 16 bit number, thus it can contain larger values then the specification permits.
-
-Registers are defined as being addressed above main memory.
 
 I set some limits to refer to later.
 ```csharp
 const ushort MAX_VALUE = 36768;
 const ushort ABSOLUTE_MAX = 36776;
 ```
+
+There is a block of memory, and a set of 8 registers that are defined as being addressed above main memory.
 
 Main memory and registers map neatly to arrays. `stack` is a `Stack()`. I could see no reason to reinvent the ~~wheel~~ `Stack()`.
 
@@ -57,8 +57,8 @@ In the hints section I found my first code.
 
 With the first code in hand and the first lines of a framework laid out, things were off to a good start.
 
-### Code 2 - Implement the basics. 
-My next task was to load the `challenge.bin` file into `mainMemory[]`. With a general lack of experience working with binary files, I immediatly turned to the help documentation. Pilfering some example code, I loaded the binary into `mainMemory[]`.
+### Code 2 - Developer's first op-code. 
+My next task was to load the `challenge.bin` file into `mainMemory[]`. With a general lack of experience working with binary files, I immediatly turned to Microsoft's help documentation. Pilfering some example code, I loaded the binary into `mainMemory[]`.
 
 Almost.
 
@@ -77,7 +77,12 @@ I still didn't know what I didn't know, so I focused on the suggestion of starti
 
 Op-code 0 is the "halt" command. I'll need a run loop that would break when encountering op-code 0.
 
-Op-code 19 outputs a character. `Console.Write((char)a);` Done!
+Op-code 19 outputs a character.
+```csharp
+a = mainMemory[cursor];
+Console.Write((char)a);
+```
+Done! ... as soon as I figure out where to put it.
 
 21 is the "no operation" command. Op-code 21 was an oddly important code to implement. Support for it required the basic framework of read instruction -> process instruction -> repeat.
 
@@ -141,10 +146,10 @@ Executing self-test...
 
 jmp fails
 ```
-A second code! Things were certainly progressing well.
+A second code! Progress!
 
-### Code 3 - Implement the rest of the op-codes. 
-This was my first big refactor. I split out nearly all the code written so far into its own class: `Synacor9000()`.
+### Code 3 - The Synacor9000() 
+This was my first big refactor. I split out nearly all the code written so far into its own class: `Synacor9000()`. I took the opportunity to rename some functions and variables. For example, `DoCommands()` became `Dispatcher()` and `cursor` became `istrPtr`. I added `Run()` and `Load()` methods. `Dispatcher()` lost the `param` parameter, now accepting only the current instruction.
 
 This reduced the core project down to only a few lines of code.
 
@@ -163,7 +168,6 @@ catch (Exception e)
 }
 ```
 
-
 I implmented a set of helper methods. `Mem_Write()` writes a value to a memory or register address. `Mem_Read()` returns the value from a memory or register address.
 
 The biggest helpers were `Ptr_ReadValue()` and `Ptr_ReadRaw()`.
@@ -173,9 +177,11 @@ For example, if `Ptr_ReadValue()` reads 2134, it will return 2134.  However, if 
 
 For the same example, `Ptr_ReadRaw()` would return 32770.
 
+
+
 I made an architectural decision. When the `Ptr` methods were called they would advance `instPtr` by one. This simplified my code immensely. Nothing in the program would need to track or communicate anything about any particular op-code's requirements. The act of an op-code requesting data would automatically set the pointer to the proper location for the next request.
 
-I took the opportunity to rename some functions and variables. For example, `DoCommands()` became `Dispatcher()` and `cursor` became `istrPtr`. I added `Run()` and `Load()` methods. `Dispatcher()` lost the `param` parameter, now accepting only the current instruction.
+
 
 I broke the op-codes into smaller methods of realated functionaly. Each block shared the same basic format, similar to the final form of the one below.
 ```csharp
@@ -210,17 +216,17 @@ At first glance they seem to be the same code. Data goes from \<b> to \<a>. The 
 
 Two things conspired to keep me from a solution. 
 
-First, and most importantly, I didn't fully understand the instructions. After flailing for some time, I sought out some help and found a reddit post that nudged me towards a solution.
+First, and most importantly, I didn't fully understand the instructions. After flailing for a couple of days, I sought out some help. A reddit post nudged me towards a solution.
 
-For `rmem` the target is a raw value from memory. Like many other op-codes,  
-`address = Ptr_ReadRaw()` would read the correct value.
+For `rmem` the target is a raw value from memory. Like many other op-codes, `address = Ptr_ReadRaw()` would read the correct value.
 
-The source was a whole other animal. "Read memory at address \<b>" This was a two step redirection. I needed to retrieve the value value of the memory at the address stored in the memory location of \<b>.
+The source was a whole other animal. "Read memory at address \<b>" This was a two step redirection. I needed to retrieve the value of the memory at the address stored in the memory location of \<b>.
+
 In code terms: `value = Mem_Read(Ptr_ReadValue())`
 
-Once I understood that, it exposed my second issue. At the time, `Ptr_ReadValue()` called `Mem_Read()` directly: `Mem_Read(instPtr++)`. This would give me the value at the address stored in `instPtr`. This wasn't wrong for much of my code.
+Once I understood that, it exposed my second issue. At the time, `Ptr_ReadValue()` called `Mem_Read()` directly: `Mem_Read(instPtr++)`. This would give me the value at the address stored in `instPtr`. This wasn't wrong for much of my code, however, it utterly failed for the needs of `rmem`.
 
-`Mem_Read()` would read the value from any address passed to it. `Ptr_ReadValue()` would return the value in `mainMemory[]`, unless that value mapped to a register.
+To fix it, `Mem_Read()` would read the value from any address passed to it. `Ptr_ReadValue()` would return the value in `mainMemory[]`, unless that value mapped to a register.
 
 After `rmem` got sorted out `wmem` fell into place as a pair of `Ptr_ReadValue()` calls.
 
@@ -256,13 +262,13 @@ What do you do?
 ```
 An excellent question with an easy answer. I had one more op-code to implement. 
 
-During my snooping for answers regarding `wmem` I unfortuanly caught a hint of how to handle this. "Input buffer."
+During my snooping for answers regarding `wmem` I unfortuainly caught a hint of how to handle this. "Input buffer."
 
-C# has three ways to read `Console` input. `Console.Read()`, `Console.ReadKey()`, and `Console.ReadLine()`. These will read a `char`, a keypress and a `string` respectivly.
+C# has three ways to read console input. `Console.Read()`, `Console.ReadKey()`, and `Console.ReadLine()`. These will read a `char`, a keypress and a `string` respectively.
 
 At first glance, `ReadLine()` seemed to be the way to go, and early implementations used it. However, I could not get a consistant experience using it. `Read()` had a similar restriction. `ReadKey()` seemed to gave me the most control over the keyboard input.
 
-I setup two loops. The first loop was in the main program. I created a basic command tree to load and run the challenge file. After starting to run, the main program shell handed off control to a input loop in the `Synacor9000()` class. An "Exit" command would pass control back the outer shell.
+I setup two loops. The first loop was in the main program. I created a basic command tree to load and run the challenge file. After starting to run, the main program shell handed off control to a input loop in the `Synacor9000()` class. An "exit" command would pass control back the outer shell.
 
 This snippit was the guts of the op-code key processor. That's ... a bunch.
 ```csharp
@@ -311,9 +317,9 @@ else
     Mem_Write(address, value);
 }
 ```
-Take a good look. Nearly all of this would be thrown out in the next big refactor. I still don't know what I don't know.
+Take a good look. Nearly all of this would be thrown out in the next big refactor. Right now, I still don't know what I don't know.
 
-However, it works and we now have an input buffer. Back to the game!
+Future changes aside, it works and I now have a functional input buffer. Back to the game!
 
 ```
 Things of interest here:
@@ -334,7 +340,7 @@ What do you do?
 ```
 A victory dance, then we go exploring, that's what we do!
 
-### Code 5 - Cavern Code
+### Code 5 - Colossal Code Cave
 I lied. I didn't go exploring quite yet. (No comment about dancing.) It was about here that I wrote a `Save()` function into the `Synacor9000()` class.
 
 I identified four items I needed to capture: `mainMemory[]`, `registers[]`, `stack` and `instPtr`.
@@ -357,12 +363,12 @@ bw.Write(MARKER); // registers done
 
 Now that I have a functional save/load function, back to the adventure. 
 
-Following the adventure path, I came to some dark caves. Down one passage was darkness and a Grue that will certainly eat us. Fortunatly there is a ladder. Unfortunatly... 
+Following the adventure path, I came to some dark caves. Down one passage was darkness and a Grue that will certainly eat me. Fortunatly there is a ladder. Unfortunatly... 
 ```
 == Twisty passages ==
 You are in a twisty maze of little passages, all alike.
 ```
-Are they though?  I had a look around to see what I could find.
+Are they though?  I took a look around to see what I could find.
 
 > You are in a maze of little twisty passages, all alike.
 
@@ -370,7 +376,7 @@ Are they though?  I had a look around to see what I could find.
 
 > You are in a twisty alike of little passages, all maze.
 
-I ran some tests and found that the text isn't random. Methodically exploring and tracking which "twisty maze of alike passages, all little" I arrived in, I was able to come up with this [map](Extras/CaveMap.jpeg).
+I ran some tests and found that the text wasn't random. Methodically exploring and tracking which "twisty maze of alike passages, all little" I arrived in, I was able to come up with this [map](Extras/CaveMap.jpeg).
 
 All that exploration awarded me another code. 
 ```
@@ -383,7 +389,7 @@ You take note of this and keep walking.
 
 Escaping the maze and beating back the darkness, I continued my journey onward.
 
-### Code 6 - Ruins 
+### Code 6 - Toss a Coin to Your Momument 
 The next location in the adventure game are some ruins. There are five coins scattered around the location, each with a different number or symbol. In the main room is a locked door and a strange momument. 
 
 ```
@@ -405,9 +411,8 @@ You activate the teleporter!  As you spiral through time and space, you think yo
 ```
 Six codes collected!
 
-### Code 7 - Trapped 
+### Code 7 Part 1 - We're not in Zork Anymore.  
 The teleporter deposited me in the lobby of Synacor Headquarters. Exploring the area, I found an book about teleportation.
-
 ```
 The cover of this book subtly swirls with colors.  It is titled "A Brief Introduction to Interdimensional Physics". 
 ```
@@ -422,13 +427,13 @@ What is useful in a debugger? I made a feature list of things I thought I might 
 - Dump the current state to a file and / or dissassemble a binary.
 - Some way to control everything and get useful output.
 
-Wow, that's a bunch.
+That's a bunch.
 
-The first concern is control. With this I'd be adding a lot more commands to my command switch statements. As there are two of them, one in the shell and one in the program, I'd need to put my debug commands in both places. 
+The first concern is control. With this I'd be adding a lot more commands to my twinned command switch statements. As there are two of them, one in the shell and one in the program, I'd potentially need to teach both of them about the upcoming debug commands. 
 
 I'm allergic to duplicated work, so I stopped and had a think. What I needed is a single place to control input and output. This task fell to the outer shell.
 
-The command loop would now be be tasked to read in a line of input, then decide if it's a shell command, a debug command or a game command. To continue seperating duties, I removed all console output and worked an output buffer into `Synacore9000()`, making it fully I/O agnostic. I chose to implement the output buffer as a queue. A `List()` *should* return text in the order it is added. A `Queue()` *guarentees* the order and comes with the bonus of built in removal.
+The command loop would now be be tasked to read in a line of input, then decide if it's a shell command, a debug command or a game command. To continue seperating, I removed all console input and output and worked an output buffer into `Synacore9000()`, making it I/O agnostic. I chose to implement the output buffer as a queue. A `List()` *should* return text in the order it is added. A `Queue()` *guarentees* the order and comes with the bonus of built in removal.
 
 ```csharp
 case 19:         // out: 19 a    write the character represented by ascii code <a> to the terminal
@@ -457,11 +462,11 @@ case 20:        // in: 20 a     read a character from the terminal and write its
     break;
 ```
 
-This simplified the two op-codes and gave me a new problem to solve before starting on the debugger; program flow control.
+This simplified the two op-codes and gave me a new problem to solve before starting on the debugger; program flow control between the class and the host program.
 
 I enumerated the two states the program could be in, `State.Running` and `State.Halted`. Then tweaked the `Dispatcher()` and `Run()` methods appropriatly. This replaced the global variable that was controlling the run loop.
 
-It turned out I needed one more state, `State.Paused_For_Input` so I could tell if the program is stopped because it's done, or stopped because its input buffer is empty.
+It turned out I needed one more state, `State.Paused_For_Input`, so I could tell if the program is stopped because it's done, or stopped because its input buffer is empty.
 
 ```csharp
 public State Run()
@@ -487,19 +492,26 @@ In rough psudocode, this is the outer loop flow.
 while shell is running 
     read the input.
 
-    if it is a command line,
-        send it to the command processor. 
+    if the input starts with '!'
+        send it to the command processor
     else
         set the Synacor9000's input buffer
         Synacor9000.Run()
         write the output buffer to the console 
     end if-else
 loop 
+
+command processer 
+    if the command is a shell command (shell commands are: load, run, save, exit) 
+        execute it.
+    else 
+        Passes the command to the Synacore9000 debugger.
+    end if-else
 ```
 
-Now that I've sorted out my IO, on to the debugger.
+Now that I've sorted out my I/O, on to the debugger.
 
-The method `DebugDispatcher()` was created and it blossomed into an enormous nested switch statement. There were not many problems implementing this. I had my framework and I/O figured out. I did need to create yet another run loop for the step command, however, everything seemed to go smoothly.
+The method `DebugDispatcher()` was created in `Synacor9000()` and it quickly blossomed into an enormous set of nested switch statements. There were not many problems implementing this. I had my framework and I/O figured out. I did need to create yet another run loop for the step command, however, everything seemed to go smoothly.
 
 I turned on tracing and started loaded the binary. My trace log exploded. I later discovered that writing a single character to the screen is in the neighborhood of thirty eight instructions. On the first game screen there are over 250 characters.
 
@@ -523,7 +535,7 @@ As a final bit of preperation, I decompiled the binary.
 ...
 ```
 
-The first step is to find out where the eighth register is being referenced.
+With everything in place, it was time to go and find the fabled eighth register. `CTRL-F` is our friend. 
 ```
 Find all "reg[7]", Current document
 \Full_Dump.txt(270):521   jt  reg[7]    1093
@@ -532,7 +544,7 @@ Find all "reg[7]", Current document
 \Full_Dump.txt(2737):6042  set  reg[1]  reg[7]
 ```
 
-521 is in the middle of the self test code. I'll ignore that one for now.
+`521` is in the middle of the self test code. I'll ignore that one for now.
 
 ```
 5445 push  reg[0]                
@@ -543,7 +555,7 @@ Find all "reg[7]", Current document
 
 Fiddling with breakpoints, I found that this is called after the "use teleporter" command is issued. 
 
-We know that the eighth register is initalized to zero, so following the jump to `5605` is likely the path that leads to Synacore headquarters. 
+We know that the eighth register is initalized to zero, so following the jump to `5605` is likely the path that leads to Synacore headquarters.
 
 I have the tools, now time to put them to use.
 
@@ -574,7 +586,7 @@ Command trace console echo is now on.
 ```
 Nice! 
 
-I spent some time getting to know `1458`. That is text generation function that blew my trace out of the water. I can ignore it.
+I spent some time getting to know `1458`. That is text generation function that blew my trace out of the water. I can ignore it. I certainly don't need to step through it. Adjusting the breakpoints, I can see what the system wrote.  
 
 ```
 > !break addy 5483
@@ -587,7 +599,7 @@ PROGRAM OUT:   "Unusual setting detected!  Starting confirmation process!  Estim
 PROGRAM OUT:
 ```
 
-Back to the full dump. After the text output, there is a block of noop, then the next interesting set of instructions start at `5483`.
+Turning back to the full dump, after the text output there is a block of noop codes. The next interesting set of instructions start at `5483`.
 
 ```
 5483  set  reg[0]       4
@@ -615,7 +627,7 @@ PROGRAM OUT:
 PROGRAM OUT:
 PROGRAM OUT: What do you do?
 ```
-Silly me. 
+That's not what I want.
 
 `5491` is looking for the value of register 1 to be 6. This must be the return value from the validation function. Let's back up and fix that.  
 
@@ -629,7 +641,7 @@ PROGRAM OUT:
 PROGRAM OUT:     plzAsKTPdyqQ
 ```
 
-Success! It was about 1 a.m. so I happily jotted down my newst code and went to bed. 
+Success! At this point it was about 1 a.m. I happily jotted down my newst code and went to bed.
 
 ```
 "You didn't think it would be that easy, did you?"
@@ -641,11 +653,11 @@ At 4 a.m. my brain woke me up with a nagging feeling that the solution was too e
 
 At 6 a.m. I gave up on sleep.
 
-plzAsKTPdyqQ => "plz AsK TP ?die? qQ". This isn't the code. 
+plzAsKTPdyqQ => "plz AsK TP ?die? qQ". There is no way this is the real code.  
 
-#### Hackerman?  No... the other guy.
+### Code 7 Part 2 - Hackerman?  No... the other guy.
 
-It's time to come to grips with reading assembly. Staring at this for a few hours, I had a basic idea of how it worked. I didn't quite get what it was doing.
+It's time to come to grips with reading assembly. After staring at this for a few hours, I had a basic idea of how it worked, even if I didn't quite get what it was doing.
 
 `6027` is the entry point. `reg[0]` and `reg[1]` seem to act as parameters.
 `jump` instructions are flow control.
@@ -660,7 +672,7 @@ It's time to come to grips with reading assembly. Staring at this for a few hour
 ```
 From the `eq` test in `5491` I can infer that `reg[0]` will contain the return value of `Func_6027(4, 1)`.
 
-So what does 6027 do?
+So what does `6027` do?
 ```
 6027   jt  reg[0]    6035
 6030  add  reg[0]  reg[1]
@@ -684,12 +696,13 @@ That seems short and to the point. What's next?
 6045 call    6027
 6047  ret 
 ```
-Ok, so this is odd. What's happening with `6038`? 
+Ok, so this is odd. What's happening with the instruction at `6038`? 
 
 Simply adding 32767 to a number will put the number out of bounds. However, checking the spec, and the implemtation for `add`, the operation is modulo 37678.
 
-> op-code 9:  (ushort)((b + c) % MODULO)
-
+```csharp
+value = (ushort)((b + c) % MODULO)
+```
 The modulo makes this a subtraction operation. Cool.
 
 ```csharp
@@ -716,15 +729,16 @@ One more to go.
 
 This one involves the stack. In other code I've seen the stack is used to maintain state between function calls.
 
-save the value of reg[0] to the stack
-subtract 1 from reg[1]
-reg[0] = Func_6027(a, b)
+In order:
+- save the value of reg[0] to the stack
+- subtract 1 from reg[1]
+- reg[0] = Func_6027(a, b)
 
 The next instruction copies reg[0] to reg[1] then pops the stack contents back to reg[0];
 
-reg[0] = a (from the stack)
-reg[1] = has the result of our function call.
-and then we call... Func_6027(a, b);
+- reg[0] = a (from the stack)
+- reg[1] = has the result of our function call.
+- and then we call... Func_6027(a, b);
 
 ```csharp
 ushort Func_6048(ushort a, ushort b)
@@ -745,11 +759,11 @@ ushort RecursiveNightmare(ushort r0, ushort r1)
 
 How the [REDACTED] do you optimize *that?* 
 
-I learned later that this is called [Ackermann's function](https://en.wikipedia.org/wiki/Ackermann_function).
+I learned later that this is called [Ackermann's function](https://en.wikipedia.org/wiki/Ackermann_function). For now, it's pure horror.
 
-I made a new class called `PuzzleSolutions()` and dumped the recursion nightmare into it.
+I made a new class called `PuzzleSolutions()` and dumped `RecursiveNightmare()` into it.
 
-Giving it a test run, it immediatly blew through the stack. The easiest thing to optimize is to cache the return values.
+Giving it a test run, it immediatly blew through the stack. I need something to bring down the recursion. The easiest thing to optimize is to cache the return values.
 ```csharp
 if (memo.TryGetValue((r0, r1), out ushort memoReg)) return memoReg;
 
@@ -759,14 +773,15 @@ memo.TryAdd((r0, r1), ret);
 return memo[(r0, r1)];
 ```
 
-The stack lasted longer, but still blew up. C# has a 1MB stack for 32-bit programs and a 4MB one for a 64-bit one. This led to my next question; can I increase the stack size? Everything I found online said some variation of "This is a bad idea. You're an idiot. Fix your program. Don't touch it."
+The stack lasted longer, but still blew up. C# has a 1 MB stack for 32-bit programs and a 4 MB stack for 64-bit programs. My next, possibly predictable, question was: How can I increase the stack size? Everything I found online said some variation of "This is a bad idea. You're an idiot. Fix your program. Don't fkin' touch it you id10t n00b."
 
+And then there was this: 
 ```
 Thread(ParameterizedThreadStart, Int32)	
 Initializes a new instance of the Thread class, specifying a delegate that allows an object to be passed to the thread when the thread is started and specifying the maximum stack size for the thread.
 ```
 
-Jackpot. 
+Jackpot.
 
 ```csharp
 Thread tp = new(new ParameterizedThreadStart(solveTP.TeleporterSolver), 18000000);
@@ -778,7 +793,7 @@ But it ran.
 
 ... and it didn't return a valid answer.
 
-*frustrated programmer noises*
+***frustrated programmer noises***
 
 I tore that function apart. I checked it line by line against the source assembly. I stepped through it. It seemed to work. I took the step of looking up another solution and comparing my code to it. They were functionally identical.
 
@@ -796,7 +811,7 @@ const ushort MODULO = 32758;
 ```
 Wait a second.
 
-*OH! FOR THE LOVE OF THE [OMNISSIAH!](https://warhammer40k.fandom.com/wiki/Machine_God)*
+*OH! BY THE [OMNISSIAH's](https://warhammer40k.fandom.com/wiki/Machine_God) BENT SPARK PLUGS!* 
 
 ```
 > !load teleporter.syn9k
@@ -823,28 +838,21 @@ You wake up on a sandy beach with a slight headache.  The last thing you remembe
     869555826e04d6aea29850b2680c9b01
 ```
 
-It works now. 
+Seven of eight. Almost there.
 
-Before I moved on to the last stage of the puzzle, I knew I had to do something about that function. I did not like the `Thread()`. First of all, I wasn't sure how to get data back from it. The output was written direct to the console. 
+Before I moved on to the last stage of the puzzle, I knew I had to do something about that method. I did not like `Thread()`. I wasn't sure how to get data back from it. The output was written direct to the console. 
 
-`Task()` seemed to be more in line with spinning off batches of parallel tasks to search for the solution. However, there wasn't any stack control with a `Task()`. Without a stack increase, I'd have to truly optimize the algorithm. During my debugging and code diving, I found a couple of versions that were not recursive.
+`Task()` seemed to be more in line with spinning off batches of parallel tasks to search for the solution. However, there wasn't any stack control with a `Task()`. Without a stack increase, I'd have to truly optimize the algorithm. During my debugging and code diving, I found a couple of versions of the algorithm that were not recursive and would run without environment changes. 
 
-I [implemented](PuzzleSolutions.cs) one from a [JavaScript solution.](https://github.com/NiXXeD/synacor-challenge/blob/master/spoilers/teleporter.js) While the routine is obvious to me in hindsight, I don't know if I'd have been able to arrive at that solution on my own. My implmentation (`PAckAsync()`) is heavily commented so I won't revisit that here.
+I implemented one from a [JavaScript solution.](https://github.com/NiXXeD/synacor-challenge/blob/master/spoilers/teleporter.js) While the routine is obvious to me in hindsight, I don't know if I'd have been able to arrive at that solution on my own. My [implementation](PuzzleSolutions.cs) (`PAckAsync()`) is heavily commented for any that are interested.
 
-As a final note, in this situation not using `Task()` is faster than using it. Regardless, I gained the experience of implmenting an `async` method, so I count it as win.
+As a final note, in this scenario not using `Task()` is faster than using it. Regardless, I gained the experience of implmenting an `async` method, so I count it as win.
 
-### Code 8 - Tropical Vacation
+### Code 8 - A Tropical Vacation
 
 Through the teleporter and out the other side to a brand new location. Time to go exploring. Exploring the tropical island I found a journal that talked about a locked vault and a mysterious orb that would gain or lose weight as it was moved from room to room. There is mention of a hourglass, so it's likely that we need to move quickly, possibly in the fewest number of moves. 
 
-Arriving at the orb room, I mapped the new space. It consisted of a simple 4x4 grid, with each room having a number or a symbol associated with it. Inspecting the orb revelaed the number 22. The vault door had the number 30 carved into it. 
-
-From start to finish in the fewest steps, arriving with a weight of 30. 
-
-Some experimentation revealed additional aspects to the puzzle.
-1) You cannot return to the first room.  The orb resets. 
-2) You cannot leave the vault room. The orb vanishes on arrival. 
-3) The orb will vanish if its weight becomes negative.
+Orb puzzle consisted of a simple 4x4 grid. Each room had a number or a symbol associated with it. Inspecting the orb revelaed the number 22. The vault door had the number 30 carved into it. 
 
 One quick map later... 
 ```
@@ -858,6 +866,13 @@ One quick map later...
   |
 Start
 ```
+
+The puzzle seemed clear. Move the orb from start to finish in the fewest steps, arriving with a weight of 30.
+
+Some experimentation revealed additional aspects to the puzzle.
+1) You cannot return to the first room. The orb resets. 
+2) You cannot leave the vault room. The orb vanishes on arrival. 
+3) The orb will vanish if its weight becomes negative.
 
 Having done two years of Advent of Code puzzles, I had seen variations of this one before. I dusted off a breadth first search. The main change I made was to have each "step" in the puzzle cover two squares, an operator and a number. I added one addtional bounds check to ensure the weight never exceeded 100. This was to prevent loops from forming. The program chewed away at the problem, then spat out an answer.
 
