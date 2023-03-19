@@ -3,9 +3,9 @@
 ## NOTE: As of the time of this commit, the [original site](https://challenge.synacor.com/) appears to have been taken offline. Reddit user [/u/Aneurysm9](https://www.reddit.com/r/adventofcode/comments/11pjsxk/comment/jbzkpo3/) has posted a [repository](https://github.com/Aneurysm9/vm_challenge) with the puzzle binary, documentation and hashes of their solution codes.
 
 ### Introduction
-In the December of 2022 I learned about the [Advent of Code](https://adventofcode.com/). Advent of Code is a yearly series coding puzzles by Eric Wastl. Those puzzles re-ignited my enjoyment of coding for fun. I've been maintaining a legacy system so these puzzles doubled as a way to modernize my skill set. I choose to learn C# as it aligns with my professional goals.
+In the December of 2022 I learned about the [Advent of Code](https://adventofcode.com/). Advent of Code is a yearly series coding puzzles by Eric Wastl. These puzzles are a joy to work on and have doubled as a way to modernize my skill set. I'm currently focused on C# as it aligns with my professional goals.
 
-During my brief time with the Advent of Code (AoC) community I learned of the Synacor Challenge, another puzzle created by the same author. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
+During my brief time with the Advent of Code (AoC) community I learned of the Synacor Challenge, another puzzle created by Eric Wastl. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
 
 In the words of the former website: 
 
@@ -15,7 +15,7 @@ The winner during each convention got Apple gift cards and fame. While we're not
 
 The overall setup is straightforward: Given a personalized binary and an architecture sheet, extract the eight codes from the puzzle and submit them to the website.
 
-I've had some minor experience working with binaries, but I've never actually done anything like this before.
+I've had some minor experience working with binaries, but I've never actually done anything like this.
 
 Below is my journey, which I hope will be of interest of anybody who started this puzzle with an experience level similar to my own.
 
@@ -30,12 +30,11 @@ There are two files provided, `challenge.bin` and `arch-spec`. Leaving the bin f
 
 Creating a new C# console project, I read through the specification again, then started laying out some basics as I felt out what I would need to implement the program.
 
-The specification states all numbers are unsigned 15 bit integers. I set aside `int` and welcomed my new best friend, `ushort`. `ushort` is a 16 bit number, thus it can contain larger values then the specification permits.
+The specification states all numbers are unsigned 15 bit integers. I set aside `int` and welcomed my new best friend, `ushort`. `ushort` is a 16 bit number, thus it can contain larger values then the specification permits. I'll need to setup some boundries to keep things in line.
 
-I set some limits to refer to later.
 ```csharp
-const ushort MAX_VALUE = 36768;
-const ushort ABSOLUTE_MAX = 36776;
+const ushort MAIN_MEMORY_MAX = 36768;
+const ushort INVALID_MEMORY = 36776;
 ```
 
 There is a block of memory, and a set of 8 registers that are defined as being addressed above main memory.
@@ -44,7 +43,7 @@ Main memory and registers map neatly to arrays. `stack` is a `Stack()`. I could 
 
 I considered merging main memory and the registers into one large array. The addressing seemed to support that idea. I ultimately rejected that option to avoid potential trouble. The spec dictated three memory regions, so I implemented three regions, not two. [Five was right out.](https://montypython.fandom.com/wiki/Holy_Hand_Grenade_of_Antioch)
 ```csharp
-ushort[] mainMemory = new ushort[MAX_VALUE];
+ushort[] mainMemory = new ushort[MAIN_MEMORY_MAX];
 ushort[] registers = new ushort[8];
 Stack<ushort> stack = new();
 ```
@@ -58,11 +57,11 @@ In the hints section I found my first code.
 With the first code in hand and the first lines of a framework laid out, things were off to a good start.
 
 ### Code 2 - Developer's first op-code. 
-My next task was to load the `challenge.bin` file into `mainMemory[]`. With a general lack of experience working with binary files, I immediately turned to Microsoft's help documentation. Pilfering some example code, I loaded the binary into `mainMemory[]`.
+My next task was to load the `challenge.bin` file into `mainMemory[]`. With a general lack of experience working with binary files, I turned to Microsoft's help documentation. Pilfering some example code, I loaded the binary into `mainMemory[]`.
 
 Almost.
 
-I briefly tripped over the subtle but critical detail that `BaseStream.Position` doesn't directly map to the indexes for `mainMemory[]`. 
+I briefly tripped over the subtle but critical detail that `BaseStream.Position` doesn't directly map to my `mainMemory[]` indexes. 
 
 After adjusting to account for the offset, the binary successfully loaded into `mainMemory[]`.
 ```csharp
@@ -73,18 +72,18 @@ while (r.BaseStream.Position < r.BaseStream.Length)
 }
 ```
 
-I still didn't know what I didn't know, so I focused on the suggestion of starting with getting op-codes 0, 19 and 21 working.
+I still didn't know what I didn't know, so I focused on the suggestion of getting op-codes 0, 19 and 21 working.
 
-Op-code 0 is the "halt" command. I'll need a run loop that would break when encountering op-code 0.
+Op-code 0 is the "halt" command. I'd need a run loop that would break when encountering op-code 0.
 
 Op-code 19 outputs a character.
 ```csharp
 a = mainMemory[cursor];
 Console.Write((char)a);
 ```
-Done! ... as soon as I figure out where to put it.
+Done! ... as soon as I figured out the run loop.
 
-21 is the "no operation" command. Op-code 21 was an oddly important code to implement. Support for it required the basic framework of read instruction -> process instruction -> repeat.
+Op-code 21 is the "no operation" command. It was an oddly important code to implement. Support for it required the basic framework of read instruction -> process instruction -> repeat.
 
 With that in mind, the immediate goal was to finish off the framework. First up was the main loop to read the instructions from memory. The next task was to build a function that does the real work.
 
@@ -177,13 +176,13 @@ For example, if `Ptr_ReadValue()` reads 2134, it will return 2134.  However, if 
 
 For the same example, `Ptr_ReadRaw()` would return 32770.
 
+At this stage I made an architectural decision. Taking my cue from the streaming class, I decided that when the `Ptr` methods were called they would advance `instPtr` by one.
 
+This simplified my code immensely. Nothing in the program would need to track or communicate anything about any particular op-code's requirements. The act of an op-code requesting data would automatically set the pointer to the proper location for the next request.
 
-I made an architectural decision. When the `Ptr` methods were called they would advance `instPtr` by one. This simplified my code immensely. Nothing in the program would need to track or communicate anything about any particular op-code's requirements. The act of an op-code requesting data would automatically set the pointer to the proper location for the next request.
+I broke the op-codes into smaller methods of related functionality. There is no technical reason to do this, I did it to keep the code orgainized. In a larger project, I might have gone as far as giving each op code its own method. 
 
-
-
-I broke the op-codes into smaller methods of related functionality. Each block shared the same basic format, similar to the final form of the one below.
+Each block shared the same basic format, similar to the final form of the one below.
 ```csharp
 private void Op_Comparison(ushort instruction)
     {
@@ -214,11 +213,13 @@ Spirits were high, right until I slammed into my first roadblock.
 
 At first glance they seem to be the same code. Data goes from \<b> to \<a>. The devil, as the saying goes, is in the details.
 
+*Narrator voice: One week later.*
+
 Two things conspired to keep me from a solution. 
 
 First, and most importantly, I didn't fully understand the instructions. After flailing for a couple of days, I sought out some help. A reddit post nudged me towards a solution.
 
-For `rmem` the target is a raw value from memory. Like many other op-codes, `address = Ptr_ReadRaw()` would read the correct value.
+For `rmem` the target (\<a>) is a raw value from memory. Like many other op-codes, `address = Ptr_ReadRaw()` would read the correct value.
 
 The source was a whole other animal. "Read memory at address \<b>" This was a two step redirection. I needed to retrieve the value of the memory at the address stored in the memory location of \<b>.
 
@@ -226,11 +227,9 @@ In code terms: `value = Mem_Read(Ptr_ReadValue())`
 
 Once I understood that, it exposed my second issue. At the time, `Ptr_ReadValue()` called `Mem_Read()` directly: `Mem_Read(instPtr++)`. This would give me the value at the address stored in `instPtr`. This wasn't wrong for much of my code, however, it utterly failed for the needs of `rmem`.
 
-To fix it, `Mem_Read()` would read the value from any address passed to it. `Ptr_ReadValue()` would return the value in `mainMemory[]`, unless that value mapped to a register.
+To fix it, `Mem_Read()` now reads the value from any memory or register address passed to it. `Ptr_ReadValue()` reads the value of `mainMemory[instPtr]` and returns the value if it is under 32767, or returns the contents of a register if the value maps to a register.
 
 After `rmem` got sorted out `wmem` fell into place as a pair of `Ptr_ReadValue()` calls.
-
-*Narrator voice: One week later.*
 
 ```csharp
 case 15:                        // rmem: 15 a b	    read memory at address <b> and write it to <a>
@@ -260,13 +259,13 @@ The self test is complete and the start of a promised adventure lay before me.
 What do you do?
 >
 ```
-An excellent question with an easy answer. I had one more op-code to implement. 
+An excellent question with an easy answer. I had one more op-code to implement, 20, the input. 
 
 During my snooping for answers regarding `wmem` I unfortuainly caught a hint of how to handle this. "Input buffer."
 
 C# has three ways to read console input. `Console.Read()`, `Console.ReadKey()`, and `Console.ReadLine()`. These will read a `char`, a keypress and a `string` respectively.
 
-At first glance, `ReadLine()` seemed to be the way to go, and early implementations used it. However, I could not get a consistent experience using it. `Read()` had a similar restriction. `ReadKey()` seemed to gave me the most control over the keyboard input.
+At first glance, `ReadLine()` seemed to be the way to go, and early implementations used it. However, I could not get a consistent experience using it. `Read()` had a similar restriction. `ReadKey()` seemed to gave me the most control over the keyboard input, with the caveat that I would need to take full control.
 
 I setup two loops. The first loop was in the main program. I created a basic command tree to load and run the challenge file. After starting to run, the main program shell handed off control to a input loop in the `Synacor9000()` class. An "exit" command would pass control back the outer shell.
 
@@ -635,7 +634,7 @@ PROGRAM OUT: What do you do?
 ```
 That's not what I want.
 
-`5491` is looking for the value of register 1 to be 6. This must be the return value from the validation function. Let's back up and fix that.  
+`5491` is looking for the value of `reg[0]` to equal 6. `reg[0]` must be the return value from the validation function. My edits have left it set at four. Let's back up and fix that.  
 
 ```
 > !set memory 5494 4
@@ -647,7 +646,7 @@ PROGRAM OUT:
 PROGRAM OUT:     plzAsKTPdyqQ
 ```
 
-Success! At this point it was about 1 a.m. I happily jotted down my newest code and went to bed.
+Success! At this point it was after 1 a.m. I happily jotted down my newest code and went to bed.
 
 ```
 "You didn't think it would be that easy, did you?"
@@ -736,16 +735,17 @@ One more to go.
 This one involves the stack. In other code I've seen the stack is used to maintain state between function calls.
 
 In order:
-- save the value of reg[0] to the stack
-- subtract 1 from reg[1]
-- reg[0] = Func_6027(a, b)
+- save the value of `reg[0]` to the stack
+- subtract 1 from `reg[1]`
+- `reg[0]` = `Func_6027(a, b)`
 
-The next instruction copies reg[0] to reg[1] then pops the stack contents back to reg[0];
+The next instruction copies `reg[0]` to `reg[1]` then pops the stack contents back to `reg[0]`.
 
-- reg[0] = a (from the stack)
-- reg[1] = has the result of our function call.
-- and then we call... Func_6027(a, b);
+- `reg[0]` = a (from the stack)
+- `reg[1]` = has the result of the function call.
+- and then it calls... `Func_6027(a, b)`;
 
+Putting it all together: 
 ```csharp
 ushort Func_6048(ushort a, ushort b)
 {
@@ -753,6 +753,8 @@ ushort Func_6048(ushort a, ushort b)
 }
 ```
 Oh dear me.
+
+It gets worse. 
 
 ```csharp
 ushort RecursiveNightmare(ushort r0, ushort r1)
@@ -763,7 +765,7 @@ ushort RecursiveNightmare(ushort r0, ushort r1)
 }
 ```
 
-How the [REDACTED] do you optimize *that?* 
+How the [REDACTED] do you optimize *that!?* 
 
 I learned later that this is called [Ackermann's function](https://en.wikipedia.org/wiki/Ackermann_function). For now, it's pure horror.
 
@@ -904,7 +906,17 @@ Through the mirror, you see "d8f1e2a126c21ae6791cea6a335784c8" scrawled in charc
 Congratulations; you have reached the end of the challenge!
 ```
 
-And just like that ... we're done.
+And just like that ... I'm done.
 
 ### Conclusion
-Final Thoughts. 
+I thoroughly enjoyed this challenge.
+
+I might not have the cleanest solution or the "best" by any metric, but I'm proud of what I accomplished.
+
+I've learned a lot about how low level instructions work and how a program can be made with them. Mixed in are a few lessons about C# which I look forward to apply to future problems.
+
+My personal, heart-felt, thanks to Eric for making these puzzles, and re-igniting my joy of programming.
+
+Next up, I need to save Christmas from the [Easter Bunny](https://adventofcode.com/2016). 
+
+-K March 19, 2023
