@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -26,67 +25,74 @@ static string GetHash(HashAlgorithm hashAlgorithm, string input)
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
+    const int PART2_KEY_STRETCH = 2016;
 
-    string secretKey = "abc"; //"File.ReadAllText(PUZZLE_INPUT);
+    string secretKey = File.ReadAllText(PUZZLE_INPUT);
 
     using MD5 md5Hash = MD5.Create();
 
-    bool isDoneP1 = false;
-    bool isDoneP2 = false;
-
-    long counter = 0;
-    long numKeysFound = 0;
-    long part1Answer = 0;
-    long part2Answer = 0;
-    string hash = "";
-    char key;
-
-    Dictionary<char, List<long>> potentialKeys = new();
-
-    while (!isDoneP1)
+    long CountKeys(int NUM_HASHES = -1)
     {
-        counter++;
-        hash = GetHash(md5Hash, $"{secretKey}{counter}");
-        
-        var matchFive = Regex.Match(hash, @"(.)\1{4}");
-        var matchThree = Regex.Match(hash, @"(.)\1{2}");
+        Dictionary<char, List<long>> potentialKeys = new();
 
+        string hash = "";
+        char key;
+        bool isDone = false;
+        long counter = 0;
+        long numKeysFound = 0;
+        long answer = 0;
 
-        if (matchFive.Success)
+        while (!isDone)
         {
-            key = matchFive.Groups[0].Value.First();
-            if (potentialKeys.TryGetValue(key, out List<long>? value))
-            {
-                var res = value.Where(x => (counter - x) <= 1000).OrderBy(x => x).FirstOrDefault(-1);
+            counter++;
+            hash = GetHash(md5Hash, $"{secretKey}{counter}");
 
-                if (res != -1 )
+            for (int i = 0; i < NUM_HASHES; i++)
+            {
+                hash = GetHash(md5Hash, hash);
+            }
+
+            var matchFive = Regex.Match(hash, @"(.)\1{4}");
+            var matchThree = Regex.Match(hash, @"(.)\1{2}");
+
+
+            if (matchFive.Success)
+            {
+                key = matchFive.Groups[0].Value.First();
+                if (potentialKeys.TryGetValue(key, out List<long>? value))
                 {
-                    Console.WriteLine($"Found match at {counter} {key} {res}");
-                    numKeysFound++;
-                    part1Answer = res;
-                    value.Remove(res);
+                    var res = value.Where(x => (counter - x) <= 1000).OrderBy(x => x);
+
+                    foreach (var item in res)
+                    {
+                        numKeysFound++;
+                        answer = item;
+                        value.Remove(item);
+
+                        if (numKeysFound >= 64) return answer;
+                    }
                 }
             }
-        }
-        
-        if (matchThree.Success)
-        {
-                
-            key = matchThree.Groups[0].Value.First();
-            if (!potentialKeys.TryAdd(key, new(){counter}))
-            {
-                potentialKeys[key].Add(counter);
-            }
-            Console.WriteLine($"Recording Triple {key} {counter} {hash}");
-        }
 
-        if (counter >= 1000 ) isDoneP1 = true;
-        if (numKeysFound >= 64) isDoneP1 = true;
+            if (matchThree.Success)
+            {
+                key = matchThree.Groups[0].Value.First();
+                if (!potentialKeys.TryAdd(key, new() { counter }))
+                {
+                    potentialKeys[key].Add(counter);
+                }
+            }
+
+            if (numKeysFound >= 64) isDone = true;
+        }
+        return answer;
     }
 
+    long part1Answer = CountKeys();
     Console.WriteLine($"Part 1: The index that produces the 64th key is: {part1Answer}.");
-    Console.WriteLine($"Part2: The first six zero AdventCoin hash is at {part2Answer}.");
 
+    long part2Answer = CountKeys(PART2_KEY_STRETCH);
+    Console.WriteLine($"Part 2: After implementing key stretching, the index that produces the 64th key is: {part2Answer}");
 }
 catch (Exception e)
 {

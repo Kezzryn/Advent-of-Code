@@ -67,8 +67,9 @@
   It turned out to be faster for me to call the function than to cache the results in a `Dictionary()`. After some additional digging I found the `BitOperations.PopCount()` function, which does the same thing with the bonus of hardware acceleration, if available. For part two, I already had the code to limit the steps, which combined with a loop through the range of X and Y, handed me the answer.
 
 ### [Day 14](Day%2014) - One-Time Pad
-- **Problem:** 
-- **Solution:**
+- **Problem:** MD5 hashing to find pairs of results. 
+- **Solution:** Borrowing once again from [2015 Day 4](../2015/Day%2004/), this time I built a cache system for the hashes. Part two was the same as part one, with the addition of lots of extra MD5 hashing. Part one ran quickly. Part two ran fast enough that I didn't feel the need to work out an async hash generator.
+- **Future Fun:** An async hash generator. 
 
 ### [Day 15](Day%2015) - Timing is Everything
 - **Problem:**
