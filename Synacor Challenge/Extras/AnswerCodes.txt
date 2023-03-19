@@ -1,0 +1,28 @@
+1) Manual code:		GXOfgPQxcRix	e36481f9059e4129e68e477b988aab67
+2) Boot code:		ZuDWTITEdkFC	7acb6bd7646fa25e711e53f1b4d385f7
+3) Self test code:	dYNCRKjOPkbo	ac40c012717b200b04a06587baabdc3b 
+4) Tablet code:		EVdVCiuTfjkM	3f385e97cb9dc86ed1cd10f74184ba2b 
+5) Maze code:		cnXVssWxhXGO	81cecc9fcbfba60ff4883f0584217622 
+Coin puzzle:		B R S Cn Co
+6) Teleport 1:		LSCOJhZsQYXP	0855b015740ed8a7a72a2568ed0c6a97 
+7) Teleport 2:		GKEHTRsYKRZn	869555826e04d6aea29850b2680c9b01 
+					plzAsKTPdyqQ <--- WRONG. Reality warped. 
+8) Orb:				oqwUOvUbTIbO	d8f1e2a126c21ae6791cea6a335784c8 
+	gotta reverse it OdITdUvOUwpo 
+
+
+Method around teleporter: 
+
+Set register 7 to anything non 0
+
+5483  set  reg[0]       4        
+5486  set  reg[1]       1        
+
+Set to 0, 0  to short circut the validator
+
+Disable the failure check 
+5495   jf  reg[1]    5579  
+
+5495 21
+5496 21
+5497 21

@@ -1,0 +1,72 @@
+Teleporter hit: 
+
+### 5445
+    5445 push  reg[0]                
+    5447 push  reg[1]                
+    5449 push  reg[2]                
+    5451   jf  reg[7]    5605	5605		<- Safe path. 
+    5454 push  reg[0]                       <- Reg 8 reset path. 
+    5456 push  reg[1]                
+    5458 push  reg[2]                
+    5460  set  reg[0]   28844               string code? 
+    5463  set  reg[1]    1531               return instruction? 
+    5466  add  reg[2]    3834   26343       ? 
+    5470 call    1458                       text output loop 
+    5472  pop  reg[2]                
+    5474  pop  reg[1]                
+    5476  pop  reg[0]                
+    5478 noop                        
+    5479 noop                        
+    5480 noop                        
+    5481 noop                        
+    5482 noop                        
+    5483  set  reg[0]       4        
+    5486  set  reg[1]       1        
+    5489 call    6027                       validator call
+    5491   eq  reg[1]  reg[0]       6       r1 = reg0 == 6
+    5495   jf  reg[1]    5579               if false jump 5579 and blow a lot of stuff off the stack
+    5498 push  reg[0]                       
+    5500 push  reg[1]                
+    5502 push  reg[2]                
+    5504  set  reg[0]   29014        
+    5507  set  reg[1]    1531        
+    5510  add  reg[2]    4463   17660       
+    5514 call    1458                       'nother string dump
+
+### 5579
+    5597  pop  reg[2]                
+    5599  pop  reg[1]                
+    5601  pop  reg[0]                
+    5603  jmp    5714               
+
+### 5714
+    5714  pop  reg[2]                
+    5716  pop  reg[1]                
+    5718  pop  reg[0]                
+    5720  ret           
+
+### 6027                                    validator 
+    6027   jt  reg[0]    6035               if reg[0] != 0 jump 6035 JUMP DOES NOT AUTO-RETURN HERE
+    6030  add  reg[0]  reg[1]       1       add 1 + reg[1] and return don't forget modulo math!
+    6034  ret                        
+
+### 6035    
+    6035   jt  reg[1]    6048               if reg[1] != 0 jump 6048 JUMP DOES NOT AUTO-RETURN HERE
+    6038  add  reg[0]  reg[0]   32767       reg[0] = (reg[0] + 32767) % modulo
+    6042  set  reg[1]  reg[7]               copy reg[7] to reg[1]
+    6045 call    6027                       recursive call, wiht new reg[0] and reg[1] values 
+    6047  ret 
+
+### 6048
+    6048 push  reg[0]                
+    6050  add  reg[1]  reg[1]   32767       R1-- This is a subtraction operation. 
+    6054 call    6027                       
+    6056  set  reg[1]  reg[0]        
+    6059  pop  reg[0]                
+    6061  add  reg[0]  reg[0]   32767       R0-- Subtraction operation. 
+    6065 call    6027                
+    6067  ret                        
+
+
+
+

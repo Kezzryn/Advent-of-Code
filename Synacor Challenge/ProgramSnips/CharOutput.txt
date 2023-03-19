@@ -1,0 +1,50 @@
+
+### 5460                            Example string launcher
+5460  set  reg[0]   28844           string code? 
+5463  set  reg[1]    1531           return instruction? 
+5466  add  reg[2]    3834   26343   ? 
+5470 call    1458                       
+
+### 1458                            String writer 
+    1458 push  reg[0]                
+    1460 push  reg[3]                
+    1462 push  reg[4]                
+    1464 push  reg[5]                
+    1466 push  reg[6]                
+    1468  set  reg[6]  reg[0]               = copy 0 to r6
+    1471  set  reg[5]  reg[1]               = copy 1 to r5
+    1474 rmem  reg[4]  reg[0]               = copy mem(r0) (= 169) to r4 ; ? string length 
+    1477  set  reg[1]       0               = r1 = 0
+    1480  add  reg[3]       1  reg[1]       = r3 = r1 + 1 
+    1484   gt  reg[0]  reg[3]  reg[4]       = r0 = r3 > r4
+    1488   jt  reg[0]    1507               <- exit loop
+    1491  add  reg[3]  reg[3]  reg[6]       r3 = r3 + r6
+    1495 rmem  reg[0]  reg[3]               
+    1498 call  reg[5]                       call 1531
+    1500  add  reg[1]  reg[1]       1
+    1504   jt  reg[1]    1480               <- loop if r1 != 0
+    1507  pop  reg[6]                
+    1509  pop  reg[5]                
+    1511  pop  reg[4]                
+    1513  pop  reg[3]                
+    1515  pop  reg[0]                
+    1517  ret
+
+### 1531                    Character writer  
+    1531 push  reg[1]                
+    1533  set  reg[1]  reg[2]        
+    1536 call    2125                
+    1538  out  reg[1]                   
+    1540  pop  reg[1]              
+    1542  ret  
+
+### 2125                    character decoder 
+    2125 push  reg[1]                
+    2127 push  reg[2]                
+    2129  and  reg[2]  reg[0]  reg[1]
+    2133  not  reg[2]  reg[2]        
+    2136   or  reg[0]  reg[0]  reg[1]
+    2140  and  reg[0]  reg[0]  reg[2]
+    2144  pop  reg[2]                
+    2146  pop  reg[1]                
+    2148  ret                       
