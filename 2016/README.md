@@ -72,8 +72,9 @@
 - **Future Fun:** An async hash generator. 
 
 ### [Day 15](Day%2015) - Timing is Everything
-- **Problem:**
-- **Solution:**
+- **Problem:** How quickly does it take for rotating disks to align?
+- **Solution:** A loop with modulo math solved this quickly.
+- **Fun Fact:** The second part aligns after over 40 days. 
 
 ### [Day 16](Day%2016) - Dragon Checksum
 - **Problem:**
