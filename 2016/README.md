@@ -77,8 +77,8 @@
 - **Fun Fact:** The second part aligns after over 40 days. 
 
 ### [Day 16](Day%2016) - Dragon Checksum
-- **Problem:**
-- **Solution:**
+- **Problem:** Unfold a sequence using the [dragon curve](https://en.wikipedia.org/wiki/Dragon_curve) formula, then compute it's checksum.
+- **Solution:** The BitArray class was centeral, with a couple of helper extensions pulled from StackOverflow.
 
 ### [Day 17](Day%2017) - Two Steps Forward
 - **Problem:**
