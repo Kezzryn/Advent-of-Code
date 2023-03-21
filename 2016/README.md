@@ -85,8 +85,8 @@
 - **Solution:**
 
 ### [Day 18](Day%2018) - Like a Rogue
-- **Problem:**
-- **Solution:**
+- **Problem:** [Rule 90](https://en.wikipedia.org/wiki/Rule_90) with a width constraint.
+- **Solution:** I initially tried to figure out how to use a BitArray and masking, and while I had a solution to it, the extension methods to append BitArray's was rather expensive (20+ seconds for part 2). Reworking for simple string brought the runtime down to four seconds. 
 
 ### [Day 19](Day%2019) - An Elephant Named Joseph
 - **Problem:**
