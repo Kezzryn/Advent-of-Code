@@ -2,12 +2,12 @@
 ## Spoiler warnings. I do talk about solutions and techniques I used for the puzzles here, but in a general way.
 
 ### [Day 1](Day%2001) - No Time for a Taxicab
-- **Problem:** Starting off the year with a distance travelled problem. Part one could have been solved with a simple +/- counter, but part two needs to know where we've been. 
+- **Problem:** Starting off the year with a distance traveled problem. Part one could have been solved with a simple +/- counter, but part two needs to know where we've been. 
 - **Solution:** Add to a `Point()` with an array of `Size()` to represent each direction, much like we've done in other years. A `HashSet` tracks where we've been.
 - **[Complex Numbers](Day%2001%20Complex%20Numbers):** - Skimming the solution thread, there was a [brief discussion](https://www.reddit.com/r/adventofcode/comments/5fur6q/comment/dangjvv/) about using complex numbers to track rotation. [Complex number guide here](https://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/). 
 
 ### [Day 2](Day%2002) - Bathroom Security
-- **Problem:** Another pathfinding problem. 
+- **Problem:** Another path finding problem. 
 - **Solution:** Another iterator, but with bounds checking!
 
 ### [Day 3](Day%2003) - Squares With Three Sides
@@ -36,12 +36,12 @@
 
 ### [Day 8](Day%2008) - Two-Factor Authentication
 - **Problem:** We have another visualization to do.
-- **Solution:** 2D Array of bits with a pair of transformation functions. The rotate one was interesting. I initally did two seperate functions, one for row the other for column. I ended up merging them with a bit of trickery to flip the row/col indexers depending on what is needed.
-- **Future Fun:** Reimplment as a one dimentional array. Perhaps bitshifting? 
+- **Solution:** 2D Array of bits with a pair of transformation functions. The rotate one was interesting. I initially did two separate functions, one for row the other for column. I ended up merging them with a bit of trickery to flip the row/col indexers depending on what is needed.
+- **Future Fun:** Reimplement as a one dimensional array. Perhaps bit shifting? 
 
 ### [Day 9](Day%2009) - Explosives in Cyberspace
 - **Problem:** Oh, Zip bomb puzzle. How big is the uncompressed file to get? 
-- **Solution:** Part one was simple iteration over the file. Part two turned out to be a reursion problem that was solved by changing a couple lines of code in my initial function to be recursive instead.
+- **Solution:** Part one was simple iteration over the file. Part two turned out to be a recursion problem that was solved by changing a couple lines of code in my initial function to be recursive instead.
 
 ### [Day 10](Day%2010) - Balance Bots
 - **Problem:** Bot giving chips to each other.
@@ -59,8 +59,8 @@
 - **Future Fun:** Decode the program and write it as a native function.
 
 ### [Day 13](Day%2013) - A Maze of Twisty Little Cubicles
-- **Problem:** Nifty. A maze to solve, but this time we get a forumala to generate our maze, rather than the maze as input.
-- **Solution:** I pulled the code from [2022 Day 12](../2022/Day%2012/) and added in a generator with our maze forumula. I took a look at the C# `BitArray()` object, but it didn't have any ways to sum or total the bits with it so, before I went and wrote a simple `foreach` loop, I googled "counting bits".
+- **Problem:** Nifty. A maze to solve, but this time we get a formula to generate our maze, rather than the maze as input.
+- **Solution:** I pulled the code from [2022 Day 12](../2022/Day%2012/) and added in a generator with our maze formula. I took a look at the C# `BitArray()` object, but it didn't have any ways to sum or total the bits with it so, before I went and wrote a simple `foreach` loop, I Googled "counting bits".
 
   [What dark magic is this?](http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel) I have no idea how or why that works, but it does. I asked Chat GPT to [explain it to me.](Day%2013/Fast%20Bit%20Counting.txt)
 
@@ -78,7 +78,7 @@
 
 ### [Day 16](Day%2016) - Dragon Checksum
 - **Problem:** Unfold a sequence using the [dragon curve](https://en.wikipedia.org/wiki/Dragon_curve) formula, then compute it's checksum.
-- **Solution:** The BitArray class was centeral, with a couple of helper extensions pulled from StackOverflow.
+- **Solution:** The BitArray class was central, with a couple of helper extensions pulled from StackOverflow.
 
 ### [Day 17](Day%2017) - Two Steps Forward
 - **Problem:**
@@ -89,8 +89,8 @@
 - **Solution:** I initially tried to figure out how to use a BitArray and masking, and while I had a solution to it, the extension methods to append BitArray's was rather expensive (20+ seconds for part 2). Reworking for simple string brought the runtime down to four seconds. 
 
 ### [Day 19](Day%2019) - An Elephant Named Joseph
-- **Problem:**
-- **Solution:**
+- **Problem:** Predict the end state of a Josephus Problem. 
+- **Solution:** Both of these looked very complex and wound up having very simple answers. I struggled with part one, missing the pattern by not extending my test cases far enough. The solution thread named the problem, which led to a video by [Numberphile](https://www.youtube.com/watch?v=uCsD3ZGzMgE) that laid out the solution. For part two, I used tokens to visualize the process and reduced it to a pair of rules that worked on twin queues.  
 
 ### [Day 20](Day%2020) - Firewall Rules
 - **Problem:**
