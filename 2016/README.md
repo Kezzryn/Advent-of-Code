@@ -93,8 +93,8 @@
 - **Solution:** Both of these looked very complex and wound up having very simple answers. I struggled with part one, missing the pattern by not extending my test cases far enough. The solution thread named the problem, which led to a video by [Numberphile](https://www.youtube.com/watch?v=uCsD3ZGzMgE) that laid out the solution. For part two, I used tokens to visualize the process and reduced it to a pair of rules that worked on twin queues.  
 
 ### [Day 20](Day%2020) - Firewall Rules
-- **Problem:**
-- **Solution:**
+- **Problem:** Range sorting and identification.
+- **Solution:** Reused the `Slice()` class from [2022 Day 15](../2022/Day%2015) to do the heavy lifting of sorting and merging the number ranges. I had to extend it slightly to merge adjacent ranges, and then tweak it to handle `uint` values.
 
 ### [Day 21](Day%2021) - Scrambled Letters and Hash
 - **Problem:**
