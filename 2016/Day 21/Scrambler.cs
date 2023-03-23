@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Text;
+﻿using System.Text;
 
 namespace AoC_2016_Day_21
 {
@@ -12,12 +11,12 @@ namespace AoC_2016_Day_21
         RotR,
         SwapPos,
         SwapLet
-    };                                                                         
+    };
 
     internal class Scrambler
     {
         private string _scrambleText;
-        private bool _doReversed;
+        private readonly bool _doReversed;
 
         public Scrambler(string text, bool doReversed = false)
         {
@@ -25,7 +24,7 @@ namespace AoC_2016_Day_21
             _doReversed = doReversed;
         }
 
-        public override string ToString() => _scrambleText; 
+        public override string ToString() => _scrambleText;
 
         private void SwapPos(int posA, int posB)
         {
@@ -57,33 +56,42 @@ namespace AoC_2016_Day_21
 
         private void RotLR(int numPos)
         {
-            int len = _scrambleText.Length;
-            //positive rotations are to the left.   
-            char[] temp = new char[len];
+            int offset = Math.Abs(numPos) % _scrambleText.Length;
 
-            for (int i = 0; i < _scrambleText.Length; i++)
+            string temp;
+            if (numPos > 0)
             {
-                int offset = (i + Math.Abs(numPos)) % len;
-
-                if (numPos > 0)
-                {
-                    temp[i] = _scrambleText[offset];
-                }
-                else
-                {
-                    temp[offset] = _scrambleText[i];
-                }
+                //Rotate Left by an amount...
+                temp = _scrambleText[offset..] + _scrambleText[..offset];
+            }
+            else
+            {
+                //Rotate Right by an amount...
+                temp = _scrambleText[^offset..] + _scrambleText[..^offset];
             }
 
-            _scrambleText = new(temp);
+            _scrambleText = temp;
         }
 
         private void RotPos(int posA)
         {
             int index = _scrambleText.IndexOf((char)posA);
-            int totalRot = 1 + index + (index >= 4 ? 1 : 0);
-            
-            RotLR(_doReversed ? totalRot : -totalRot);
+            int totalRot;
+            if (_doReversed)
+            {
+                //even NB: zero special case, 'cause it just would not work in a formula.
+                totalRot = (index == 0)
+                                ? -7
+                                : ((index % 2) == 1)
+                                    ? ((index + 1) / 2)      //odd 
+                                    : ((index + 4) / 2) - 5; //even
+            }
+            else
+            {
+                totalRot = -(1 + index + (index >= 4 ? 1 : 0));
+            }
+
+            RotLR(totalRot);
         }
 
         public void Step(string instruction)
@@ -153,8 +161,8 @@ namespace AoC_2016_Day_21
                     else
                     {
                         inst = s[1] == "left" ? Ops.RotL : Ops.RotR;
+                        if (_doReversed) inst = s[1] == "left" ? Ops.RotR : Ops.RotL;
                         argA = int.Parse(s[2]);
-                        if (_doReversed) inst = (inst == Ops.RotL) ? Ops.RotR : Ops.RotL; 
                     }
                     break;
                 case "swap":
@@ -165,14 +173,12 @@ namespace AoC_2016_Day_21
                         inst = Ops.SwapLet;
                         argA = s[2][0];
                         argB = s[5][0];
-                        if (_doReversed) (argB, argA) = (argA, argB);
                     }
                     else
                     {
                         inst = Ops.SwapPos;
                         argA = int.Parse(s[2]);
                         argB = int.Parse(s[5]);
-                        if (_doReversed) (argB, argA) = (argA, argB);
                     }
                     break;
                 default:

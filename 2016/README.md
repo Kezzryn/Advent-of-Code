@@ -97,8 +97,8 @@
 - **Solution:** Reused the `Slice()` class from [2022 Day 15](../2022/Day%2015) to do the heavy lifting of sorting and merging the number ranges. I had to extend it slightly to merge adjacent ranges, and then tweak it to handle `uint` values.
 
 ### [Day 21](Day%2021) - Scrambled Letters and Hash
-- **Problem:**
-- **Solution:**
+- **Problem:** Given a set of instructions, scramble a string.  Then ... unscramble them. 
+- **Solution:** A fairly straight forward task where I learned of a few more language functions to help with string manipulation. The hard part was working out the reverse logic of the rotation scheme. Un-rotating it is a mess, but it works. 
 
 ### [Day 22](Day%2022) - Grid Computing 
 - **Problem:**
