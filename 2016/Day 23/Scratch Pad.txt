@@ -1,0 +1,96 @@
+int a = 7;
+int b = 0;
+int c = 0;
+int d = 0;
+
+bool toggle2 = true;
+bool toggle3 = true;
+bool toggle4 = true;
+bool toggle5 = true;
+
+b = a;        //cpy a b				
+do
+{
+
+
+    b--;          //dec b				
+    d = a;        //cpy a d				
+    a = 0;        //cpy 0 a				
+
+    do
+    {
+        c = b;        //cpy b c			
+        do
+        {
+            a++;    //inc a 
+            c--;    //dec c 
+        } while (c != 0);   //jnz c - 2  WHILE C != 0 
+        d--;    //dec d
+    }
+    while (d != 0);        //jnz d - 5   WHILE D != 0
+
+    b--;    //dec b	
+    c = b;  //cpy b c
+    d = c;  //cpy c d
+
+    do
+    {
+        d--;    //dec d
+        c++;     //inc c
+    }
+    while (d != 0); //jnz d -2
+
+    Console.WriteLine(c);
+    //tgl c     
+
+    if (c == 8) toggle2 = false;
+    if (c == 6) toggle3 = false;
+    if (c == 4) toggle4 = false;
+    if (c == 2) toggle5 = false;
+
+    // first hit c is 10, nothing happens 
+
+    //16   tgl c           210      4      8      0
+    //24 is reset from inc c to dec c
+
+    //16   tgl c           840      3      6      0
+    //22 is reset from inc d to dec d
+
+    //16   tgl c          2520      2      4      0
+    //20 is reset from jnz 77 d to cpy 77 d
+
+    //16   tgl c          5040      1      2      0
+    //18 is reset from jnz 1 c to cpy 1 c
+
+    c = -16;    //cpy -16 c
+} while (toggle5); //jnz 1 c
+c = 1;
+
+
+c = 72;    //cpy 72 c
+
+/*
+17   cpy -16 c      5040      1      2      0
+18   cpy 1 c        5040      1    -16      0
+19   cpy 72 c       5040      1      1      0
+20   cpy 77 d       5040      1     72      0
+21   inc a          5040      1     72     77
+22   dec d          5041      1     72     77
+23   jnz d -2       5041      1     72     76
+
+24   dec c         10584      1      1      0
+25   jnz c -5      10584      1      0      0
+*/
+//10584 for a = 7
+
+do
+{
+    // return when d == 0;   //jnz 77 d
+    do
+    {
+        a++;    //inc a
+        d++;    //inc d
+    } while (d != 0);   //jnz d -2
+    c++;
+    //inc c
+} while (c != 0);//jnz c -5
