@@ -13,6 +13,7 @@ namespace AoC_2016_Day_17
         private readonly Point3D _defaultEnd = new(3, 0, 0);
 
         public Point MapMin { get; }
+
         public Point MapMax { get; }
 
         //the path after an A_Star call. 
@@ -20,30 +21,27 @@ namespace AoC_2016_Day_17
 
         public string History = String.Empty;
         
-        string _secretHash; 
+        private readonly string _secretHash;
 
         public Map(string puzzleInput)
         {
-
             for (int x = 0; x < 4; x++)
-            {
                 for (int y = 0; y < 4; y++)
-                {
                     _theMap.Add(new Point(x,y), 1);
-                }
-            }
 
             _secretHash = puzzleInput;
 
             MapMin = new Point(_theMap.Keys.Select(k => k.X).Min(), _theMap.Keys.Select(k => k.Y).Min());
             MapMax = new Point(_theMap.Keys.Select(k => k.X).Max(), _theMap.Keys.Select(k => k.Y).Max());
         }
+
         public static int TaxiDistance(Point s, Point e)
         {
             return Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
         }
 
         public Point3D DefaultStart => _defaultStart;
+
         public Point3D DefaultEnd => _defaultEnd;
 
         private bool TestStep(Point3D current, Point3D nextPoint)
@@ -67,37 +65,46 @@ namespace AoC_2016_Day_17
                 dirs[i] = "bcdef".Contains(hash[i]);
             }
 
-            // have we moved right? 
+            string dirValue = String.Empty;
+
             if (current.X < nextPoint.X) 
             {
                 if (!dirs[RIGHT]) return false;
-                _history.Add(nextPoint, $"{histValue}R");
+                dirValue = "R";
             }
 
             if (current.X > nextPoint.X)
             {
                 if (!dirs[LEFT]) return false;
-                _history.Add(nextPoint, $"{histValue}L");
+                dirValue = "L";
             }
 
             if (current.Y < nextPoint.Y)
             {
                 if (!dirs[UP]) return false;
-                _history.Add(nextPoint, $"{histValue}U");
+                dirValue = "U";
             }
 
             if (current.Y > nextPoint.Y)
             {
                 if (!dirs[DOWN]) return false;
-                _history.Add(nextPoint, $"{histValue}D");
+                dirValue = "D";
             }
 
+            if (!_history.TryAdd(nextPoint, $"{histValue}{dirValue}"))
+            {
+                string temp = $"{histValue}{dirValue}";
+                if (temp.Length > _history[nextPoint].Length) _history[nextPoint] = temp;
+            }
             return true;
         }
 
-        public bool A_Star(Point3D start, Point3D dest, out int numSteps)
+        public bool A_Star(Point3D start, Point3D dest, out int numSteps, bool longPath = false)
         {
             FinalPath.Clear();
+
+            int maxSteps = -1;
+            _history.Clear();
 
             List<Point3D> neighbors = new()
             {
@@ -132,6 +139,7 @@ namespace AoC_2016_Day_17
                 if (cursor.Get2DPoint() == dest.Get2DPoint())
                 {
                     numSteps = stepCounter[cursor].gScore;
+                    if (numSteps > maxSteps) maxSteps = numSteps;
 
                     //unroll our history. 
                     FinalPath.Add(cursor);
@@ -145,7 +153,7 @@ namespace AoC_2016_Day_17
 
                     History = _history[cursor].ToString();
 
-                    return true;
+                    if (!longPath) return true;
                 }
 
                 foreach (Point3D neighbor in neighbors)
@@ -161,7 +169,7 @@ namespace AoC_2016_Day_17
                         int t_gScore = stepCounter[cursor].gScore + 1;
 
                         //if tentative_gScore < gScore[neighbor]
-                        if (t_gScore < stepCounter[nextStep].gScore)
+                        if (t_gScore < stepCounter[nextStep].gScore || longPath)
                         {
                             //cameFrom[neighbor] := current
                             //gScore[neighbor] := tentative_gScore
@@ -169,7 +177,7 @@ namespace AoC_2016_Day_17
                             stepCounter[nextStep] = (t_gScore, t_gScore + TaxiDistance(nextStep.Get2DPoint(), dest.Get2DPoint()), cursor);
 
                             //if neighbor not in openSet openSet.add(neighbor) 
-                            if (!inSearchQueue.Contains(nextStep))
+                            if (!inSearchQueue.Contains(nextStep) || longPath)
                             {
                                 searchQueue.Enqueue(nextStep, stepCounter[nextStep].fScore);
                                 inSearchQueue.Add(nextStep);
@@ -178,11 +186,112 @@ namespace AoC_2016_Day_17
                     }
                 }
             }
+            if (longPath)
+            {
+                numSteps = maxSteps;
+                return true;
+            }
             numSteps = -1;
             return false;
         }
 
+        public int A_Slow(Point3D start, Point3D dest)
+        {
+            // stripped all the optimizations out of A_Start and returned the max value. 
+            int maxSteps = -1;
+            _history.Clear();
+            List<string> neighbors = new()
+            {
+                "U","D","L","R"
+            };
+
+            Queue<string> searchQueue = new(); 
+
+            searchQueue.Enqueue(string.Empty);
+
+            while (searchQueue.Count > 0)
+            {
+                string cursor = searchQueue.Dequeue();
+
+                if (GetPointFromHistory(cursor, start) == dest.Get2DPoint())
+                {
+                    if( cursor.Length > maxSteps) maxSteps = cursor.Length;
+                    continue;
+                }
+
+                foreach (string neighbor in neighbors)
+                {
+                    //bounds and valid move check. 
+                    if (TestStepA_Slow(cursor, neighbor, start))
+                    {
+                        string nextStep = cursor + neighbor;
+                        searchQueue.Enqueue(nextStep);
+                    }
+                }
+            }
+            return maxSteps;
+        }
+
+        private static Point GetPointFromHistory(string history, Point3D start)
+        {
+            //Coverts a history string into a point.  used in A_Slow to test if they've hit the end.
+            int x = start.X;
+            int y = start.Y;
+            foreach (char c in history)
+            {
+                switch (c)
+                {
+                    case 'U':
+                        y++;
+                        break;
+                    case 'D':
+                        y--;
+                        break;
+                    case 'L':
+                        x--;
+                        break;
+                    case 'R':
+                        x++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return new Point(x, y);
+        }
+
+        private bool TestStepA_Slow(string current, string nextPoint, Point3D start)
+        {
+
+            const int UP = 0;
+            const int DOWN = 1;
+            const int LEFT = 2;
+            const int RIGHT = 3;
+
+            // Off the map
+            if (!_theMap.TryGetValue(GetPointFromHistory(current + nextPoint, start), out _)) return false;
+
+            string hash = MD5Hasher.GetHash($"{_secretHash}{current}");
+
+            // 0U 1D 2L 3R 
+            bool[] dirs = new bool[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                dirs[i] = "bcdef".Contains(hash[i]);
+            }
+
+            if (nextPoint == "R" && !dirs[RIGHT]) return false;
+            if (nextPoint == "L" && !dirs[LEFT]) return false;
+            if (nextPoint == "U" && !dirs[UP]) return false;
+            if (nextPoint == "D" && !dirs[DOWN]) return false;
+
+            return true;
+        }
+    
         public void DisplayMap() => DisplayMap(FinalPath);
+  
         public void DisplayMap(List<Point3D> drawPath)
         {
             Point3D cursor = new();

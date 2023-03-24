@@ -7,13 +7,13 @@ try
 
 
     Map theMap = new(puzzleInput);
-    theMap.A_Star(theMap.DefaultStart, theMap.DefaultEnd, out int numSteps);
+    theMap.A_Star(theMap.DefaultStart, theMap.DefaultEnd, out _);
 
-    Console.WriteLine($"Part 1: The final path is {theMap.History}");
+    Console.WriteLine($"Part 1: The final path is {theMap.History}.");
 
-    //Console.WriteLine($"Part 2: The number of reachable positions within {PART2_STEPS} from the {theMap.DefaultStart()} is {part2Answer}.");
+    int part2Answer = theMap.A_Slow(theMap.DefaultStart, theMap.DefaultEnd);
+    Console.WriteLine($"Part 2: The longest path is {part2Answer}.");
 }
-
 catch (Exception e)
 {
     Console.WriteLine(e);

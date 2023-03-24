@@ -81,8 +81,8 @@
 - **Solution:** The BitArray class was central, with a couple of helper extensions pulled from StackOverflow.
 
 ### [Day 17](Day%2017) - Two Steps Forward
-- **Problem:**
-- **Solution:**
+- **Problem:** Pathfinding with a changing maze. 
+- **Solution:** Pulled my code from [2022 Day 24](../2022/Day%2024) to track the shifting states of the maze. Part two required rethinking about how to track the path through the maze. I made the cursor the path, and stripped out all A* optimizations to create a new method called `A_Slow()`.
 
 ### [Day 18](Day%2018) - Like a Rogue
 - **Problem:** [Rule 90](https://en.wikipedia.org/wiki/Rule_90) with a width constraint.
@@ -105,8 +105,8 @@
 - **Solution:**
 
 ### [Day 23](Day%2023) - Safe Cracking
-- **Problem:**
-- **Solution:**
+- **Problem:** Another program to dissassemble and optimize. Fun!
+- **Solution:** Reusing the entire codebase from [Day 12](Day%2012) I added the new command and ran it successfully for part one. Part two ran on unmodifed code. Eventually. With some debug lines, I worked out what the program was doing a factorial and rewrote it in native C# for part two. 
 
 ### [Day 24](Day%2024) - Air Duct Spelunking
 - **Problem:**

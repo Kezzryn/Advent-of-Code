@@ -3,15 +3,11 @@ int b = 0;
 int c = 0;
 int d = 0;
 
-bool toggle2 = true;
-bool toggle3 = true;
-bool toggle4 = true;
 bool toggle5 = true;
 
 b = a;        //cpy a b				
 do
 {
-
 
     b--;          //dec b				
     d = a;        //cpy a d				
@@ -38,14 +34,10 @@ do
         d--;    //dec d
         c++;     //inc c
     }
-    while (d != 0); //jnz d -2
+    while (d != 0); //jnz d -2      copy d to c, because we can't add / copy registers directly. 
 
-    Console.WriteLine(c);
     //tgl c     
 
-    if (c == 8) toggle2 = false;
-    if (c == 6) toggle3 = false;
-    if (c == 4) toggle4 = false;
     if (c == 2) toggle5 = false;
 
     // first hit c is 10, nothing happens 
@@ -62,10 +54,9 @@ do
     //16   tgl c          5040      1      2      0
     //18 is reset from jnz 1 c to cpy 1 c
 
-    c = -16;    //cpy -16 c
+    c = -16;    //cpy -16 c # set jump target
 } while (toggle5); //jnz 1 c
-c = 1;
-
+c = 1; // TGL command: reset away from jump target
 
 c = 72;    //cpy 72 c
 
@@ -83,14 +74,14 @@ c = 72;    //cpy 72 c
 */
 //10584 for a = 7
 
+// a += 5544
 do
 {
-    // return when d == 0;   //jnz 77 d
+    d = 77;   //jnz 77 d RESET BY TGL
     do
     {
         a++;    //inc a
-        d++;    //inc d
+        d--;    //inc d RESET BY TGL
     } while (d != 0);   //jnz d -2
-    c++;
-    //inc c
+    c--;        //inc c RESET BY TGL
 } while (c != 0);//jnz c -5
