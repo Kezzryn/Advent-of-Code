@@ -101,8 +101,8 @@
 - **Solution:** A fairly straight forward task where I learned of a few more language functions to help with string manipulation. The hard part was working out the reverse logic of the rotation scheme. Un-rotating it is a mess, but it works. 
 
 ### [Day 22](Day%2022) - Grid Computing 
-- **Problem:**
-- **Solution:**
+- **Problem:** Pathfinding problem with a cursor.
+- **Solution:** Part one was a comparison puzzle. Part two was reasoned out on paper.
 
 ### [Day 23](Day%2023) - Safe Cracking
 - **Problem:** Another program to dissassemble and optimize. Fun!
