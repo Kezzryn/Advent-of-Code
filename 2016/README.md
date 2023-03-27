@@ -113,5 +113,5 @@
 - **Solution:**
 
 ### [Day 25](Day%2025) - Clock Signal
-- **Problem:**
-- **Solution:**
+- **Problem:** One final Asmbunny program to take apart. 
+- **Solution:** Pulling [Day 23's](Day%2023) code forward, I added the new operation, and ... hit a wall. The asm bunny program was outputting all 1s or all 0s regardless of input. This didn't match with my hand solve of the program, which should have been writing out a binary number. This led me to try some weird things to no avail. Eventually I realized I'd missed incrementing the instruction pointer with the new output command. Fixing that, fixed everything else.
