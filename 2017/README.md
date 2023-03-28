@@ -22,8 +22,8 @@
 - **Solution:** Jumped around, jumped up, jumped up and got down.
 
 ### [Day 6](Day%2006) - Memory Reallocation
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Moving values around an array, and tracking repeating patterns. 
+- **Solution:** All my work with modulo math to loop lists helped here. A hash function and `HashSet()` kept uniqueness in check. Part two added another tracker in the form of a list to track indexes with.
 
 ### [Day 7](Day%2007) - Recursive Circus
 - **Problem:** 
