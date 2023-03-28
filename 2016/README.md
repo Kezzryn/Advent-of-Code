@@ -109,8 +109,8 @@
 - **Solution:** Reusing the entire codebase from [Day 12](Day%2012) I added the new command and ran it successfully for part one. Part two ran on unmodifed code. Eventually. With some debug lines, I worked out what the program was doing a factorial and rewrote it in native C# for part two. 
 
 ### [Day 24](Day%2024) - Air Duct Spelunking
-- **Problem:**
-- **Solution:**
+- **Problem:** Given a maze, find the optimal route to visit each node. 
+- **Solution:** A_Star ([2022 Day 24](../2022/Day%2024)) and a basic node search made short work of this one.
 
 ### [Day 25](Day%2025) - Clock Signal
 - **Problem:** One final Asmbunny program to take apart. 
