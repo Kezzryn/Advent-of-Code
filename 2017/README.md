@@ -6,8 +6,8 @@
 - **Solution:** For part two, I replaced some crazy wrapping logic with modulo math for both parts.  
 
 ### [Day 2](Day%2002) - Corruption Checksum
-- **Problem:** 
-- **Solution:** 
+- **Problem:** List number processing. 
+- **Solution:** Sneaky sticking tabs in the input file. A early puzzles go, both parts are straight forward calculations.
 
 ### [Day 3](Day%2003) - Spiral Memory
 - **Problem:** 
