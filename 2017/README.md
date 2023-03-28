@@ -14,8 +14,8 @@
 - **Solution:** Part one was a bunch of math, wherein I figured out how the pattern repeats and grows. Part two I had to simulate. I used the [Complex Numbers](..\Day%2001%20Complex%20Numbers) trick to make tracking the direction easy.
 
 ### [Day 4](Day%2004) - High-Entropy Passphrases
-- **Problem:** 
-- **Solution:** 
+- **Problem:** String sorting and comparison.
+- **Solution:** `Distinct()` was made for this, I'm sure.
 
 ### [Day 5](Day%2005) - A Maze of Twisty Trampolines, All Alike
 - **Problem:** 
