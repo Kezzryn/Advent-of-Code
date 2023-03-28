@@ -10,8 +10,8 @@
 - **Solution:** 
 
 ### [Day 3](Day%2003) - Spiral Memory
-- **Problem:** 
-- **Solution:**
+- **Problem:** Figuring out values on a spiral grid. 
+- **Solution:** Part one was a bunch of math, wherein I figured out how the pattern repeats and grows. Part two I had to simulate. I used the [Complex Numbers](..\Day%2001%20Complex%20Numbers) trick to make tracking the direction easy.
 
 ### [Day 4](Day%2004) - High-Entropy Passphrases
 - **Problem:** 
