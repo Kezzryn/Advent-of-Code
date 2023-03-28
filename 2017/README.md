@@ -18,8 +18,8 @@
 - **Solution:** `Distinct()` was made for this, I'm sure.
 
 ### [Day 5](Day%2005) - A Maze of Twisty Trampolines, All Alike
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Following a path through an instruction list of jump instructions. 
+- **Solution:** Jumped around, jumped up, jumped up and got down.
 
 ### [Day 6](Day%2006) - Memory Reallocation
 - **Problem:** 
