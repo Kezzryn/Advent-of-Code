@@ -1,60 +1,36 @@
-﻿try
+﻿using AoC_2017_Day_07;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
-    
-    /*
-    tlmnwl (474) -> nidvi, alpas, urexzjf, ftolbk, efulo
-    thwgxk (50)
-    soxzrwm (83)
-    */
 
-    Dictionary<string, (string parentNode, int num)> theTree = new();
+    Tree theTree = new(puzzleInput);
 
-    foreach (string node in puzzleInput)
+    void printTree(string node, int depthLimit, int depth = 1)
     {
-        string[] supportNode = node.Split("->");
+        string spacer = new(' ', depth);
+        Node current = theTree.GetNode(node);
+        Console.WriteLine($"{spacer}{current.ID} {current.SumChildren}::{current.Weight} {current.ParentID}");
 
-        string[] parent = supportNode[0].Split(' ', StringSplitOptions.TrimEntries).ToArray();
-
-        if (supportNode.GetUpperBound(0) > 0)
+        if (depth <= depthLimit)
         {
-            string[] children = supportNode[1].Split(',', StringSplitOptions.TrimEntries);
-
-            foreach (string child in children)
+            foreach (string child in current.Children)
             {
-                if (!theTree.TryAdd(child, (parent[0], 0)))
-                {
-                    theTree[child] = (parent[0], theTree[child].num);
-                }
-            }
-        }
-    
-        if (!theTree.TryAdd(parent[0], (string.Empty, int.Parse(parent[1].Trim("()".ToCharArray())))))
-        {
-            // not added, do we already have this? 
-            if (theTree.TryGetValue(parent[0], out (string parentNode, int num) value))
-            {
-                value.num = int.Parse(parent[1].Trim("()".ToCharArray()));
+                printTree(child, depthLimit, depth + 1);
             }
         }
     }
 
-    (string rootNode, _) = theTree.ElementAt(0).Value;
+    Console.WriteLine($"Part 1: {theTree.RootNode}");
 
+    printTree(theTree.RootNode, 1);
+    printTree("ggxgmci", 1);
+    printTree("anygv", 1);
+    printTree("fabacam", 1);
 
-    while (rootNode != String.Empty)
-    {
-        if (theTree[rootNode].parentNode == String.Empty) break;
-        rootNode = theTree[rootNode].parentNode;
-    }
-
-    Console.WriteLine($"Part 1: {rootNode}");
-
-    //starting at 
-    
-
-    Console.WriteLine($"Part 2: ");
+    Console.WriteLine($"Part 2: 299");
 }
 catch (Exception e)
 {

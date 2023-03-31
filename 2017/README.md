@@ -26,8 +26,9 @@
 - **Solution:** All my work with modulo math to loop lists helped here. A hash function and `HashSet()` kept uniqueness in check. Part two added another tracker in the form of a list to track indexes with.
 
 ### [Day 7](Day%2007) - Recursive Circus
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Tree time!
+- **Solution:** Part one built and populated a tree. Part two was solved by simply inspecting the tree.
+- **Future Fun:** Solve part two programatically. 
 
 ### [Day 8](Day%2008) - I Heard You Like Registers
 - **Problem:** 
