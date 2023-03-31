@@ -30,8 +30,8 @@
 - **Solution:** 
 
 ### [Day 8](Day%2008) - I Heard You Like Registers
-- **Problem:** 
-- **Solution:** 
+- **Problem:** String parsing for operations.
+- **Solution:** Straightforward puzzle. I played with the `CSharpScripting()` class, and while it worked, the performance of compiling code every loop wasn't great. I fell back to a basic switch statement. 
 
 ### [Day 9](Day%2009) - Stream Processing
 - **Problem:** 
