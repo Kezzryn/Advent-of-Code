@@ -39,8 +39,8 @@
 - **Solution:** Checked the characters of the string in order, toggling states as needed.
 
 ### [Day 10](Day%2010) - Knot Hash
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Implement a hashing algorithm. 
+- **Solution:** Learned some new things about how to use modulo math to wrap reversals in arrays.
 
 ### [Day 11](Day%2011) - Hex Ed
 - **Problem:** 
