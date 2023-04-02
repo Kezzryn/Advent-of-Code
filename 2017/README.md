@@ -43,8 +43,8 @@
 - **Solution:** Learned some new things about how to use modulo math to wrap reversals in arrays.
 
 ### [Day 11](Day%2011) - Hex Ed
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Calculate the distance of spot on a hex grid. 
+- **Solution:** This took a bunch of visualizaton and spreadsheet work, followed by a pile of debugging moving around negative hex numbers. I learned that modulo of a negative number will return a negative.
 
 ### [Day 12](Day%2012) - Digital Plumber
 - **Problem:** 
