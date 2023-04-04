@@ -98,6 +98,6 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 25](Day%2025) - he Halting Problem
+### [Day 25](Day%2025) - The Halting Problem
 - **Problem:** 
 - **Solution:** 
