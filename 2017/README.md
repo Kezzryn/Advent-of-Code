@@ -47,8 +47,8 @@
 - **Solution:** This took a bunch of visualizaton and spreadsheet work, followed by a pile of debugging moving around negative hex numbers. I learned that modulo of a negative number will return a negative.
 
 ### [Day 12](Day%2012) - Digital Plumber
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Load a tree. 
+- **Solution:** This turned into a recursive call to fill a `Dictionary()`. When I ran out of items, I stepped through the puzzle until I found a new entry point.
 
 ### [Day 13](Day%2013) - Packet Scanners
 - **Problem:** 
