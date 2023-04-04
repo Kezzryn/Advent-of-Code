@@ -51,8 +51,8 @@
 - **Solution:** This turned into a recursive call to fill a `Dictionary()`. When I ran out of items, I stepped through the puzzle until I found a new entry point.
 
 ### [Day 13](Day%2013) - Packet Scanners
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Slip through a series of ossolating values.
+- **Solution:** Modulo math. Very straight forward solution once I got the interval setup.
 
 ### [Day 14](Day%2014) - Disk Defragmentation
 - **Problem:** 
