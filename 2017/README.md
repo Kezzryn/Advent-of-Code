@@ -59,8 +59,8 @@
 - **Solution:** 
 
 ### [Day 15](Day%2015) - Dueling Generators
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Generator consumer pattern.
+- **Solution:** Used a pair of queues to buffer the generator output. If the process had been more complex I might have tried for some threading tasks.
 
 ### [Day 16](Day%2016) - Permutation Promenade
 - **Problem:** 
@@ -98,6 +98,6 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 25](Day%2025) - he Halting Problem
+### [Day 25](Day%2025) - The Halting Problem
 - **Problem:** 
 - **Solution:** 
