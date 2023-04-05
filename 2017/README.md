@@ -55,8 +55,8 @@
 - **Solution:** Modulo math. Very straight forward solution once I got the interval setup.
 
 ### [Day 14](Day%2014) - Disk Defragmentation
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Populating and finding groups in a grid.
+- **Solution:** After improving the [Knot Hash](Day%2010) class for part one, part two involved bascially a flood erase of the puzzle data.
 
 ### [Day 15](Day%2015) - Dueling Generators
 - **Problem:** 
