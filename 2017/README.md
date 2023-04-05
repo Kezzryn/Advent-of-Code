@@ -63,8 +63,8 @@
 - **Solution:** Used a pair of queues to buffer the generator output. If the process had been more complex I might have tried for some threading tasks.
 
 ### [Day 16](Day%2016) - Permutation Promenade
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Run a set of instructions over an array, then do it a billion times. 
+- **Solution:** I made a single pass at brute forcing part two, however, the instructions are too complex to make that work. Instead I ran a test to see if the pattern repeats, which it did. One modulo calcuation later, and that was that.
 
 ### [Day 17](Day%2017) - Spinlock 
 - **Problem:** 
