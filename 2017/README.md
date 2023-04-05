@@ -59,8 +59,8 @@
 - **Solution:** After improving the [Knot Hash](Day%2010) class for part one, part two involved bascially a flood erase of the puzzle data.
 
 ### [Day 15](Day%2015) - Dueling Generators
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Generator consumer pattern.
+- **Solution:** Used a pair of queues to buffer the generator output. If the process had been more complex I might have tried for some threading tasks.
 
 ### [Day 16](Day%2016) - Permutation Promenade
 - **Problem:** 
