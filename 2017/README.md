@@ -67,8 +67,8 @@
 - **Solution:** I made a single pass at brute forcing part two, however, the instructions are too complex to make that work. Instead I ran a test to see if the pattern repeats, which it did. One modulo calcuation later, and that was that.
 
 ### [Day 17](Day%2017) - Spinlock 
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Predict a value in a circular list.
+- **Solution:** Part one can be simulated. Part two needs a careful reading of the puzzle requirements. Skipping expensive array inserts is the key. 
 
 ### [Day 18](Day%2018) - Duet 
 - **Problem:** 
