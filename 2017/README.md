@@ -11,7 +11,7 @@
 
 ### [Day 3](Day%2003) - Spiral Memory
 - **Problem:** Figuring out values on a spiral grid. 
-- **Solution:** Part one was a bunch of math, wherein I figured out how the pattern repeats and grows. Part two I had to simulate. I used the [Complex Numbers](..\Day%2001%20Complex%20Numbers) trick to make tracking the direction easy.
+- **Solution:** Part one was a bunch of math, wherein I figured out how the pattern repeats and grows. Part two I had to simulate. I used the [Complex Numbers](../2016/Day%2001%20-%20Complex%20Numbers) trick to make tracking the direction easy.
 
 ### [Day 4](Day%2004) - High-Entropy Passphrases
 - **Problem:** String sorting and comparison.
@@ -76,8 +76,8 @@
 - **Future Fun:** Thread the two VMs.
 
 ### [Day 19](Day%2019) - A Series of Tubes
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Follow the map. 
+- **Solution:** Followed the map. Careful study of the input data allowed simplifications to be made around the rotations. 
 
 ### [Day 20](Day%2020) - Particle Swarm
 - **Problem:** 
