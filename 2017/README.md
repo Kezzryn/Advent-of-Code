@@ -28,7 +28,7 @@
 ### [Day 7](Day%2007) - Recursive Circus
 - **Problem:** Tree time!
 - **Solution:** Part one built and populated a tree. Part two was solved by simply inspecting the tree.
-- **Future Fun:** Solve part two programatically. 
+- **Future Fun:** Solve part two programmatically. 
 
 ### [Day 8](Day%2008) - I Heard You Like Registers
 - **Problem:** String parsing for operations.
@@ -44,19 +44,19 @@
 
 ### [Day 11](Day%2011) - Hex Ed
 - **Problem:** Calculate the distance of spot on a hex grid. 
-- **Solution:** This took a bunch of visualizaton and spreadsheet work, followed by a pile of debugging moving around negative hex numbers. I learned that modulo of a negative number will return a negative.
+- **Solution:** This took a bunch of visualization and spreadsheet work, followed by a pile of debugging moving around negative hex numbers. I learned that modulo of a negative number will return a negative.
 
 ### [Day 12](Day%2012) - Digital Plumber
 - **Problem:** Load a tree. 
 - **Solution:** This turned into a recursive call to fill a `Dictionary()`. When I ran out of items, I stepped through the puzzle until I found a new entry point.
 
 ### [Day 13](Day%2013) - Packet Scanners
-- **Problem:** Slip through a series of ossolating values.
+- **Problem:** Slip through a series of oscillating values.
 - **Solution:** Modulo math. Very straight forward solution once I got the interval setup.
 
 ### [Day 14](Day%2014) - Disk Defragmentation
 - **Problem:** Populating and finding groups in a grid.
-- **Solution:** After improving the [Knot Hash](Day%2010) class for part one, part two involved bascially a flood erase of the puzzle data.
+- **Solution:** After improving the [Knot Hash](Day%2010) class for part one, part two involved a flood erase of the puzzle data.
 
 ### [Day 15](Day%2015) - Dueling Generators
 - **Problem:** Generator consumer pattern.
@@ -64,7 +64,7 @@
 
 ### [Day 16](Day%2016) - Permutation Promenade
 - **Problem:** Run a set of instructions over an array, then do it a billion times. 
-- **Solution:** I made a single pass at brute forcing part two, however, the instructions are too complex to make that work. Instead I ran a test to see if the pattern repeats, which it did. One modulo calcuation later, and that was that.
+- **Solution:** I made a single pass at brute forcing part two, however, the instructions are too complex to make that work. Instead I ran a test to see if the pattern repeats, which it did. One modulo calculation later, and that was that.
 
 ### [Day 17](Day%2017) - Spinlock 
 - **Problem:** Predict a value in a circular list.
@@ -80,8 +80,9 @@
 - **Solution:** Followed the map. Careful study of the input data allowed simplifications to be made around the rotations. 
 
 ### [Day 20](Day%2020) - Particle Swarm
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Calculating the position and collisions of particles. 
+- **Solution:** For part one, it appears that I need to brush up on my physics. I solved both parts via a simulation. `Point3D()` got dusted off and extended with `GetHashCode()` to make it work in `GroupBy()` calls. That was a rabbit hole.
+- **Future Fun:** Rework with math over simulations.
 
 ### [Day 21](Day%2021) - Fractal Art
 - **Problem:** 
