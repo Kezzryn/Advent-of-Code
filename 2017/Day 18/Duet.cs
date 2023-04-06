@@ -43,7 +43,6 @@
 
             do
             {
-                _instPtr++;
                 CurrentState = Dispatcher();
                 numSteps--;
             } while (CurrentState == State.Running && numSteps > 0);
@@ -54,6 +53,7 @@
             if (_instPtr >= _instructionSet.Length ) return State.Halted;
             string[] cmds = _instructionSet[_instPtr].Split(' ');
             long instValue = 0;
+            _instPtr++;
 
             if (cmds.GetUpperBound(0) >= 2)
             {
@@ -132,6 +132,12 @@
             if (_outputBuffer.Count == 0) return false;
 
             output = _outputBuffer.Dequeue();
+            return true;
+        }
+
+        public bool HasOutput()
+        {
+            if (_outputBuffer.Count == 0) return false;
             return true;
         }
 

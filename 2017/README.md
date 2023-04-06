@@ -71,8 +71,9 @@
 - **Solution:** Part one can be simulated. Part two needs a careful reading of the puzzle requirements. Skipping expensive array inserts is the key. 
 
 ### [Day 18](Day%2018) - Duet 
-- **Problem:** 
-- **Solution:** 
+- **Problem:** A virtual machine.
+- **Solution:** Part one was a straight forward VM implementation. Part two required reworking all of that into a class, and then running two of them side by side. I used the main program loop to pass values back and forth until they deadlocked. 
+- **Future Fun:** Thread the two VMs.
 
 ### [Day 19](Day%2019) - A Series of Tubes
 - **Problem:** 

@@ -5,31 +5,40 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Duet DuoA = new(puzzleInput, 0);
-    Duet DuoB = new(puzzleInput, 1);
+    Duet DuoZero = new(puzzleInput, 0);
+    Duet DuoOne = new(puzzleInput, 1);
 
     bool isDone = false;
     do
     {
-        DuoA.Run();
-        DuoB.Run();
+        while (DuoZero.GetProgramOutput(out long outA)) DuoOne.SetProgramInput(outA);
+        while (DuoOne.GetProgramOutput(out long outB)) DuoZero.SetProgramInput(outB);
 
-        if (DuoA.GetProgramOutput(out long outA)) DuoB.SetProgramInput(outA);
-        if (DuoB.GetProgramOutput(out long outB)) DuoA.SetProgramInput(outB);
+        DuoZero.Run();
+        DuoOne.Run();
 
-        if (DuoA.CurrentState != State.Running && DuoB.CurrentState != State.Running)
+        if (DuoZero.CurrentState == State.Halted && DuoOne.CurrentState == State.Halted) isDone = true;
+
+        if (DuoZero.CurrentState == State.Paused_For_Input && 
+            (DuoOne.CurrentState == State.Halted || (DuoOne.CurrentState == State.Paused_For_Input && !DuoZero.HasOutput())))
         {
-            Console.WriteLine($"{DuoA.CurrentState} {DuoB.CurrentState}");
             isDone = true;
         }
 
+        if (DuoOne.CurrentState == State.Paused_For_Input &&
+            (DuoZero.CurrentState == State.Halted || (DuoZero.CurrentState == State.Paused_For_Input && !DuoOne.HasOutput())))
+        {
+            isDone = true;
+        }
+
+
     } while (!isDone);
         
-    long part1Answer = DuoA.FirstRCVValue();
-    long part2Answer = DuoB.NumSentMessages();
+    long part1Answer = DuoZero.FirstRCVValue();
+    long part2Answer = DuoOne.NumSentMessages();
     
-    Console.WriteLine($"Part 1: The first non-zero rcv value is {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    Console.WriteLine($"Part 1: The first non-zero rcv value is {part1Answer}.");
+    Console.WriteLine($"Part 2: Program One sent a value {part2Answer} times.");
 }
 catch (Exception e)
 {
