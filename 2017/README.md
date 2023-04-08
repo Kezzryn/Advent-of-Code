@@ -85,8 +85,8 @@
 - **Future Fun:** Rework with math over simulations.
 
 ### [Day 21](Day%2021) - Fractal Art
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Rebuilding a grid based on its values.
+- **Solution:** I pre-rotated and flipped the key values to expand the dictionary rules. This saved me from doing that operation for each bit in the puzzle itself. My inital solution developed with an array of `string`s to represent the puzzle data. I replaced that with a one dimensional array of `bool` for an approx 2.5 - 3x performance improvement. (~650 ms -> ~250 ms)
 
 ### [Day 22](Day%2022) - Sporifica Virus 
 - **Problem:** 
