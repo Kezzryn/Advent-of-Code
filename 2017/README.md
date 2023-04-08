@@ -86,11 +86,11 @@
 
 ### [Day 21](Day%2021) - Fractal Art
 - **Problem:** Rebuilding a grid based on its values.
-- **Solution:** I pre-rotated and flipped the key values to expand the dictionary rules. This saved me from doing that operation for each bit in the puzzle itself. My inital solution developed with an array of `string`s to represent the puzzle data. I replaced that with a one dimensional array of `bool` for an approx 2.5 - 3x performance improvement. (~650 ms -> ~250 ms)
+- **Solution:** I pre-rotated and flipped the key values to expand the dictionary rules. This saved me from doing that operation for each bit in the puzzle itself. My inital solution developed with an array of `string` to represent the puzzle data. I replaced that with a one dimensional array of `bool` for an approx 2.5 - 3x performance improvement. (~650 ms -> ~250 ms)
 
 ### [Day 22](Day%2022) - Sporifica Virus 
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Track the state of a grid as a bot moves across it.
+- **Solution:** Hey, have you heard about [Complex Numbers](../2016/Day%2001%20-%20Complex%20Numbers)? They're great at tracking bot positions. Also, passing by ref when one expects by value is a great way to introduce bugs. Note to future self, reverse the array before it gets passed to the worker function, not after. 
 
 ### [Day 23](Day%2023) - Coprocessor Conflagration
 - **Problem:** 
