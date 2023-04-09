@@ -1,0 +1,120 @@
+static bool isPrime(int number)
+{
+    if (number == 1) return false;
+    if (number == 2 || number == 3 || number == 5) return true;
+    if (number % 2 == 0 || number % 3 == 0 || number % 5 == 0) return false;
+
+    var boundary = (int)Math.Floor(Math.Sqrt(number));
+
+    // You can do less work by observing that at this point, all primes 
+    // other than 2 and 3 leave a remainder of either 1 or 5 when divided by 6. 
+    // The other possible remainders have been taken care of.
+    int i = 6; // start from 6, since others below have been handled.
+    while (i <= boundary)
+    {
+        if (number % (i + 1) == 0 || number % (i + 5) == 0)
+            return false;
+
+        i += 6;
+    }
+
+    return true;
+}
+
+int a_part2Flag = 1;
+int b_fromLoop;
+int c_toLoop;
+int d = 0;
+int e = 0;
+int f_incFlag = 0;
+int g = 0;
+int h_counter = 0;
+
+ b_fromLoop = 79; // set b 79
+ c_toLoop = b_fromLoop; //set c b
+//if (a != 0) //jnz a 2 -> jnz 1 5
+//{
+//    b *= 100; //mul b 100
+//    b += 100000; //sub b -100000
+//    c = b;  //set c b
+//    c += 17000; //sub c -17000
+//}
+int z = 100;
+//for (int z = 1; z < 100; z++)
+//{
+    if (a_part2Flag != 0) //jnz a 2 -> jnz 1 5
+    {
+        b_fromLoop *= 1 * z; //mul b 100
+        b_fromLoop += (1000 * z); //sub b -100000
+        c_toLoop = b_fromLoop;  //set c b
+        c_toLoop += (170 * z); //sub c -17000
+    }
+    int part2Answer = 0;
+    for (int i = b_fromLoop; i <= c_toLoop; i += 17)
+    {
+        if(!isPrime(i)) part2Answer++;
+    }   
+    Console.WriteLine($"{z} {part2Answer}");
+//}
+
+
+//do
+//{
+//    f_incFlag = 1; // set f 1
+
+//    var loop = from x in Enumerable.Range(2, (int)b_fromLoop)
+//               from y in Enumerable.Range(2, (int)b_fromLoop)
+//               select (x, y);
+   
+  
+//    foreach ((int x, int y) in loop)
+//    {
+//        if (x * y == b_fromLoop)
+//        {
+//            Console.WriteLine($"{x} {y} {b_fromLoop}");
+//            h_counter++;
+//            f_incFlag = 0;
+//            break;
+//        }
+//    }
+//    if (f_incFlag == 1) Console.WriteLine($"FAILURE: {b_fromLoop}");
+///*
+//    d = 2; // set d 2
+//    do
+//    {
+//        e = 2; // set e 2
+//        do
+//        {
+//            g = d;      // set g d
+//            g *= e;     // mul g e
+//            g -= b_fromLoop;     // sub g b
+//            if (g == 0) // jnz g 2
+//            {
+//                f_incFlag = 0;  // set f 0
+//            }
+//            e++;        // sub e -1
+//            g = e;      // set g e
+//            g -= b_fromLoop;     // sub g b
+//        } while (g != 0); //jnz g -8
+
+//        d++;       //sub d -1
+//        g = d;      //set g d
+//        g -= b_fromLoop;     //sub g b
+//    } while (g != 0);    //jnz g -13
+//*/
+//    // this is a countdown, from 124900 to 107900 by 17s. a = 0 1 loop. a = 1, 10k loops. 
+////    if (f_incFlag == 0) //jnz f 2
+//  //  {
+//    //    h_counter++;    //sub h -1
+//    //}
+
+//    if (b_fromLoop - c_toLoop == 0) break;
+//    g = b_fromLoop;      //set g b   // This is a loop counter, counting from B to C by 17s. 
+//    g -= c_toLoop;    //sub g c    
+//    if (g == 0) break; //jnz g 2 -> //jnz 1 3
+
+//    b_fromLoop += 17;     //sub b -17
+//} while (true);//(b_fromLoop - c_toLoop != 0);
+//    //} while (true); // jnz 1 - 23
+
+//Console.WriteLine($"{a_part2Flag} {b_fromLoop} {c_toLoop} {d} {e} {f_incFlag} {g} h:{h_counter}");
