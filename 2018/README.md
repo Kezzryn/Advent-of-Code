@@ -10,8 +10,8 @@
 - **Solution:** I'm pleased I was able to pull out part one with LINQ, part two I resorted to a more direct set of loops. Scanning the mega solution thread, there was a clever LINQ solution for it that involved removing a letter then grouping the dataset.
 
 ### [Day 3](Day%2003) - No Matter How You Slice It
-- **Problem:**
-- **Solution:**
+- **Problem:** Calculate overlapping areas. 
+- **Solution:** `Rectanges()` and `Intersect()` did the heavy lifting.
 
 ### [Day 4](Day%2004) - Repose Record
 - **Problem:**
