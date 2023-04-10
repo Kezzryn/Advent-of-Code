@@ -97,8 +97,8 @@
 - **Solution:** Lots of fiddling by re-implementing the program in a scratch project. The program is calculating if a range of numbers are prime. [Stack Overflow](https://stackoverflow.com/questions/15743192/check-if-number-is-prime-number) provided some better code to calculate primes.
 
 ### [Day 24](Day%2024) - Electromagnetic Moat
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Build a bridge out of matching parts.
+- **Solution:** BFS and a bitmask worked out well for part one. The bitmask made part two a case of adding a secondary to the existing search function.
 
 ### [Day 25](Day%2025) - The Halting Problem
 - **Problem:** 
