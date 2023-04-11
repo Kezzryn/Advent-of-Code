@@ -14,8 +14,8 @@
 - **Solution:** `Rectanges()` and `Intersect()` did the heavy lifting.
 
 ### [Day 4](Day%2004) - Repose Record
-- **Problem:**
-- **Solution:**
+- **Problem:** Track activity over time.
+- **Solution:** Several assumptions were made about the input data that checked out to be true and simplified the processing, and allowed part two to be a small tweak on the part one data.
 
 ### [Day 5](Day%2005) - Alchemical Reduction
 - **Problem:**
