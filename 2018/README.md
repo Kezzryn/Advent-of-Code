@@ -30,8 +30,8 @@
 - **Solution:** Part one took me a little to get the exact setup right. I used queues to control which jobs got picked up and processed.  Part two formallized the queue process, and added a time element. The major change was to implement a new queue to represent the elf workers, but limit it to 5 entries.
 
 ### [Day 8](Day%2008) - Memory Maneuver
-- **Problem:**
-- **Solution:**
+- **Problem:** First tree puzzle. 
+- **Solution:** A recursive load solved part one. Part two extended the load function with the value rules.
 
 ### [Day 9](Day%2009) - Marble Mania
 - **Problem:**
