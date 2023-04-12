@@ -31,11 +31,11 @@
 
 ### [Day 8](Day%2008) - Memory Maneuver
 - **Problem:** First tree puzzle. 
-- **Solution:** A recursive load solved part one. Part two extended the load function with the value rules.
+- **Solution:** A recursive load and a lightweight `Node()` class solved part one. Part two extended the load function with the value rules.
 
 ### [Day 9](Day%2009) - Marble Mania
-- **Problem:**
-- **Solution:**
+- **Problem:** Circular list manipulation. 
+- **Solution:** I was initially put in the mind of the double queue I used for [2016 Day 19](../2016/Day%2019/). However, some doodling on paper showed that a simple linked list would suffice. Part two made me use `long` for the answer values. 
 
 ### [Day 10](Day%2010) - The Stars Align
 - **Problem:**
