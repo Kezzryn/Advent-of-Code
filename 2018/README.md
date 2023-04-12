@@ -26,8 +26,8 @@
 - **Solution:**
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
-- **Problem:**
-- **Solution:**
+- **Problem:** Graph traversal!
+- **Solution:** Part one took me a little to get the exact setup right. I used queues to control which jobs got picked up and processed.  Part two formallized the queue process, and added a time element. The major change was to implement a new queue to represent the elf workers, but limit it to 5 entries.
 
 ### [Day 8](Day%2008) - Memory Maneuver
 - **Problem:**
