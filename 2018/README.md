@@ -26,8 +26,8 @@
 - **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinate, and to remove those from the solution set. Part two startes as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
-- **Problem:**
-- **Solution:**
+- **Problem:** Graph traversal!
+- **Solution:** Part one took me a little to get the exact setup right. I used queues to control which jobs got picked up and processed.  Part two formallized the queue process, and added a time element. The major change was to implement a new queue to represent the elf workers, but limit it to 5 entries.
 
 ### [Day 8](Day%2008) - Memory Maneuver
 - **Problem:**
