@@ -22,8 +22,8 @@
 - **Solution:** Datatypes matter. Converting the string to a `LinkedList<int>()` and working on that, made the whole process easier, and faster. String processing ran in a couple hundred milliseconds. Loading the string directly into the `LinkedList()` and the entire program (minus initial data load) ran in under 35 ms.  
 
 ### [Day 6](Day%2006) - Chronal Coordinates
-- **Problem:**
-- **Solution:**
+- **Problem:** Finding distances over an area.
+- **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinate, and to remove those from the solution set. Part two startes as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
 - **Problem:**
