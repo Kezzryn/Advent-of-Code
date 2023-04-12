@@ -18,8 +18,8 @@
 - **Solution:** Several assumptions were made about the input data that checked out to be true and simplified the processing, and allowed part two to be a small tweak on the part one data.
 
 ### [Day 5](Day%2005) - Alchemical Reduction
-- **Problem:**
-- **Solution:**
+- **Problem:** String reduction on a 50,000 character string. 
+- **Solution:** Datatypes matter. Converting the string to a `LinkedList<int>()` and working on that, made the whole process easier, and faster. String processing ran in a couple hundred milliseconds. Loading the string directly into the `LinkedList()` and the entire program (minus initial data load) ran in under 35 ms.  
 
 ### [Day 6](Day%2006) - Chronal Coordinates
 - **Problem:**
