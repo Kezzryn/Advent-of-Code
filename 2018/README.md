@@ -38,8 +38,8 @@
 - **Solution:** I was initially put in the mind of the double queue I used for [2016 Day 19](../2016/Day%2019/). However, some doodling on paper showed that a simple linked list would suffice. Part two made me use `long` for the answer values. 
 
 ### [Day 10](Day%2010) - The Stars Align
-- **Problem:**
-- **Solution:**
+- **Problem:** A large scatter of points that are coming together.
+- **Solution:** Lots of experimentation showed that the area of the points reduces down to a minimal area. The program pauses when the points come close and allows the user to step through to find the answer. 
 
 ### [Day 11](Day%2011) - Chronal Charge
 - **Problem:**
