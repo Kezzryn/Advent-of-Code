@@ -42,8 +42,8 @@
 - **Solution:** Lots of experimentation showed that the area of the points reduces down to a minimal area. The program pauses when the points come close and allows the user to step through to find the answer. 
 
 ### [Day 11](Day%2011) - Chronal Charge
-- **Problem:**
-- **Solution:**
+- **Problem:** Calcuate the sums of values in a grid.
+- **Solution:** Populating the grid was straight forward. Part two stress tested my solution and found it wanting. Brute force took around 8 minutes. I reworked it to take the size from the previous step and add the new boarder to it. That got me down to about 35 seconds. The next optimzation was to recognize that the value drops to zero and does not recover. A [Summed-Area table](https://en.wikipedia.org/wiki/Summed-area_table) would have been a more optimal solution.
 
 ### [Day 12](Day%2012) - Subterranean Sustainability
 - **Problem:**
