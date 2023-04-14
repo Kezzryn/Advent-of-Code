@@ -54,7 +54,7 @@ try
     }
 
     Console.WriteLine($"Part 1: The length of the polymer is {part1Answer} after all reactions have taken place.");
-    Console.WriteLine($"Part 2: By dropping {droppedLetter} the reactoin can be reduced down to {part2Answer}.");
+    Console.WriteLine($"Part 2: By dropping {droppedLetter} the reaction can be reduced down to {part2Answer}.");
 }
 catch (Exception e)
 {
