@@ -46,8 +46,8 @@
 - **Solution:** Populating the grid was straight forward. Part two stress tested my solution and found it wanting. Brute force took around 8 minutes. I reworked it to take the size from the previous step and add the new boarder to it. That got me down to about 35 seconds. The next optimzation was to recognize that the value drops to zero and does not recover. A [Summed-Area table](https://en.wikipedia.org/wiki/Summed-area_table) would have been a more optimal solution.
 
 ### [Day 12](Day%2012) - Subterranean Sustainability
-- **Problem:**
-- **Solution:**
+- **Problem:** 
+- **Solution:** 
 
 ### [Day 13](Day%2013) - Mine Cart Madness
 - **Problem:**
