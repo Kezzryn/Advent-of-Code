@@ -8,12 +8,45 @@ static int BoolAryToInt(bool[] boolAry)
     return intConverter[0];
 }
 
+static int ScoreLine(List<bool> row, int baseIndex)
+{
+    int returnValue = 0;
+    for (int i = 0; i < row.Count; i++)
+    {
+        returnValue += row[i] ? i + baseIndex : 0;
+    }
+    return returnValue;
+}
+
+static bool RowCompare(List<bool> row1, List<bool> row2)
+{
+    const bool FLOWER = true;
+
+    int indexFlowerRow1 = row1.IndexOf(FLOWER);
+    int indexFlowerRow2 = row2.IndexOf(FLOWER);
+    int length = row1.Count - indexFlowerRow1;
+
+    if (length != row2.Count - indexFlowerRow2) return false;
+    
+    for (int i = 0;i < length;i++)
+    {
+        if (row1[indexFlowerRow1 + i] != row2[indexFlowerRow2 + i]) return false;
+    }
+    
+    return true;
+}
+
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    const int NUM_GENERATIONS = 115;
+
+    const int MAX_GENERATIONS = 100;
+    const int PART_1_GENERATION = 20;
+    const long PART_2_GENERATION = 50_000_000_000;
+
     const int FLOWER = '#';
     const string CRLF = "\r\n";
+
     string[] puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(CRLF + CRLF);
     string initialState = puzzleInput[0].Split(' ').Last();
     string[][] puzzleKeys = puzzleInput[1].Split(CRLF).Select(x => x.Split(" => ").ToArray()).ToArray();
@@ -21,10 +54,12 @@ try
     Dictionary<int, bool> flowerGrowth = new();
     bool[] keyArray = new bool[5];
 
+    int part1Answer = 0;
+    long part2Answer = 0;
+
     foreach (string[] s in puzzleKeys)
     {
         keyArray = s[0].Select(c => c == FLOWER).ToArray();
-
         flowerGrowth.Add(BoolAryToInt(keyArray), s[1][0] == FLOWER);
     }
 
@@ -36,17 +71,17 @@ try
     {
         flowers[0].Add(c == FLOWER);
     }
-
-    int cursorPrevFlowers;
+    
     int baseIndex = 0;
 
-    //Console.WriteLine($"{0,-2}: #..#.#..##......###...###");
-    for (int i = 1; i <= NUM_GENERATIONS; i++)
+    for (int generationNum = 1; generationNum <= MAX_GENERATIONS; generationNum++)
     {
-        int indexNewFlowers = i % 2;
-        int indexPrevFlowers = (i-1) % 2;
+        int indexNewFlowers = generationNum % 2;
+        int indexPrevFlowers = (generationNum - 1) % 2;
+
+        int cursorPrevFlowers = 0;
+
         flowers[indexNewFlowers].Clear();
-        cursorPrevFlowers = 0;
 
         while (cursorPrevFlowers < flowers[indexPrevFlowers].Count)
         {
@@ -58,7 +93,6 @@ try
                 if (flowerGrowth[BoolAryToInt(keyArray)])
                 {
                     // examing the puzzle rules shows that only a single rule creates a new node before the start.
-                    // if ...##  then prepend, and decrease the base index  
                     flowers[indexNewFlowers].Add(true);
                     baseIndex--;
                 }
@@ -69,28 +103,15 @@ try
             int windowMax = int.Min(cursorPrevFlowers + 2, flowers[indexPrevFlowers].Count - 1);
             int windowSize = windowMax - windowMin + 1;
             int startIndex = int.Max(2 - (cursorPrevFlowers - windowMin), 0);
-           // Console.Write($"{cursorPrevFlowers} {windowMin} {windowMax} {windowSize} {startIndex} {flowers[indexPrevFlowers].Count-1}  ");
 
             flowers[indexPrevFlowers].CopyTo(windowMin, keyArray, startIndex, windowSize);
-            int keyID = BoolAryToInt(keyArray);
-
-           // Console.Write($"{keyID} = {flowerGrowth[keyID]}   ");
-
             flowers[indexNewFlowers].Add(flowerGrowth[BoolAryToInt(keyArray)]);
-           // Console.WriteLine(flowers[indexNewFlowers].Last());
 
             if (cursorPrevFlowers == flowers[indexPrevFlowers].Count - 1)
             {
-                // check the off the end positions. 
+                // examing the puzzle rules shows that a new node is only added immediatly to the end.
                 Array.Clear(keyArray); // reset to false 
                 flowers[indexPrevFlowers].CopyTo(cursorPrevFlowers - 1, keyArray, 0, 2);
-                if (flowerGrowth[BoolAryToInt(keyArray)])
-                {
-                    flowers[indexNewFlowers].Add(true);
-                }
-
-                Array.Clear(keyArray); // reset to false 
-                flowers[indexPrevFlowers].CopyTo(cursorPrevFlowers, keyArray, 0, 1);
                 if (flowerGrowth[BoolAryToInt(keyArray)])
                 {
                     flowers[indexNewFlowers].Add(true);
@@ -99,35 +120,20 @@ try
             cursorPrevFlowers++;
         }
 
-//        StringBuilder sb = new();
-        //Console.Write($"{i,-2}: ");
-        //int rowAnswer = 0;
+        if (generationNum == PART_1_GENERATION) part1Answer = ScoreLine(flowers[indexNewFlowers], baseIndex);
 
-        
-        //for (int z = 0; z < flowers[indexNewFlowers].Count; z++)
-        //{
-         //   Console.Write($"{(flowers[indexNewFlowers][z] ? '#' : '.')}");
-         //   rowAnswer += flowers[indexNewFlowers][z] ? baseIndex + z : 0;
-            //sb.Append(flower ? '1' : '0');
-        //}
-       // Console.WriteLine($"  {rowAnswer}");
+        if (RowCompare(flowers[indexNewFlowers], flowers[indexPrevFlowers]))
+        {
+            int prevAnswer = ScoreLine(flowers[indexPrevFlowers], baseIndex);
+            int rowAnswer = ScoreLine(flowers[indexNewFlowers], baseIndex);
 
-        //Console.WriteLine($"{Convert.ToUInt32(sb.ToString()[^96..^64], 2)} {Convert.ToUInt32(sb.ToString()[^64..^32], 2)}  {Convert.ToUInt32(sb.ToString()[^32..], 2)}");
+            part2Answer = ((PART_2_GENERATION - generationNum) * (rowAnswer - prevAnswer)) + rowAnswer;
+            break;
+        }
     }
 
-    Console.WriteLine();
-    int part1Answer = 0;
-    for (int i = 0; i < flowers[NUM_GENERATIONS % 2].Count; i++)
-    {
-        part1Answer += flowers[NUM_GENERATIONS % 2][i] ? baseIndex + i : 0;
-    }
-
-    //50000000000
-    //process stabalizes at about generation 100, then increments by 25 per generation. 
-    long part2Answer = ((50000000000 - NUM_GENERATIONS) * 25) + part1Answer;
-
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    Console.WriteLine($"Part 1: The flower score after {PART_1_GENERATION} is {part1Answer}.");
+    Console.WriteLine($"Part 2: The flower score after {PART_2_GENERATION} is {part2Answer}.");
 }
 catch (Exception e)
 {
