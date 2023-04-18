@@ -54,8 +54,8 @@
 - **Solution:**
 
 ### [Day 14](Day%2014) - Chocolate Charts
-- **Problem:**
-- **Solution:**
+- **Problem:** Pattern matching on an ever growing list.
+- **Solution:** Part one was nice and easy with a simple loop and a clear end point. Part two threw most of that out, making me come up with a scheme to efficiently compare arrays. I struggled for a little bit, finding answers in the 800M range (Actual answer is in the 20 M range), before I realized I was inadvertently skipping past potential matches.
 
 ### [Day 15](Day%2015) - Beverage Bandits
 - **Problem:**
