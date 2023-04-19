@@ -55,15 +55,15 @@
 
 ### [Day 14](Day%2014) - Chocolate Charts
 - **Problem:** Pattern matching on an ever growing list.
-- **Solution:** Part one was nice and easy with a simple loop and a clear end point. Part two threw most of that out, making me come up with a scheme to efficiently compare arrays. I struggled for a little bit, finding answers in the 800M range (Actual answer is in the 20 M range), before I realized I was inadvertently skipping past potential matches.
+- **Solution:** Part one was nice and easy with a simple loop and a clear end point. Part two threw most of that out, making me come up with a scheme to efficiently compare arrays. I struggled for a little bit, finding answers in the 800M range (Actual answer is in the 20 M range), before I realized I was inadvertently skipping past potential matches. Adding a `Queue()` to the middle of my loop solved the issue.
 
 ### [Day 15](Day%2015) - Beverage Bandits
 - **Problem:**
 - **Solution:**
 
 ### [Day 16](Day%2016) - Chronal Classification
-- **Problem:**
-- **Solution:**
+- **Problem:** Build a VM and figure out which opcodes do what. 
+- **Solution:** My biggest enemy was myself. The VM had a silly number of typos in it. Working out the opcodes was a simple matter of deduction. After fixing the VM code, that step became a sanity check for future runs.
 
 ### [Day 17](Day%2017) - Reservoir Research
 - **Problem:**
