@@ -8,22 +8,28 @@
         {
             _registers[output] = opCode switch
             {
-                0 => _registers[inA] * inB,                       // muli
-                1 => inA,                                         // seti
-                2 => _registers[inA] & inB,                       // bani
-                3 => _registers[inA] > inB ? 1 : 0,               // gtri
-                4 => _registers[inA] > _registers[inB] ? 1 : 0,   // gtrr
-                5 => _registers[inA] == _registers[inB] ? 1 : 0,  // eqrr
-                6 => _registers[inA] + inB,                       // addi
-                7 => inA > _registers[inB] ? 1 : 0,               // gtir
-                8 => inA == _registers[inB] ? 1 : 0,              // eqir
-                9 => _registers[inA] * _registers[inB],           // mulr
-                10 => _registers[inA] + _registers[inB],          // addr
-                11 => _registers[inA] | _registers[inB],          // borr
-                12 => _registers[inA] | inB,                      // bori
-                13 => _registers[inA] == inB ? 1 : 0,             // eqri
-                14 => _registers[inA] & _registers[inB],          // banr
-                15 => _registers[inA],                            // setr
+                0 => _registers[inA] + _registers[inB],          // addr
+                1 => _registers[inA] + inB,                      // addi
+
+                2 => _registers[inA] * _registers[inB],          // mulr
+                3 => _registers[inA] * inB,                      // muli
+
+                4 => _registers[inA] & _registers[inB],          // banr                
+                5 => _registers[inA] & inB,                      // bani
+
+                6 => _registers[inA] | _registers[inB],          // borr
+                7 => _registers[inA] | inB,                      // bori
+
+                8 => _registers[inA],                            // setr
+                9 => inA,                                        // seti
+
+                10 => inA > _registers[inB] ? 1 : 0,             // gtir
+                11 => _registers[inA] > inB ? 1 : 0,             // gtri
+                12 => _registers[inA] > _registers[inB] ? 1 : 0, // gtrr
+                
+                13 => inA == _registers[inB] ? 1 : 0,            // eqir
+                14 => _registers[inA] == inB ? 1 : 0,            // eqri
+                15 => _registers[inA] == _registers[inB] ? 1 : 0,// eqrr
                 _ => throw new NotImplementedException()
             };
         }

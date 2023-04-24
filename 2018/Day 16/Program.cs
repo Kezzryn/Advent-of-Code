@@ -68,20 +68,11 @@ try
             }
         }
     }
-    
-    foreach(var kvp in potentialOpCodes)
-    {
-        // These numbers should match each other if we've edited the program correctly.
-        if (kvp.Key != kvp.Value.FirstOrDefault(-1))
-        {
-            Console.WriteLine($"KEY VALUE MISMATCH: {kvp.Key} {kvp.Value.FirstOrDefault(-1)}");
-        }
-    }
 
     vm.ClearRegisters();
     foreach (int[] opCode in puzzlePart2)
     {
-        vm.Dispatcher(opCode[OPCODE], opCode[IN_A], opCode[IN_B], opCode[OUTPUT]);
+        vm.Dispatcher(potentialOpCodes[opCode[OPCODE]].FirstOrDefault(-1), opCode[IN_A], opCode[IN_B], opCode[OUTPUT]);
     }
     
     int part2Answer = vm.GetRegisterValue(0);
