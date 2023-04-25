@@ -50,8 +50,8 @@
 - **Solution:** Part one is easy enough to simulate. Fifty billion iterations would have taken no less than 36 hours, and likely many more. Visualizing the sim showed that it stabalized after nearly 100 iterations.
 
 ### [Day 13](Day%2013) - Mine Cart Madness
-- **Problem:**
-- **Solution:**
+- **Problem:** Collision detection in a maze.
+- **Solution:** Motion around the mine cart maze was the easy part. Reliable collision detection wasn't until I moved first to tracking positions in a `HashSet()` then to a `Dictionary()` to ID the other cart in the collision. 
 
 ### [Day 14](Day%2014) - Chocolate Charts
 - **Problem:** Pattern matching on an ever growing list.
