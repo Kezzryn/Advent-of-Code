@@ -70,8 +70,8 @@
 - **Solution:**
 
 ### [Day 18](Day%2018) - Settlers of The North Pole
-- **Problem:**
-- **Solution:**
+- **Problem:** Three state cell automata.
+- **Solution:** As with previous iteratons, a grid with a double buffer was used. The adjancey check initially used an enumeration, however, I got a signifiant performance gain by changing it to nested for loops.
  
 ### [Day 19](Day%2019) - Go With The Flow
 - **Problem:**
