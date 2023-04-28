@@ -74,8 +74,8 @@
 - **Solution:** As with previous iteratons, a grid with a double buffer was used. The adjancey check initially used an enumeration, however, I got a signifiant performance gain by changing it to nested for loops.
  
 ### [Day 19](Day%2019) - Go With The Flow
-- **Problem:**
-- **Solution:**
+- **Problem:** Add jump instruction to [Day 16s](Day%2016) VM and see what happens. 
+- **Solution:** What happens is finding the sum of the factors of a number. The flow control in this program is crazy hard to follow.
 
 ### [Day 20](Day%2020) - A Regular Map
 - **Problem:**
