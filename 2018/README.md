@@ -86,8 +86,8 @@
 - **Solution:** I initally reimplemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my lightbulb moment. The key to the puzzle was to realize it is generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runds in about 4 ms.
 
 ### [Day 22](Day%2022) - Mode Maze
-- **Problem:**
-- **Solution:**
+- **Problem:** Generate a maze and pathfind through it. 
+- **Solution:** Trusty A* makes a reapperance with a new `Map()` class to generate maze locatoins on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
 
 ### [Day 23](Day%2023) - Experimental Emergency Teleportation
 - **Problem:**
