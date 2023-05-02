@@ -1,30 +1,30 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace AoC_2018_Day_17
 {
     public static class MapNode
     {
-        public const char Clay  = '#';
-        public const char Sand  = '.';
+        public const char Clay = '#';
+        public const char Sand = '.';
         public const char Water = '|';
-        public const char Lake  = '~';
+        public const char Lake = '~';
     }
 
     public class Map
     {
         //A note on coordinates, "down" is Y+1 in this map.  0,0 is ground level, 0,1 is one unit "down"
-
         private readonly Dictionary<Point, char> _theMap = new();
-        private Point spigot = new(500, 0);
+        private readonly Point _spigot = new(500, 0);
 
-        private readonly List<Size> _directions = new()
-        {
-            new Size(0, 1), //down
-            new Size(-1, 1), //down-left
-            new Size(1, 1) //down-right
-        };
-    
+        private readonly Size DOWN = new(0, 1);
+        private readonly Size LEFT = new(-1, 0);
+        private readonly Size RIGHT = new(1, 0);
 
+        private Point _mapMin;
+        private Point _mapMax;
+        public int RecurseLimit = 0;
+        public int Recurse = 0;
 
         public Map(string[] mapData)
         {
@@ -32,109 +32,172 @@ namespace AoC_2018_Day_17
             //EG: y=13, x=498..504
             // x or y can be in either order.
             {
-                if (line.Contains("->"))
+                int[] matches = Regex.Matches(line, @"\d+").Select(x => int.Parse(x.Value)).ToArray();
+
+                int startX = 0;
+                int numX = 0;
+
+                int startY = 0;
+                int numY = 0;
+
+                if (line[0] == 'x')
                 {
-                    Point[] points = line
-                        .Split("->")
-                        .Select(s => s.Split(','))
-                        .Select(a =>
-                        new Point(x: int.Parse(a[0]), y: int.Parse(a[1]))).ToArray();
+                    startX = matches[0];
+                    numX = 1;
 
-                    var adjacents = points
-                            .Zip(points.Skip(1), (a, b) => new { a, b })
-                            .ToArray();
-
-                    foreach (var pair in adjacents)
-                    {
-                        int startX = int.Min(pair.a.X, pair.b.X);
-                        int numX = Math.Abs(pair.a.X - pair.b.X) + 1;
-
-                        int startY = int.Min(pair.a.Y, pair.b.Y);
-                        int numY = Math.Abs(pair.a.Y - pair.b.Y) + 1;
-                        foreach ((int x, int y) in from a in Enumerable.Range(startX, numX)
-                                                   from b in Enumerable.Range(startY, numY)
-                                                   select (a,b))
-                        {
-                            _theMap.TryAdd(new Point(x, y), MapNode.Clay);
-                        }
-                    }
+                    startY = matches[1];
+                    numY = matches[2] - matches[1] + 1;
                 }
                 else
                 {
-                    //line is a single point
-                    var temp = line.Split(",").Select(int.Parse).ToArray();
-                    _theMap.TryAdd(new Point(temp[0], temp[1]), MapNode.Clay);
+                    startY = matches[0];
+                    numY = 1;
+
+                    startX = matches[1];
+                    numX = matches[2] - matches[1] + 1;
                 }
 
+                foreach ((int x, int y) in from a in Enumerable.Range(startX, numX)
+                                           from b in Enumerable.Range(startY, numY)
+                                           select (a, b))
+                {
+                    _theMap.TryAdd(new Point(x, y), MapNode.Clay);
+                }
             }
+
+            _mapMin = new(
+                    _theMap.Keys.Select(x => x.X).Min(),
+                    _theMap.Keys.Select(x => x.Y).Min()
+                );
+
+            _mapMax = new(
+                    _theMap.Keys.Select(x => x.X).Max(),
+                    _theMap.Keys.Select(x => x.Y).Max()
+                );
         }
 
-        public int CountWater()
+        public int CountAllWater()
         {
-            return _theMap.Values.Where(x => x == MapNode.Water || x == MapNode.Lake).Count();
+            int minY = _theMap.Where(x => x.Value == MapNode.Clay).Select(x => x.Key.Y).Min();
+            return _theMap.Where(x => (x.Value == MapNode.Water || x.Value == MapNode.Lake) && x.Key.Y >= minY).Count();
         }
 
-        //public void SweepUp()
-        //{
-        //    //take all the sand off the map. 
-        //    //no RemoveAll :( 
-        //    List<Point> sandNodes = _theMap.Where(kvp => kvp.Value == MapNode.Sand)
-        //                 .Select(kvp => kvp.Key)
-        //                 .ToList();
-
-        //    foreach (Point p in sandNodes)
-        //    {
-        //        _theMap.Remove(p);
-        //    }
-        //}
-
-        public void DropSand(int numGrains)
+        public int CountStandingWater()
         {
-            for (int i = 1; i <= numGrains; i++)
+            return _theMap.Values.Where(x => x == MapNode.Lake).Count();
+        }
+
+        public void DripWater() => DripWater(null);
+        public void DripWater(Point? spigot)
+        {
+            Recurse++;
+            if (Recurse > RecurseLimit) RecurseLimit++;
+
+            // return types for doLeftRight
+            const int CONTINUE = -1;
+            const int SPIGOT = 0;
+            const int WALL = 1;
+
+            List<Point> drips = new()
             {
-                if (!DropSand()) break;
-            }
-        }
+                 spigot ?? _spigot
+            };
 
-        public bool DropSand()
-        {
-            //return false if the map is full/ended. 
-
-            Point sand = spigot;
-            bool intoAbyss = false;
-            bool isFalling = false;
-
+            // find the next basin, or the abyss.
+            bool isFlowing = true;
             do
             {
-                foreach (Size d in _directions)
+                Point nextStep = drips.Last() + DOWN;
+
+                if (nextStep.Y > _mapMax.Y)
                 {
-                    isFalling = false;
-                    Point nextStep = sand + d;
-
-                    //if (IsFloor() && nextStep.Y >= _floorHeight)
-                    //{
-                    //    isFalling = false;
-                    //    break;
-                    //}
-                    //if (!IsFloor() && nextStep.Y > _floorHeight - 2)
-                    //{
-                    //    isFalling = true;
-                    //    intoAbyss = true;
-                    //    break;
-                    //}
-
-                    //if (!_theMap.ContainsKey(nextStep))
-                    //{
-                    //    sand = nextStep;
-                    //    isFalling = true;
-                    //    break;
-                    //}
+                    // unroll and return.
+                    foreach (Point p in drips)
+                    {
+                        if (p != _spigot && !_theMap.TryAdd(p, MapNode.Water)) _theMap[p] = MapNode.Water;
+                    }
+                    return;
                 }
-            } while (isFalling && !intoAbyss);
+                
+                isFlowing = !(_theMap.TryGetValue(nextStep, out char value) && (value == MapNode.Clay || value == MapNode.Lake));
 
-            if (!intoAbyss) _theMap.Add(sand, MapNode.Sand);
+                if (isFlowing) drips.Add(nextStep);
+            } while (isFlowing);
 
-            return !(_theMap.ContainsKey(spigot) || intoAbyss);
+            //unroll back up filling in the water as we go. 
+            foreach (Point p in drips.Select(x => x).Reverse())
+            {
+                if (!_theMap.TryGetValue(p + DOWN, out char downValue)) throw new Exception($"{p} Nothing under this???");
+
+                bool isRightDone = false;
+                bool isLeftDone = false;
+
+                Point goLeft = p;
+                Point goRight = p;
+                if (_theMap[p + DOWN] == MapNode.Water)
+                {
+                    if (p != drips.First() && !_theMap.TryAdd(p, MapNode.Water)) _theMap[p] = MapNode.Water;
+                    continue;
+                }
+
+                bool isLake = false;
+                int leftResult = CONTINUE;
+                int rightResult = CONTINUE;
+                bool isDone = false;
+                do
+                {
+                    int doLeftRight(ref Point dir, Size step)
+                    {
+                        // -1 keep checking
+                        // 0 spigot - flowing water
+                        // 1 blocked - build a lake
+                        int returnValue = CONTINUE; 
+
+                        Point nextStep = dir + step;
+                        Point nextDown = nextStep + DOWN;
+
+                        char sideTest = _theMap.TryGetValue(nextStep, out char sideValue) ? sideValue : MapNode.Sand;
+                        char downTest = _theMap.TryGetValue(nextDown, out char downValue) ? downValue : MapNode.Sand;
+
+                        if (downTest == MapNode.Sand) 
+                        {
+                            DripWater(nextStep);
+                            downTest = _theMap[nextDown];
+                        }
+
+                        if (downTest == MapNode.Water)
+                        {
+                            dir += step;
+                            return SPIGOT;
+                        }
+
+                        if (sideTest == MapNode.Clay) return WALL;
+
+                        dir += step;
+                        return returnValue;
+                    }
+
+                    if (!isLeftDone) leftResult = doLeftRight(ref goLeft, LEFT);
+                    if (!isRightDone) rightResult = doLeftRight(ref goRight, RIGHT);
+
+                    if (leftResult != CONTINUE) isLeftDone = true;
+                    if (rightResult != CONTINUE) isRightDone = true;
+
+                    if (isLeftDone && isRightDone)
+                    {
+                        isDone = true;
+                        if (leftResult == WALL && rightResult == WALL) isLake = true;
+                    }
+
+                } while (!isDone);
+
+                char layerSymbol = isLake ? MapNode.Lake : MapNode.Water;
+                for (int x = goLeft.X; x <= goRight.X; x++)
+                {
+                    if (!_theMap.TryAdd(new(x, goLeft.Y), layerSymbol)) _theMap[goRight] = layerSymbol;
+                }
+            }
+            Recurse--;
         }
 
         public void RawMap()
@@ -146,17 +209,26 @@ namespace AoC_2018_Day_17
             }
         }
 
-
-        public void PrintMap()
+        public void DrawMap()
         {
-            Point offset = max - (Size)min;
+            _mapMin = new(
+                   _theMap.Keys.Select(x => x.X).Min(),
+                   _theMap.Keys.Select(x => x.Y).Min()
+               );
+
+            _mapMax = new(
+                    _theMap.Keys.Select(x => x.X).Max(),
+                    _theMap.Keys.Select(x => x.Y).Max()
+                );
+
+            Point offset = _mapMax - (Size)_mapMin;
 
             char[,] map = new char[offset.X + 1, offset.Y + 1];
 
             foreach (KeyValuePair<Point, char> kvp in _theMap)
             {
-                int newX = offset.X - (max.X - kvp.Key.X);
-                int newY = offset.Y - (max.Y - kvp.Key.Y);
+                int newX = offset.X - (_mapMax.X - kvp.Key.X);
+                int newY = offset.Y - (_mapMax.Y - kvp.Key.Y);
                 map[newX, newY] = kvp.Value;
             }
 

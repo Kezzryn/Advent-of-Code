@@ -66,8 +66,8 @@
 - **Solution:** My biggest enemy was myself. The VM had a silly number of typos in it. Working out the opcodes was a simple matter of deduction. After fixing the VM code, that step became a sanity check for future runs.
 
 ### [Day 17](Day%2017) - Reservoir Research
-- **Problem:**
-- **Solution:**
+- **Problem:** Used the code from [2022 Day 14](../2022/Day%2014), Regolith Reservoir as the basis for this one. 
+- **Solution:** Had a little trouble with unrolling back up, until I converted the drip function to be recursive. I am glad I kept the water tagged as standing or set, as that made part two trivial.
 
 ### [Day 18](Day%2018) - Settlers of The North Pole
 - **Problem:** Three state cell automata.
