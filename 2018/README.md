@@ -87,11 +87,11 @@
 
 ### [Day 22](Day%2022) - Mode Maze
 - **Problem:** Generate a maze and pathfind through it. 
-- **Solution:** Trusty A* makes a reapperance with a new `Map()` class to generate maze locatoins on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
+- **Solution:** Trusty A* makes a reapperance with a new `Map()` class to generate maze locations on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
 
 ### [Day 23](Day%2023) - Experimental Emergency Teleportation
-- **Problem:**
-- **Solution:**
+- **Problem:** Searching 3D space.
+- **Solution:** Looking through the solution thread, there are some clever solutions and insights. I put all the bots in a `Box()` and subdivided the search space until I found the solution. The hardest part was adapting the "Sphere intersects Cube" calculation from normal euclidean distances to work on taxi distances.
 
 ### [Day 24](Day%2024) - Immune System Simulator 20XX
 - **Problem:**
