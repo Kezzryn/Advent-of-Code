@@ -94,8 +94,8 @@
 - **Solution:**
 
 ### [Day 24](Day%2024) - Immune System Simulator 20XX
-- **Problem:**
-- **Solution:**
+- **Problem:** The immune system of reindeer is weird.
+- **Solution:** Read every step carefully. I initially screwed up my tiebreaks. And then for part two, there is a third condition that needs to be considered. Stalemate!
 
 ### [Day 25](Day%2025) - Four-Dimensional Adventure
 - **Problem:**
