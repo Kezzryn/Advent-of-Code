@@ -10,7 +10,6 @@ namespace AoC_2018_Day_20
 
     internal static class AStar
     {
-        // in "reading order" -y, -x, +x, +y
         public static List<Size> Neighbors = new()
         {
             new Size(0,-1),

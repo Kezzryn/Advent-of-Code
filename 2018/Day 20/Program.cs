@@ -65,8 +65,7 @@ try
     const int PART_TWO_THRESHOLD = 1000;
 
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
-    //string[] puzzleInput = File.ReadAllLines("puzzleInputTest.txt");
-
+    
     Dictionary<Point, HashSet<Point>> theMap = new();
     Dictionary<Point, int> theMapDist = new();
     
@@ -126,7 +125,7 @@ try
 
     Stopwatch sw = Stopwatch.StartNew();
     LoadMap(puzzleInput, new(0, 0));
-    //PrintMap(theMap);
+    PrintMap(theMap);
 
     Console.WriteLine($"Fast answer part 1: {theMapDist.Max(x => x.Value)}");
     Console.WriteLine($"Fast answer part 2: {theMapDist.Where(x => x.Value >= PART_TWO_THRESHOLD).Count()}");
