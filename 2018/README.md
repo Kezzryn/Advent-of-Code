@@ -94,8 +94,8 @@
 - **Solution:** Looking through the solution thread, there are some clever solutions and insights. I put all the bots in a `Box()` and subdivided the search space until I found the solution. The hardest part was adapting the "Sphere intersects Cube" calculation from normal euclidean distances to work on taxi distances.
 
 ### [Day 24](Day%2024) - Immune System Simulator 20XX
-- **Problem:**
-- **Solution:**
+- **Problem:** The immune system of reindeer is weird.
+- **Solution:** Read every step carefully. I initially screwed up my tiebreaks. And then for part two, there is a third condition that needs to be considered. Stalemate!
 
 ### [Day 25](Day%2025) - Four-Dimensional Adventure
 - **Problem:**
