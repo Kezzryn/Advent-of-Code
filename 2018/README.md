@@ -78,12 +78,12 @@
 - **Solution:** What happens is finding the sum of the factors of a number. The flow control in this program is crazy hard to follow.
 
 ### [Day 20](Day%2020) - A Regular Map
-- **Problem:**
-- **Solution:**
+- **Problem:** Text parsing to make a map.
+- **Solution:** I solved this two ways. The first way was to build the map and then search each point on it with A*. This takes 20-40 seconds to search across 10,000 points. The second, more efficent way, is to count the steps as the map is being built. This can be done in under 100 ms.
 
 ### [Day 21](Day%2021) - Chronal Conversion
 - **Problem:** [Day 19s](Day%2019) VM called on to run one more program.
-- **Solution:** I initally reimplemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my lightbulb moment. The key to the puzzle was to realize it is generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runds in about 4 ms.
+- **Solution:** I initally reimplemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my lightbulb moment. The key to the puzzle was to realize it is generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runs in about 4 ms.
 
 ### [Day 22](Day%2022) - Mode Maze
 - **Problem:** Generate a maze and pathfind through it. 
