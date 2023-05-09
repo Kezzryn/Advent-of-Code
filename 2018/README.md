@@ -23,7 +23,7 @@
 
 ### [Day 6](Day%2006) - Chronal Coordinates
 - **Problem:** Finding distances over an area.
-- **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinate, and to remove those from the solution set. Part two startes as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
+- **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinite, and to remove those from the solution set. Part two starts as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
 - **Problem:** Graph traversal!
@@ -58,16 +58,16 @@
 - **Solution:** Part one was nice and easy with a simple loop and a clear end point. Part two threw most of that out, making me come up with a scheme to efficiently compare arrays. I struggled for a little bit, finding answers in the 800M range (Actual answer is in the 20 M range), before I realized I was inadvertently skipping past potential matches. Adding a `Queue()` to the middle of my loop solved the issue.
 
 ### [Day 15](Day%2015) - Beverage Bandits
-- **Problem:**
-- **Solution:**
+- **Problem:** Elves vs Goblins, FIGHT!
+- **Solution:** There are a lot of little details that all need to be tracked. The program spends a lot of time in A* working out pathfinding.
 
 ### [Day 16](Day%2016) - Chronal Classification
 - **Problem:** Build a VM and figure out which opcodes do what. 
 - **Solution:** My biggest enemy was myself. The VM had a silly number of typos in it. Working out the opcodes was a simple matter of deduction. After fixing the VM code, that step became a sanity check for future runs.
 
 ### [Day 17](Day%2017) - Reservoir Research
-- **Problem:**
-- **Solution:**
+- **Problem:** Used the code from [2022 Day 14](../2022/Day%2014), Regolith Reservoir as the basis for this one. 
+- **Solution:** Had a little trouble with unrolling back up, until I converted the drip function to be recursive. I am glad I kept the water tagged as standing or set, as that made part two trivial.
 
 ### [Day 18](Day%2018) - Settlers of The North Pole
 - **Problem:** Three state cell automata.
