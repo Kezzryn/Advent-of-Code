@@ -58,8 +58,8 @@
 - **Solution:** Part one was nice and easy with a simple loop and a clear end point. Part two threw most of that out, making me come up with a scheme to efficiently compare arrays. I struggled for a little bit, finding answers in the 800M range (Actual answer is in the 20 M range), before I realized I was inadvertently skipping past potential matches. Adding a `Queue()` to the middle of my loop solved the issue.
 
 ### [Day 15](Day%2015) - Beverage Bandits
-- **Problem:**
-- **Solution:**
+- **Problem:** Elves vs Goblins, FIGHT!
+- **Solution:** There are a lot of little details that all need to be tracked. The program spends a lot of time in A* working out pathfinding.
 
 ### [Day 16](Day%2016) - Chronal Classification
 - **Problem:** Build a VM and figure out which opcodes do what. 

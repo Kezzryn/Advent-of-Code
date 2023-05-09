@@ -1,7 +1,5 @@
 ﻿using AoC_2018_Day_15;
-using System.ComponentModel.Design;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 try
@@ -78,25 +76,24 @@ try
 
     int part1Answer = 0;
     int part2Answer = 0;
-
-    int STEP = 1000;
+     
+    int STEP = 10;
     int boost = 0;
-    for (boost = 0; boost < int.MaxValue; boost += STEP)
+    while (boost < int.MaxValue)
     {
-        Console.WriteLine(boost);
         LoadMaps(boost);
 
-        //PrintMap("Start Map");
+        // PrintMap("Start Map");
 
         int roundCounter = 0;
         bool isDone = false;
-
-        //bool isVerbose = new List<int>() { 1, 2, 22, 23, 24, 25, 26, 27, 28, 46, 47 }.Contains(roundCounter);
-        bool isVerbose = false;
-
+        bool fullRound = false;
         while (!isDone)
         {
-            HashSet<Point> initOrder = combatants.Keys.OrderBy(o => o.Y).ThenBy(t => t.X).ToHashSet();
+            roundCounter++;
+            //bool isVerbose = new List<int>() { 0, 1, 5, 10, 15, 27, 28, 29, 30 }.Contains(roundCounter);
+            bool isVerbose = false;
+            List<Point> initOrder = combatants.Keys.OrderBy(o => o.Y).ThenBy(t => t.X).ToList();
             if (isVerbose)
             {
                 Console.WriteLine($"Round start {roundCounter}");
@@ -109,8 +106,12 @@ try
                 Console.WriteLine();
             }
 
-            foreach (Point currentFigherPos in initOrder)
+            fullRound = false;
+            for (int i = 0; i < initOrder.Count; i++)
             {
+                Point currentFigherPos = initOrder[i];
+                if (i == initOrder.Count - 1) fullRound = true;
+
                 if (isVerbose) Console.WriteLine($"With {currentFigherPos}:");
 
                 if (!combatants.TryGetValue(currentFigherPos, out Entity? currentFighter)) continue;
@@ -165,40 +166,28 @@ try
             {
                 isDone = true;
             }
+        }
+
+        if (boost == 0) part1Answer = (roundCounter - (fullRound ? 1 : 0)) * combatants.Sum(x => x.Value.HP);
+
+        if (combatants.Any(a => a.Value.Type == Entity.Elf) && numElves == combatants.Count(c => c.Value.Type == Entity.Elf))
+        {
+            if (STEP == 1)
+            {
+                part2Answer = roundCounter * combatants.Sum(x => x.Value.HP);
+                break;
+            }
             else
             {
-                roundCounter++;
+                boost -= STEP;
+                STEP /= 10;
             }
         }
-
-        if (boost == 0) part1Answer = roundCounter * combatants.Sum(x => x.Value.HP);
-
-        Console.WriteLine($"{numElves} left: {combatants.Count(c => c.Value.Type == Entity.Elf)}");
-        if (combatants.Any(a => a.Value.Type == Entity.Elf))
-        {
-            Console.Write($"{boost} Elves won");
-            if (numElves == combatants.Count(c => c.Value.Type == Entity.Elf))
-            {
-                Console.Write($" flawlessly");
-                if (STEP == 1)
-                {
-                    part2Answer = roundCounter * combatants.Sum(x => x.Value.HP);
-                    break;
-                }
-            }
-            Console.WriteLine("!");
-            boost -= STEP;
-            STEP /= 10;
-            Console.WriteLine($"Boost step down: {boost} {STEP}");
-        }
-        else
-        {
-            Console.WriteLine($"{boost}: Elves lost.");
-        }
+        boost += STEP;
     }
 
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    Console.WriteLine($"Part 1: With no boosts, the winning army has a score of: {part1Answer}.");
+    Console.WriteLine($"Part 2: The elves need a boost of {boost} to win with a score of: {part2Answer}.");
 }
 catch (Exception e)
 {
