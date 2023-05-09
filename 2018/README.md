@@ -23,7 +23,7 @@
 
 ### [Day 6](Day%2006) - Chronal Coordinates
 - **Problem:** Finding distances over an area.
-- **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinate, and to remove those from the solution set. Part two startes as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
+- **Solution:** The key insight for part one was to realize that any hit from an edge indicates a point is infinite, and to remove those from the solution set. Part two starts as a thought to find the radius of a circle, however, experimentation showed that the area is already within the search area defined in part one.
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
 - **Problem:** Graph traversal!

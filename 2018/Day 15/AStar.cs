@@ -21,8 +21,36 @@ namespace AoC_2018_Day_15
 
         public static int TaxiDistance(Point a, Point b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
 
-        public static bool A_Star(Point start, Point dest, Dictionary<Point, MapSymbols> theMap, HashSet<Point> collisionMap,  out int numSteps, out List<Point> finalPath, int? maxSteps = null)
+        public static bool NextStep(Point source, Point target, Dictionary<Point, MapSymbols> theMap, HashSet<Point> collisionMap, out Point nextStep, out int dist)
         {
+            nextStep = new(-1, -1);
+            dist = -1;
+            Dictionary<(Point origon, Point destination), int> results = new();
+
+            foreach(var coordPair in from origon in Neighbors.Select(x => source + x).Where(z => theMap[z] == MapSymbols.Open && !collisionMap.Contains(z)).ToList()
+                                     from destination in Neighbors.Select(x => target + x).Where(z => theMap[z] == MapSymbols.Open && !collisionMap.Contains(z)).ToList()
+                                     select (origon, destination))
+            {
+                if (coordPair.origon == target)
+                {
+                    // adjacency test
+                    nextStep = source;
+                    dist = 0;
+                    return true;
+                }
+                dist = A_Star(coordPair.origon, coordPair.destination, theMap, collisionMap, out _);
+                if (dist != -1)  results.Add(coordPair, dist);
+            }
+
+            if (results.Count == 0) return false;
+            nextStep = results.OrderBy(x => x.Value).ThenBy(x => x.Key.origon.Y).ThenBy(x => x.Key.origon.X).First().Key.origon;
+            dist = results.Values.Min();
+            return true;
+        }
+
+        public static int A_Star(Point start, Point dest, Dictionary<Point, MapSymbols> theMap, HashSet<Point> collisionMap, out List<Point> finalPath, int? maxSteps = null)
+        {
+            int numSteps = 0;
             finalPath = new();
 
             PriorityQueue<Point, int> searchQueue = new(); //we enque based on fScore + h, the distance travelled, plus taxi distance guess to destination.
@@ -79,7 +107,7 @@ namespace AoC_2018_Day_15
                         p = stepCounter[(Point)p].parent;
                     }
 
-                    return true;
+                    return numSteps;
                 }
 
                 foreach (Size neighbor in Neighbors)
@@ -110,9 +138,7 @@ namespace AoC_2018_Day_15
                     }
                 }
             }
-            numSteps = -1;
-            return false;
+            return -1;
         }
-
     }
 }

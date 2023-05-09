@@ -9,24 +9,16 @@ namespace AoC_2018_Day_15
 
         public int Type { get; }
 
-//        public Point Position { get; set; }
+        public string TypeName => Type == Entity.Goblin ? "G" : "E";
 
         public int HP { get; set; } = 200;
 
         public int Attack { get; set; } = 3;
 
-        public Entity(int type)//, Point startPosition)
+        public Entity(int type, int attackBoost = 0)
         {
             Type = type;
-  //          Position = startPosition;
-        }
-
-        public Entity(int type, int hp, int attack)
-        {
-            Type = type;
-            //Position = startPosition;
-            HP = hp;
-            Attack = attack;
+            Attack = 3 + attackBoost;
         }
     }
 }
