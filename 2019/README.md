@@ -3,14 +3,14 @@
 
 ### [Day 1](Day%2001) - The Tyranny of the Rocket Equation
 - **Problem:** 2019 and we're off with some basic sums!
-- **Solution:** Part two had a small hiccup where I was messing with the output by returning negative fuel, which was a no-no. 
+- **Solution:** Part two had a small hiccup where I was returning negative fuel, which was a no-no.
 
 ### [Day 2](Day%2002) - 1202 Program Alarm
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Build an Intcode computer.
+- **Solution:** Borrowed a pile of patterns from my [Synacor VM](../Synacor%20Challenge). Need to be careful when assigning arrays, an early bug had the puzzle input assigned by reference, making resetting the machine impossible.
 
 ### [Day 3](Day%2003) - Crossed Wires
-- **Problem:
+- **Problem:**
 - **Solution:** 
 
 ### [Day 4](Day%2004) - Secure Container
