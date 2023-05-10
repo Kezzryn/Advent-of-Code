@@ -98,5 +98,5 @@
 - **Solution:** Read every step carefully. I initially screwed up my tiebreaks. And then for part two, there is a third condition that needs to be considered. Stalemate!
 
 ### [Day 25](Day%2025) - Four-Dimensional Adventure
-- **Problem:**
-- **Solution:**
+- **Problem:** 4D grouping!
+- **Solution:** A slighly inefficent, but simple, loop to sort/collect elements into buckets.
