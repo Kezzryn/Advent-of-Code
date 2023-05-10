@@ -10,8 +10,8 @@
 - **Solution:** Borrowed a pile of patterns from my [Synacor VM](../Synacor%20Challenge). Need to be careful when assigning arrays, an early bug had the puzzle input assigned by reference, making resetting the machine impossible.
 
 ### [Day 3](Day%2003) - Crossed Wires
-- **Problem:**
-- **Solution:** 
+- **Problem:** Create maps and find the intersections between the maps.
+- **Solution:** Once I had my data loaded, `Intersect()` and `Min()` to the rescue.
 
 ### [Day 4](Day%2004) - Secure Container
 - **Problem:** 
