@@ -18,8 +18,8 @@
 - **Solution:** Part one was fairly straight forward. I got to learn about using indexes in `.While()` statements. Part two broke my brain for a little bit. I worked out a whole pile of pattern matching, only to throw it all away when I had a lightbulb moment on how to group the input.
 
 ### [Day 5](Day%2005) - Sunny with a Chance of Asteroids
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Extend the Intcode computer with new commands.
+- **Solution:** Pilfered more code from [Synacor VM](../Synacor%20Challenge) for the I/O. Immediate vs. Position mode was a little tricky to line.
 
 ### [Day 6](Day%2006) - Universal Orbit Map
 - **Problem:** 
