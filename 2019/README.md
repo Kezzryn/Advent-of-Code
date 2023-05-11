@@ -18,8 +18,8 @@
 - **Solution:** 
 
 ### [Day 5](Day%2005) - Sunny with a Chance of Asteroids
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Extend the Intcode computer with new commands.
+- **Solution:** Pilfered more code from [Synacor VM](../Synacor%20Challenge) for the I/O. Immediate vs. Position mode was a little tricky to line.
 
 ### [Day 6](Day%2006) - Universal Orbit Map
 - **Problem:** 
