@@ -22,8 +22,8 @@
 - **Solution:** Pilfered more code from [Synacor VM](../Synacor%20Challenge) for the I/O. Immediate vs. Position mode was a little tricky to line.
 
 ### [Day 6](Day%2006) - Universal Orbit Map
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Graph traversal.
+- **Solution:** Part one involved counting up from the bottom of the graph to the root. Part two looked hard, until I realized that I never need to travel down the graph, only up it, until I find an intersection point. 
 
 ### [Day 7](Day%2007) - Amplification Circuit
 - **Problem:** 
