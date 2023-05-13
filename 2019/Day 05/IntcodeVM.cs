@@ -1,14 +1,4 @@
-﻿using static System.Formats.Asn1.AsnWriter;
-using System.Reflection.Emit;
-using System.Reflection.Metadata;
-using System;
-using System.Net.Sockets;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Reflection;
-
-namespace AoC_2019_IntcodeVM
+﻿namespace AoC_2019_IntcodeVM
 {
     public enum State
     {
