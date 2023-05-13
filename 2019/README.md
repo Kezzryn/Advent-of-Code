@@ -26,8 +26,8 @@
 - **Solution:** Part one involved counting up from the bottom of the graph to the root. Part two looked hard, until I realized that I never need to travel down the graph, only up it, until I find an intersection point. 
 
 ### [Day 7](Day%2007) - Amplification Circuit
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Intcode computer extension, now with more IO.
+- **Solution:** Fairly straigh forward extensions to the I/O systems. Made it work manually first, then automated the process. Once again (still?) borrowed heavily from [Synacor VM](../Synacor%20Challenge).
 
 ### [Day 8](Day%2008) - Space Image Format
 - **Problem:** 
