@@ -30,8 +30,8 @@
 - **Solution:** Fairly straigh forward extensions to the I/O systems. Made it work manually first, then automated the process. Once again (still?) borrowed heavily from [Synacor VM](../Synacor%20Challenge).
 
 ### [Day 8](Day%2008) - Space Image Format
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Data slicing!
+- **Solution:** Build a little cube of data. Slice it horizontally for part one, then drill vertically for part two.
 
 ### [Day 9](Day%2009) - Sensor Boost
 - **Problem:** 
