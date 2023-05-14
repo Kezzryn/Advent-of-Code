@@ -34,8 +34,8 @@
 - **Solution:** Build a little cube of data. Slice it horizontally for part one, then drill vertically for part two.
 
 ### [Day 9](Day%2009) - Sensor Boost
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Intcode computer extension, now with more address modes.
+- **Solution:** Just as in the Synacore puzzle, I really struggled with getting the modes right. Returning the value vs. the value at an address is my bane. In the end I had to refer to [reddit]( https://www.reddit.com/r/adventofcode/comments/e8aw9j/2019_day_9_part_1_how_to_fix_203_error/) to resolve the conflict.
 
 ### [Day 10](Day%2010) - Monitoring Station
 - **Problem:** 
