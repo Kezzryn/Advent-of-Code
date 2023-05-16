@@ -39,11 +39,11 @@
 
 ### [Day 10](Day%2010) - Monitoring Station
 - **Problem:** Let's learn trig!
-- **Solution:** Once I had the main formulas down, I descended into a spiral of testing until I realized I was rounding the angle for part two. This gave incorrect occulusions. Once that bug was discovered and fixed everything blew up nicely.
+- **Solution:** Once I had the main formulas down, I descended into a spiral of testing until I realized I was rounding the angle for part two. This gave incorrect occlusions. Once that bug was discovered and fixed everything blew up nicely.
 
 ### [Day 11](Day%2011) - Space Police
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Direct a robot to paint letters.
+- **Solution:** More Intcode machine. Only a minor change to it, to test for the existance of available output. Everything else was a straight forward shell implementation around the VM. Part one makes a nifty picture. 
 
 ### [Day 12](Day%2012) - The N-Body Problem
 - **Problem:** 
