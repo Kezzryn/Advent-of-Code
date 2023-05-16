@@ -38,8 +38,8 @@
 - **Solution:** Just as in the Synacore puzzle, I really struggled with getting the modes right. Returning the value vs. the value at an address is my bane. In the end I had to refer to [reddit]( https://www.reddit.com/r/adventofcode/comments/e8aw9j/2019_day_9_part_1_how_to_fix_203_error/) to resolve the conflict.
 
 ### [Day 10](Day%2010) - Monitoring Station
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Let's learn trig!
+- **Solution:** Once I had the main formulas down, I descended into a spiral of testing until I realized I was rounding the angle for part two. This gave incorrect occulusions. Once that bug was discovered and fixed everything blew up nicely.
 
 ### [Day 11](Day%2011) - Space Police
 - **Problem:** 
