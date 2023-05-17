@@ -54,8 +54,8 @@
 - **Solution:** Built an I/O feedback loop and a display screen.
 
 ### [Day 14](Day%2014) - Space Stoichiometry
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Tree calculation.
+- **Solution:** Part one had a tricky bit to account for overproduction. Part two had a little rethink, but in the end was a binary search loop.
 
 ### [Day 15](Day%2015) - Oxygen System
 - **Problem:**
