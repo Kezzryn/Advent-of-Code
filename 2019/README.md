@@ -46,8 +46,8 @@
 - **Solution:** More Intcode machine. Only a minor change to it, to test for the existance of available output. Everything else was a straight forward shell implementation around the VM. Part one makes a nifty picture. 
 
 ### [Day 12](Day%2012) - The N-Body Problem
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Simulate a repeating quasi-orbit.
+- **Solution:** This one I needed a little help with. My initial attempt tried to find the interval of each moon indivdually. This worked for one of the test cases, but not the other. I needed to find the interval of each axis of moons. Looking at some other code, I learned about `Math.Sign()` and simplified a whole pile of code. Had to brush up on [Least Common Multiple](https://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers/29717490#29717490) as well. I had the right initial idea, but the wrong forumalas.  
 
 ### [Day 13](Day%2013) - Care Package
 - **Problem:** Intcode breakout.
