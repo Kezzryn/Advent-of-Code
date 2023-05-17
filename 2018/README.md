@@ -11,7 +11,7 @@
 
 ### [Day 3](Day%2003) - No Matter How You Slice It
 - **Problem:** Calculate overlapping areas. 
-- **Solution:** `Rectanges()` and `Intersect()` did the heavy lifting.
+- **Solution:** `Rectangles()` and `Intersect()` did the heavy lifting.
 
 ### [Day 4](Day%2004) - Repose Record
 - **Problem:** Track activity over time.
@@ -27,7 +27,7 @@
 
 ### [Day 7](Day%2007) - The Sum of Its Parts
 - **Problem:** Graph traversal!
-- **Solution:** Part one took me a little to get the exact setup right. I used queues to control which jobs got picked up and processed.  Part two formallized the queue process, and added a time element. The major change was to implement a new queue to represent the elf workers, but limit it to 5 entries.
+- **Solution:** Part one took me a little to get the exact setup right. I used queues to control which jobs got picked up and processed.  Part two formalized the queue process, and added a time element. The major change was to implement a new queue to represent the elf workers, but limit it to 5 entries.
 
 ### [Day 8](Day%2008) - Memory Maneuver
 - **Problem:** First tree puzzle. 
@@ -42,12 +42,12 @@
 - **Solution:** Lots of experimentation showed that the area of the points reduces down to a minimal area. The program pauses when the points come close and allows the user to step through to find the answer. 
 
 ### [Day 11](Day%2011) - Chronal Charge
-- **Problem:** Calcuate the sums of values in a grid.
-- **Solution:** Populating the grid was straight forward. Part two stress tested my solution and found it wanting. Brute force took around 8 minutes. I reworked it to take the size from the previous step and add the new boarder to it. That got me down to about 35 seconds. The next optimzation was to recognize that the value drops to zero and does not recover. A [Summed-Area table](https://en.wikipedia.org/wiki/Summed-area_table) would have been a more optimal solution.
+- **Problem:** Calculate the sums of values in a grid.
+- **Solution:** Populating the grid was straight forward. Part two stress tested my solution and found it wanting. Brute force took around 8 minutes. I reworked it to take the size from the previous step and add the new boarder to it. That got me down to about 35 seconds. The next optimization was to recognize that the value drops to zero and does not recover. A [Summed-Area table](https://en.wikipedia.org/wiki/Summed-area_table) would have been a more optimal solution.
 
 ### [Day 12](Day%2012) - Subterranean Sustainability
 - **Problem:** Cell automata.
-- **Solution:** Part one is easy enough to simulate. Fifty billion iterations would have taken no less than 36 hours, and likely many more. Visualizing the sim showed that it stabalized after nearly 100 iterations.
+- **Solution:** Part one is easy enough to simulate. Fifty billion iterations would have taken no less than 36 hours, and likely many more. Visualizing the sim showed that it stabilized after nearly 100 iterations.
 
 ### [Day 13](Day%2013) - Mine Cart Madness
 - **Problem:** Collision detection in a maze.
@@ -71,7 +71,7 @@
 
 ### [Day 18](Day%2018) - Settlers of The North Pole
 - **Problem:** Three state cell automata.
-- **Solution:** As with previous iteratons, a grid with a double buffer was used. The adjancey check initially used an enumeration, however, I got a signifiant performance gain by changing it to nested for loops.
+- **Solution:** As with previous iterations, a grid with a double buffer was used. The adjacency check initially used an enumeration, however, I got a significant performance gain by changing it to nested for loops.
  
 ### [Day 19](Day%2019) - Go With The Flow
 - **Problem:** Add jump instruction to [Day 16s](Day%2016) VM and see what happens. 
@@ -79,15 +79,15 @@
 
 ### [Day 20](Day%2020) - A Regular Map
 - **Problem:** Text parsing to make a map.
-- **Solution:** I solved this two ways. The first way was to build the map and then search each point on it with A*. This takes 20-40 seconds to search across 10,000 points. The second, more efficent way, is to count the steps as the map is being built. This can be done in under 100 ms.
+- **Solution:** I solved this two ways. The first way was to build the map and then search each point on it with A*. This takes 20-40 seconds to search across 10,000 points. The second, more efficient way, is to count the steps as the map is being built. This can be done in under 100 ms.
 
 ### [Day 21](Day%2021) - Chronal Conversion
 - **Problem:** [Day 19s](Day%2019) VM called on to run one more program.
-- **Solution:** I initally reimplemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my lightbulb moment. The key to the puzzle was to realize it is generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runs in about 4 ms.
+- **Solution:** I initially re-implemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my light bulb moment. The key to the puzzle was to realize it's generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runs in about 4 ms.
 
 ### [Day 22](Day%2022) - Mode Maze
 - **Problem:** Generate a maze and pathfind through it. 
-- **Solution:** Trusty A* makes a reapperance with a new `Map()` class to generate maze locations on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
+- **Solution:** Trusty A* makes a reappearance with a new `Map()` class to generate maze locations on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
 
 ### [Day 23](Day%2023) - Experimental Emergency Teleportation
 - **Problem:** Searching 3D space.
@@ -99,4 +99,4 @@
 
 ### [Day 25](Day%2025) - Four-Dimensional Adventure
 - **Problem:** 4D grouping!
-- **Solution:** A slighly inefficent, but simple, loop to sort/collect elements into buckets.
+- **Solution:** A slightly inefficient, but simple, loop to sort/collect elements into buckets.
