@@ -50,8 +50,8 @@
 - **Solution:** 
 
 ### [Day 13](Day%2013) - Care Package
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Intcode breakout.
+- **Solution:** Built an I/O feedback loop and a display screen.
 
 ### [Day 14](Day%2014) - Space Stoichiometry
 - **Problem:** 
