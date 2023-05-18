@@ -58,8 +58,9 @@
 - **Solution:** Part one had a tricky bit to account for overproduction. Part two had a little rethink, but in the end was a binary search loop.
 
 ### [Day 15](Day%2015) - Oxygen System
-- **Problem:**
-- **Solution:**
+- **Problem:** Using an Intcode program, map your surroundings.
+- **Solution:** Manually generated a map, then ran A* on it to find the distances for the puzzle. For part two, I tried a different search method that turned out to be much faster than A*-ing each point.
+- **Future Fun:** Make the robot generate the map on the fly.
 
 ### [Day 16](Day%2016) - Flawed Frequency Transmission
 - **Problem:** 
