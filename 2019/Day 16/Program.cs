@@ -1,35 +1,22 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-try
+static string doFFT(string input, int multiplier = 1)
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int NUM_PHASES = 100;
-    const int MULTIPLIER = 10000;
 
-    string puzzleInput = "03036732577212944063491565474664"; //"File.ReadAllText(PUZZLE_INPUT);
-
-    int length = puzzleInput.Length * MULTIPLIER;
-    int answerOffset = int.Parse(puzzleInput[0..7]);
+    int length = input.Length * multiplier;
+    int answerOffset = multiplier == 1 ? 0 : int.Parse(input[0..7]);
 
     int[] fftA = new int[length];
     int[] fftB = new int[length];
     int[] cumulativeSum = new int[length + 1];
 
     // initial load.
-    for (int m = 1; m <= MULTIPLIER; m++)
+    for (int i = 0; i < length; i++)
     {
-        for (int i = 0; i < puzzleInput.Length; i++)
-        {
-            fftA[i * m] = puzzleInput[i] - '0';
-        }
+        fftA[i] = input[i % input.Length] - '0';
     }
-
-    int newValue = 0;
-    int sign = 0;
-    int j = 0;
-    int sum = 0;
-    int end = 0; 
 
     ref int[] ptrSource = ref fftA;
     ref int[] ptrTarget = ref fftB;
@@ -37,7 +24,6 @@ try
     Stopwatch sw = Stopwatch.StartNew();
     for (int phase = 1; phase <= NUM_PHASES; phase++)
     {
-        //Console.WriteLine($"phase {phase} {sw.ElapsedMilliseconds}  ");
         if (phase % 2 == 0)
         {
             ptrSource = ref fftB;
@@ -49,56 +35,49 @@ try
             ptrTarget = ref fftB;
         }
 
+        // Precompute the cumulative sums. This solves all sorts of performance issues. 
         cumulativeSum[0] = 0;
         for (int i = 1; i <= length; i++)
         {
-            cumulativeSum[i] = ptrSource[i - 1] + cumulativeSum[i-1];
+            cumulativeSum[i] = ptrSource[i - 1] + cumulativeSum[i - 1];
         }
 
-        for(int step = 1; step <= length; step++)
+        for (int step = 1; step <= length; step++)
         {
-            //if ((step % 1000) == 0) Console.WriteLine($"-- {step} {sw.ElapsedMilliseconds}");
+            int newValue = 0;
+            int sign = 1;
 
-            newValue = 0;
-            sign = 1;
-            for(j = step - 1; j < length; j += step << 1)
+            for (int j = step - 1; j < length; j += step << 1)
             {
-                end = int.Min(j + step, length);
-                sum = cumulativeSum[end] - cumulativeSum[j];
-                
-               //Console.Write($"{sum * sign} ");
+                newValue += sign * cumulativeSum[int.Min(j + step, length)] - cumulativeSum[j];
 
-                newValue += sign * sum;
-                
                 sign = -sign;
             }
-            
-            ptrTarget[step-1] = Math.Abs(newValue % 10);
-            //Console.WriteLine(ptrTarget[step - 1]);
-        }
 
-        //foreach (int value in ptrTarget)
-        //{
-        //    Console.Write(value);
-        //}
-        //Console.WriteLine();
+            ptrTarget[step - 1] = Math.Abs(newValue % 10);
+        }
     }
 
     sw.Stop();
 
     StringBuilder sb = new();
-    foreach(int i in ptrTarget[answerOffset..(answerOffset+7)])
-    {
-        sb.Append(ptrTarget[i]);
-    }
+    ptrTarget[answerOffset..(answerOffset + 8)].ToList().ForEach(x => sb.Append(x));
 
-    string part1Answer = sb.ToString();
-    int part2Answer = 0;
+    return sb.ToString();
+}
 
+try
+{
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    const int MULTIPLIER = 10000;
 
-    Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
+
+    string part1Answer = doFFT(puzzleInput);
+    string part2Answer = doFFT(puzzleInput, MULTIPLIER);
+
+    Console.WriteLine($"Part 1: After 100 phases, the first eight digits of the output are: {part1Answer}.");
+    Console.WriteLine($"Part 2: After 100 phases of the input duped {MULTIPLIER} times returns: {part2Answer}.");
 }
 catch (Exception e)
 {

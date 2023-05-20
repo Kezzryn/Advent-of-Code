@@ -63,8 +63,8 @@
 - **Future Fun:** Make the robot generate the map on the fly.
 
 ### [Day 16](Day%2016) - Flawed Frequency Transmission
-- **Problem:** 
-- **Solution:** 
+- **Problem:** F.F.T. ... missed that hint. 
+- **Solution:** Part one was easy enough to implement. Part two, predictibly, exploded the search space. I implmented a few optimizations that cut down the processing space, however, the biggest optimzation came from a reddit hint to precompute partial sums. After that, it was the normal amount of index issues.
 
 ### [Day 17](Day%2017) - Set and Forget
 - **Problem:** 
