@@ -1,0 +1,12 @@
+R,6,L,10,R,10,R,10,L,10,L,12,R,10,R,6,L,10,R,10,R,10,L,10,L,12,R,10,R,6,L,10,R,10,R,10,R,6,L,12,L,10,R,6,L,10,R,10,R,10,R,6,L,12,L,10,L,10,L,12,R,10,R,6,L,12,L,10
+
+Search forward to find A
+Search backwards to find C
+Everything else is B
+
+A,B,A,B,A,C,A,C,B,C
+
+A: R,6,L,10,R,10,R,10
+B: L,10,L,12,R,10
+C: R,6,L,12,L,10
+   12345678901234567890

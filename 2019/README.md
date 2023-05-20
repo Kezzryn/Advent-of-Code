@@ -67,8 +67,8 @@
 - **Solution:** Part one was easy enough to implement. Part two, predictibly, exploded the search space. I implmented a few optimizations that cut down the processing space, however, the biggest optimzation came from a reddit hint to precompute partial sums. After that, it was the normal amount of index issues.
 
 ### [Day 17](Day%2017) - Set and Forget
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Intcode computer time! Get output from a bot and work out a pathfinding solution for it.
+- **Solution:** Part one was easy enough to read the computer's surroundings. Part two was held back by transcription errors, but was easily worked out with some Find-And-Replace highlighting.  
 
 ### [Day 18](Day%2018) - Many-Worlds Interpretation
 - **Problem:** 
