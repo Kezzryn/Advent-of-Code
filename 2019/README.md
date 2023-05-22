@@ -71,8 +71,8 @@
 - **Solution:** Part one was easy enough to read the computer's surroundings. Part two was held back by transcription errors, but was easily worked out with some Find-And-Replace highlighting.  
 
 ### [Day 18](Day%2018) - Many-Worlds Interpretation
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Pathfinding, then many-actors pathfinding.
+- **Solution:** Initial attempts with a basic search and some pathfinding were not optimized enough for anything but the most basic examples. Caching was added, first to the search, then to the pathfinding. Part two made me rethink how to represent having four actors, so I crammed eight `bytes` into a `long` for the coordinates and used that in place of a `Point()` for my position key. I had to add another layer to reverse the process, but that's what helper functions are for.
  
 ### [Day 19](Day%2019) - Tractor Beam
 - **Problem:** 
