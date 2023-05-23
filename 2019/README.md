@@ -75,8 +75,8 @@
 - **Solution:** Initial attempts with a basic search and some pathfinding were not optimized enough for anything but the most basic examples. Caching was added, first to the search, then to the pathfinding. Part two made me rethink how to represent having four actors, so I crammed eight `bytes` into a `long` for the coordinates and used that in place of a `Point()` for my position key. I had to add another layer to reverse the process, but that's what helper functions are for.
  
 ### [Day 19](Day%2019) - Tractor Beam
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Intcode computer!
+- **Solution:** Part one is a straight forward IO loop. Did have to reset/reboot the Intcode computer between runs, so that got an optimization pass. Part two took a bit of noodling. Working out the approximate slope of the beam sides, I walk down the outer right side, until I find a point where Santa's ship can fit.
 
 ### [Day 20](Day%2020) - Donut Maze
 - **Problem:**
