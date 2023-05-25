@@ -79,8 +79,8 @@
 - **Solution:** Part one is a straight forward IO loop. Did have to reset/reboot the Intcode computer between runs, so that got an optimization pass. Part two took a bit of noodling. Working out the approximate slope of the beam sides, I walk down the outer right side, until I find a point where Santa's ship can fit.
 
 ### [Day 20](Day%2020) - Donut Maze
-- **Problem:**
-- **Solution:**
+- **Problem:** Maze running, with portals!
+- **Solution:** Part one was a straight forward test of making portals work. Part two had me reimplement with `Point3D()` where I used the Z axis to track recursion depth. Part two runs long. It could be reworked as a portal-to-portal distance graph and searched that way, similar to [Day 18](Day%2018). 
 
 ### [Day 21](Day%2021) - Springdroid Adventure
 - **Problem:**
