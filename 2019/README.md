@@ -87,15 +87,18 @@
 - **Solution:** I worked out part one. Part two involved a lookahead which took a bit of noodling which is documented in the instruction set.
 
 ### [Day 22](Day%2022) - Slam Shuffle
-- **Problem:**
-- **Solution:**
+- **Problem:** Shuffle a deck. Then shuffle a REALLY big deck. This turns out to be a 
+- **Solution:** Part one could be simulated. Part two required a lot of reading about a lot of math that I'm not sure I fully understand.
+[Spheniscine's blog](https://codeforces.com/blog/entry/72593)
+[Solution discussion from u/asgardian28](https://www.reddit.com/r/adventofcode/comments/ees6bj/2019_day_22_part_2_story_of_solving_spoilers/)
+[Reddit general discussion](https://www.reddit.com/r/adventofcode/comments/ee56wh/2019_day_22_part_2_so_whats_the_purpose_of_this/)
 
 ### [Day 23](Day%2023) - Category Six
-- **Problem:**
-- **Solution:**
+- **Problem:** Intcode networks!
+- **Solution:** Turned out to be a very straight forward implementation to read/write each machine.
 
 ### [Day 24](Day%2024) - Planet of Discord
-- **Problem:**
+- **Problem:** Cell automta, but recursive!
 - **Solution:**
 
 ### [Day 25](Day%2025) - Cryostasis
