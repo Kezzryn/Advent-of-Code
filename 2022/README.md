@@ -39,7 +39,7 @@
 
 ### [Day 10](Day%2010) - Cathode-Ray Tube
 - **Problem:** Simple register and clock simulation.
-- **Solution:** My answer to this was to simulate the two instructions, with the addx instruction morphing between cycles to indicate if it was on its load or execute sequence. 
+- **Solution:** My answer to this was to simulate the two instructions, with the `addx` instruction morphing between cycles to indicate if it was on its load or execute sequence. 
 
 ### [Day 11](Day%2011) - Monkey in the Middle
 - **Problem:** This is a game of moving items around, with a growing "worry factor" that needs to be tracked and operated on for each move. 
@@ -47,7 +47,7 @@
 
 ### [Day 12](Day%2012) - Hill Climbing Algorithm
 - **Problem:** Find the shortest path from A to B.
-- **Solution:** Implemented an A* pathfinding algorithm based off the Wikipedia psudocode.
+- **Solution:** Implemented an A* pathfinding algorithm based off the Wikipedia pseudocode.
 
 ### [Day 13](Day%2013) - Distress Signal
 - **Problem:** Comparing nested lists of integers and lists, which can be blank.

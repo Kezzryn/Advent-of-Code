@@ -12,9 +12,7 @@
 
 ### [Day 3](Day%2003) - Squares With Three Sides
 - **Problem:** Given a list of three numbers, are these measurements for a valid triangle? 
-- **Solution:** Reused a good part of the solution from [2015 Day 2](../2015/Day%2002/) for the first part. This turned out to be a fortuitous decision, as it lead first to the realization that all three combos of sides need to match the (a + b) > c. This can be short cut if you do the math on the two smallest sides.
-
-  Part two had a bit of a twist, having to read and parse column data. This may have been my first use of the `Range()` object. 
+- **Solution:** Reused a good part of the solution from [2015 Day 2](../2015/Day%2002/) for the first part. This turned out to be a fortuitous decision, as it lead first to the realization that all three combos of sides need to match the (a + b) > c. This can be short cut if you do the math on the two smallest sides. Part two had a bit of a twist, having to read and parse column data. This may have been my first use of the `Range()` object. 
 
 ### [Day 4](Day%2004) - Security Through Obscurity
 - **Problem:** Our first string parsing puzzle of the season. 
@@ -105,13 +103,13 @@
 - **Solution:** Part one was a comparison puzzle. Part two was reasoned out on paper.
 
 ### [Day 23](Day%2023) - Safe Cracking
-- **Problem:** Another program to dissassemble and optimize. Fun!
-- **Solution:** Reusing the entire codebase from [Day 12](Day%2012) I added the new command and ran it successfully for part one. Part two ran on unmodifed code. Eventually. With some debug lines, I worked out what the program was doing a factorial and rewrote it in native C# for part two. 
+- **Problem:** Another program to disassemble and optimize. Fun!
+- **Solution:** Reusing the entire codebase from [Day 12](Day%2012) I added the new command and ran it successfully for part one. Part two ran on unmodified code. Eventually. With some debug lines, I worked out what the program was doing a factorial and rewrote it in native C# for part two. 
 
 ### [Day 24](Day%2024) - Air Duct Spelunking
 - **Problem:** Given a maze, find the optimal route to visit each node. 
 - **Solution:** A_Star ([2022 Day 24](../2022/Day%2024)) and a basic node search made short work of this one.
 
 ### [Day 25](Day%2025) - Clock Signal
-- **Problem:** One final Asmbunny program to take apart. 
+- **Problem:** One final `Asmbunny()` program to take apart. 
 - **Solution:** Pulling [Day 23's](Day%2023) code forward, I added the new operation, and ... hit a wall. The asm bunny program was outputting all 1s or all 0s regardless of input. This didn't match with my hand solve of the program, which should have been writing out a binary number. This led me to try some weird things to no avail. Eventually I realized I'd missed incrementing the instruction pointer with the new output command. Fixing that, fixed everything else.

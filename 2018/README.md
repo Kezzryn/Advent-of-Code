@@ -86,12 +86,12 @@
 - **Solution:** I initially re-implemented the code to try to better understand what it was doing. This got me most of the way, but it wasn't until I was stepping through the sequences generated that I had my light bulb moment. The key to the puzzle was to realize it's generating a sequence that loops, and the puzzle answers are the first and last entries of that loop. My vm runs the loop through in about 45 seconds. The rewrite of it runs in about 4 ms.
 
 ### [Day 22](Day%2022) - Mode Maze
-- **Problem:** Generate a maze and pathfind through it. 
+- **Problem:** Generate a maze and path-find through it. 
 - **Solution:** Trusty A* makes a reappearance with a new `Map()` class to generate maze locations on the fly. The biggest change was to track the tool usage. This was done by using the Z coordinate of a `Point3D()` object.
 
 ### [Day 23](Day%2023) - Experimental Emergency Teleportation
 - **Problem:** Searching 3D space.
-- **Solution:** Looking through the solution thread, there are some clever solutions and insights. I put all the bots in a `Box()` and subdivided the search space until I found the solution. The hardest part was adapting the "Sphere intersects Cube" calculation from normal euclidean distances to work on taxi distances.
+- **Solution:** Looking through the solution thread, there are some clever solutions and insights. I put all the bots in a `Box()` and subdivided the search space until I found the solution. The hardest part was adapting the "Sphere intersects Cube" calculation from normal Euclidean distances to work on taxi distances.
 
 ### [Day 24](Day%2024) - Immune System Simulator 20XX
 - **Problem:** The immune system of reindeer is weird.
