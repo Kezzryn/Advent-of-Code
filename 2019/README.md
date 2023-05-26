@@ -83,8 +83,8 @@
 - **Solution:** Part one was a straight forward test of making portals work. Part two had me reimplement with `Point3D()` where I used the Z axis to track recursion depth. Part two runs long. It could be reworked as a portal-to-portal distance graph and searched that way, similar to [Day 18](Day%2018). 
 
 ### [Day 21](Day%2021) - Springdroid Adventure
-- **Problem:**
-- **Solution:**
+- **Problem:** Boolean programming! 
+- **Solution:** I worked out part one. Part two involved a lookahead which took a bit of noodling which is documented in the instruction set.
 
 ### [Day 22](Day%2022) - Slam Shuffle
 - **Problem:**
