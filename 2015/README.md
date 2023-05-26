@@ -16,7 +16,7 @@
 - **Solution:** HashSets are nice for this, as duplicates are automatically discarded. This was a simple simulation, adding each moves to a `HashSet<Point>`, then querying the `HashSet` for the answers. 
 
 ### [Day 4](Day%2004) - The Ideal Stocking Stuffer
-- **Problem:** Creating MD5 hashs that fill a certain pattern. 
+- **Problem:** Creating MD5 hashes that fill a certain pattern. 
 - **Solution:** Pulled code from documentation examples for the MD5 hash creation. I'm not sure if there's a faster way to find the answer to either part, other than to simply brute force it.
 
 ### [Day 5](Day%2005) - Doesn't He Have Intern-Elves For This?
@@ -45,11 +45,11 @@
 
 ### [Day 11](Day%2011) - Corporate Policy
 - **Problem:** Password generation that is required to follow certain rules.
-- **Solution:** I could have created a string incrementer. Instead I borrow from the [2022 Day 25](../2022/Day%2025/) puzzle for a way to increment the password string while searching for a valid one.
+- **Solution:** I could have created a string incrementor. Instead I borrow from the [2022 Day 25](../2022/Day%2025/) puzzle for a way to increment the password string while searching for a valid one.
 
 ### [Day 12](Day%2012) - JSAbacusFramework.io
 - **Problem:** JSON parsing.
-- **Solution:** I used the [Newtonsoft.Json.Linq](https://www.newtonsoft.com/json) libraries to walk through the object model. Doing so required learning the object model. 
+- **Solution:** I used the [Newtonsoft.Json.LINQ](https://www.newtonsoft.com/json) libraries to walk through the object model. Doing so required learning the object model. 
 
 ### [Day 13](Day%2013) - Knights of the Dinner Table
 - **Problem:** Traveling Salesmen of a circular list.
@@ -62,7 +62,7 @@
 ### [Day 15](Day%2015) - Science for Hungry People
 - **Problem:** Maximization problem.
 - **Solution:** This has used the same form of search loop I've used in other solutions. The main change here is the next step system, which spreads out up to 28 points from each successful test. 
-- **Future fun:** Create start keys and steps algorithmically. Narrow the search space with lower/upper bounds for each of the variables. I **think** this is a partial deritive calculation. 
+- **Future fun:** Create start keys and steps algorithmically. Narrow the search space with lower/upper bounds for each of the variables. I **think** this is a partial derivative calculation. 
 
 ### [Day 16](Day%2016) - Aunt Sue
 - **Problem:** Pattern matching with incomplete data.
@@ -79,7 +79,7 @@
 
 ### [Day 19](Day%2019) - Medicine for Rudolph
 - **Problem:** Part one was a straight forward string substitution. Part two turned out to be reversing the string substitution back down to a start point.
-- **Solution:** I implemented a backwards greedy replacement. There's a lot more to this puzzle than I expected. See the [reddit solution megathread](https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/) for further information on how this puzzle works.
+- **Solution:** I implemented a backwards greedy replacement. There's a lot more to this puzzle than I expected. See the [reddit solution mega thread](https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/) for further information on how this puzzle works.
 
 ### [Day 20](Day%2020) - Infinite Elves and Infinite Houses
 - **Problem:** Factoring numbers!
@@ -103,5 +103,5 @@
 - Uses a `CartesianProduct()` function from [Eric Lippert](https://ericlippert.com/)
 
 ### [Day 25](Day%2025) - Let It Snow
-- **Problem:** Figure out a missing code based on a forumula.
+- **Problem:** Figure out a missing code based on a formula.
 - **Solution:** A tight little loop that spends more time tracking where it is in the code book, than it does doing math. 

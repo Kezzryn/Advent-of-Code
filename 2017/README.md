@@ -102,4 +102,4 @@
 
 ### [Day 25](Day%2025) - The Halting Problem
 - **Problem:** One last puzzle to track symbols on a line.
-- **Solution:** The tricky part was to parse the puzzle input I had some really dense syntax initally, which I replaced afterwords with something more sane. A fun puzzle to finish off the year.
+- **Solution:** The tricky part was to parse the puzzle input. I had some really dense syntax initially, which I replaced afterwards with something more sane. A fun puzzle to finish off the year.
