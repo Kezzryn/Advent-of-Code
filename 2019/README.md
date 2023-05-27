@@ -99,7 +99,7 @@
 
 ### [Day 24](Day%2024) - Planet of Discord
 - **Problem:** Cell automta, but recursive!
-- **Solution:**
+- **Solution:** I did a bunch of bit twiddling for part one. Part two got crazy and I expanded things out to a linked list with all the null pointer issues that involves. After this and [Day 18](Day%2018) I'm much more comfortable with using ints as bitfields to store the puzzle data.
 
 ### [Day 25](Day%2025) - Cryostasis
 - **Problem:**

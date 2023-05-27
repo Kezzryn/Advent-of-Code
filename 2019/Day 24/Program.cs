@@ -1,195 +1,157 @@
-﻿using System.Collections;
-
-static int getIntFromBitArray(BitArray bitArray)
-{
-    if (bitArray.Length > 32) throw new ArgumentException("Argument length shall be at most 32 bits.");
-    int[] array = new int[1];
-    bitArray.CopyTo(array, 0);
-    return array[0];
-}
+﻿static int getBit(int x, int pos) => (x & (1 << pos)) != 0 ? 1 : 0;
+static int setBit(int x, int pos) => x |= 1 << pos;
+//static int clearBit(int x, int pos) => x &= ~(1 << pos);
 
 try
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
-    const string CRLF = "\r\n";
     const int SIDE = 5;
-    const int MIDPOINT = 2;
+    const int CENTER_SQUARE = 12; // the center square of the board, as counted from 0. 
+  
+    const int MAX_GENERATIONS = 200;
+    const bool DO_PART2 = true;
+    
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    string puzzleInput = File.ReadAllText(PUZZLE_INPUT).Replace("\r\n", "");
 
-    bool[] puzzleInput = File.ReadAllText(PUZZLE_INPUT).Replace(CRLF, "").Select(x => x == '#').ToArray();
-
-    BitArray source = new(puzzleInput);
-    BitArray target = new(puzzleInput);
-
-    LinkedList<int> recursiveBugs = new();
-
-    HashSet<int> history = new();
-
-    int part1Answer = 0; 
-    int part2Answer = 0;
-
-    bool isDone = false;
-
-    while(!isDone)
+    int FindAdjY(int currentX, int currentY, LinkedListNode<int> current, bool doRecursion = false)
     {
-        for (int y = 0; y < SIDE; y++)
-        { 
-            for (int x = 0; x < SIDE; x++)
-            {
-                int adj = 0;
-                adj += ((y - 1) >= 0) ? source[((y - 1) * SIDE) + x] ? 1 : 0 : 0; // north
-                adj += ((y + 1) <= SIDE - 1) ? source[((y + 1) * SIDE) + x] ? 1 : 0 : 0; // south
+        // Bit position for upper levels
+        const int UPPER_NORTH = 7; 
+        const int UPPER_SOUTH = 17;
+        
+        // Bitmask for lower values
+        const int LOWER_NORTH = 31; // north edge, 0 - 4
+        const int LOWER_SOUTH = 32505856; //  south edge 20-14
+        
+        int returnValue = 0;
 
-                adj += ((x - 1) >= 0) ? source[(y * SIDE) + (x - 1)] ? 1 : 0 : 0; // west
-                adj += ((x + 1) <= SIDE - 1) ? source[(y * SIDE) + x + 1] ? 1 : 0 : 0; // east
-
-                if (source[(y * SIDE) + x])
-                {
-                    target[(y * SIDE) + x] = adj == 1;
-                }
-                else
-                {
-                    target[(y * SIDE) + x] = adj == 1 || adj == 2;
-                }
+        for (int ystep = -1; ystep <= 1; ystep += 2)
+        {
+            int newY = currentY + ystep;
+            int newPOS = (newY * SIDE) + currentX;
+            
+            if (newY < 0 || newY >= SIDE) // go up a level
+            { 
+                if (doRecursion) returnValue += current.Previous == null ? 0 : getBit(current.Previous.Value, (newY < 0) ? UPPER_NORTH : UPPER_SOUTH);
             }
-        }
-
-        source = new BitArray(target);
-        if (!history.Add(getIntFromBitArray(source)))
-        {
-            isDone = true;
-            part1Answer = getIntFromBitArray(source);
-        }
-    }
-
-    LinkedListNode<int> cursor = recursiveBugs.First ?? recursiveBugs.AddFirst(0);
-    
-
-    const int upperNorth = 7;
-    const int upperSouth = 17;
-    const int upperWest = 11;
-    const int upperEast = 13;
-
-    const int lowerNorth = 0;
-    const int lowerSouth = 1;
-    const int lowerWest = 2;
-    const int lowerEast = 3;
-
-
-    int getBit(int x, int pos) => (x & (1 << pos)) != 0 ? 1 : 0;
-    int setBit(int x, int pos) => x |= 1 << pos;
-    int clearBit(int x, int pos) => x &= ~(1 << pos);
-    
-    int getLowerLayer(int x, int pos)
-    {
-        // X is expected to be the lower layer value. 
-        int returnValue = 0;
-        // n = 20-24, s = 0 - 4
-        // w = 4,9, 14, 19, 24
-        // e = 0, 5, 10, 15 20 
-        switch (pos)
-        {
-            case lowerNorth:
-                returnValue += getBit(x, 20);
-                returnValue += getBit(x, 21);
-                returnValue += getBit(x, 22);
-                returnValue += getBit(x, 23);
-                returnValue += getBit(x, 24);
-                break;
-            case lowerSouth:
-                returnValue += getBit(x, 0);
-                returnValue += getBit(x, 1);
-                returnValue += getBit(x, 2);
-                returnValue += getBit(x, 3);
-                returnValue += getBit(x, 4);
-                break;
-            case lowerWest:
-                returnValue += getBit(x, 4);
-                returnValue += getBit(x, 9);
-                returnValue += getBit(x, 14);
-                returnValue += getBit(x, 19);
-                returnValue += getBit(x, 24);
-                break;
-            case lowerEast:
-                returnValue += getBit(x, 0);
-                returnValue += getBit(x, 5);
-                returnValue += getBit(x, 10);
-                returnValue += getBit(x, 15);
-                returnValue += getBit(x, 20);
-                break;
-        }
-        return returnValue;
-    }
-
-    int test = 0;
-
-
-    int testY(int newY, LinkedListNode<int> current)
-    {
-        int returnValue = 0;
-        if (newY < 0)
-        {
-            // go up a level. 
-        }
-        else if (newY == 13)
-        {
-            // go down a level
-        }
-        else
-        {
-            // we're on the level.
-        }
-        return returnValue;
-    }
-
-    for (int y = 0; y < SIDE; y++)
-    {
-        for (int x = 0; x < SIDE; x++)
-        {
-            int adj = 0;
-
-            adj += testY(-1);
-
-            adj += (newY < 0) ?  ? 1 : 0 : 0; // north
-
-
-
-            adj += ((y + 1) <= SIDE - 1) ? source[((y + 1) * SIDE) + x] ? 1 : 0 : 0; // south
-
-            adj += ((x - 1) >= 0) ? source[(y * SIDE) + (x - 1)] ? 1 : 0 : 0; // west
-            adj += ((x + 1) <= SIDE - 1) ? source[(y * SIDE) + x + 1] ? 1 : 0 : 0; // east
-
-            if (source[(y * SIDE) + x])
+            else if (doRecursion && newPOS == CENTER_SQUARE) // go down a level
             {
-                target[(y * SIDE) + x] = adj == 1;
+                returnValue += current.Next == null ? 0 : int.PopCount(current.Next.Value & ((newY > currentY) ? LOWER_NORTH : LOWER_SOUTH));
             }
             else
             {
-                target[(y * SIDE) + x] = adj == 1 || adj == 2;
+                returnValue += getBit(current.Value, newPOS); // we're on the same level.
             }
         }
+        return returnValue;
     }
 
+    int FindAdjX(int currentX, int currentY, LinkedListNode<int> current, bool doRecursion = false)
+    {
+        // Bit position for upper levels
+        const int UPPER_WEST = 11;
+        const int UPPER_EAST = 13;
 
+        // Bitmask for lower value
+        const int LOWER_WEST = 1082401; // west edge, 0,5,10,15,20
+        const int LOWER_EAST = 17318416; //east edge, 4,9,14,19,24
+        int returnValue = 0;
 
-    // upper
-    //  n = 7, s = 17, w = 11, e = 13 
+        for (int xstep = -1; xstep <= 1; xstep += 2)
+        {
+            int newX = currentX + xstep;
+            int newPOS = (currentX + xstep) + (currentY * SIDE);
 
-    // lower 
-    // n = 20-24, s = 0 - 4
-    // w = 4,9, 14, 19, 24
-    // e = 0, 5, 10, 15 20 
-    /*
-       adj += ((y - 1) >= 0) ? source[((y - 1) * SIDE) + x] ? 1 : 0 : 0; // north
-                adj += ((y + 1) <= SIDE - 1) ? source[((y + 1) * SIDE) + x] ? 1 : 0 : 0; // south
+            if (newX < 0 || newX >= SIDE)   // go up a level
+            {
+                if (doRecursion) returnValue += current.Previous == null ? 0 : getBit(current.Previous.Value, (newX < 0) ? UPPER_WEST : UPPER_EAST);
+            }
+            else if (doRecursion && newPOS == CENTER_SQUARE) // go down a level
+            {
+                returnValue += current.Next == null ? 0 : int.PopCount(current.Next.Value & ((newX > currentX) ? LOWER_WEST : LOWER_EAST));
+            }
+            else
+            {
+                returnValue += getBit(current.Value, newPOS); // same level.
+            }
+        }
+        return returnValue;
+    }
 
-                adj += ((x - 1) >= 0) ? source[(y * SIDE) + (x - 1)] ? 1 : 0 : 0; // west
-                adj += ((x + 1) <= SIDE - 1) ? source[(y * SIDE) + x + 1] ? 1 : 0 : 0; // east
-     */
+    int CalcBugs(string startState, bool doPart2 = false)
+    {
+        LinkedList<int> bugsA = new();
+        LinkedList<int> bugsB = new();
 
+        ref LinkedList<int> source = ref bugsA;
+        ref LinkedList<int> target = ref bugsB;
 
-    //    BitArray test = new BitArray(new int[] { part1Answer });
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+        int startBoard = 0;
+        
+        for (int i = 0; i < startState.Length; i++)
+        {
+            if (startState[i] == '#')
+                startBoard = setBit(startBoard, i);
+        }
+
+        HashSet<int> history = new()
+        {
+            startBoard
+        };
+
+        bugsA.AddFirst(startBoard);
+
+        for (int generation = 0; generation <= MAX_GENERATIONS; generation++)
+        {
+            if (int.IsEvenInteger(generation))
+            {
+                source = ref bugsA;
+                target = ref bugsB;
+            }
+            else
+            {
+                source = ref bugsB;
+                target = ref bugsA;
+            }
+
+            target.Clear();
+
+            if (doPart2) // expand the boards.
+            {
+                if ((source.First == null ? 0 : source.First.Value) != 0) source.AddFirst(0);
+                if ((source.Last == null ? 0 : source.Last.Value) != 0) source.AddLast(0);
+            }
+
+            for (LinkedListNode<int>? cursor = source.First; cursor != null; cursor = cursor.Next)
+            {
+                int newBoard = 0;
+                foreach ((int x, int y) in from y in Enumerable.Range(0, SIDE)
+                                           from x in Enumerable.Range(0, SIDE)
+                                           select (x, y))
+                {
+                    int currPos = (y * SIDE) + x;
+                    if (doPart2 && currPos == CENTER_SQUARE) continue;
+
+                    int adj = FindAdjX(x, y, cursor, doPart2) + FindAdjY(x, y, cursor, doPart2);
+                    int currValue = getBit(cursor.Value, currPos);
+                    
+                    if (adj == 1 || (currValue == 0 && adj == 2))
+                    {
+                        newBoard = setBit(newBoard, currPos);
+                    }
+                }
+                target.AddLast(newBoard);
+                if (!doPart2 && !history.Add(newBoard)) return newBoard;
+            } 
+        }
+        return source.Sum(int.PopCount);
+    }
+
+    int part1Answer = CalcBugs(puzzleInput);
+    int part2Answer = CalcBugs(puzzleInput, DO_PART2);
+
+    Console.WriteLine($"Part 1: The first repeated biodiversity index is {part1Answer}.");
+    Console.WriteLine($"Part 2: The number of bugs after {MAX_GENERATIONS} is {part2Answer}.");
 }
 catch (Exception e)
 {
