@@ -6,8 +6,8 @@
 - **Solution:** Made short work of this one with a pair of query clauses.
 
 ### [Day 2](Day%2002) - Password Philosophy
-- **Problem:**
-- **Solution:**
+- **Problem:** String rules testing.
+- **Solution:** Part one used `Count()` and in part two, I found a use for an `xor` operator. 
 
 ### [Day 3](Day%2003) - Toboggan Trajectory
 - **Problem:**
