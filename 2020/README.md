@@ -18,8 +18,8 @@
 - **Solution:** Rolled each line out into a dictionary, then applied various logical checks to each entry.
 
 ### [Day 5](Day%2005) - Binary Boarding
-- **Problem:**
-- **Solution:**
+- **Problem:** Binary Tree... kinda. 
+- **Solution:** Did what I thoguht was a very tight solution leveraging a bunch of C# syntax. However, I should have looked at the puzzle input closer, there's an easier conversion by rewriting the strings as binary. 
 
 ### [Day 6](Day%2006) - Custom Customs
 - **Problem:**
