@@ -10,8 +10,8 @@
 - **Solution:** Part one used `Count()` and in part two, I found a use for an `xor` operator. 
 
 ### [Day 3](Day%2003) - Toboggan Trajectory
-- **Problem:**
-- **Solution:**
+- **Problem:** Tree hitting.
+- **Solution:** Part one was a straight forward loop. Part two turned it into a function.
 
 ### [Day 4](Day%2004) - Passport Processing
 - **Problem:**
