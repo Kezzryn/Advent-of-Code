@@ -8,7 +8,7 @@
 
     foreach (string line in puzzleInput)
     {
-        string[] inst = line.Replace('-', ' ').Split(' ').ToArray();
+        string[] inst = line.Split(' ', '-').ToArray();
 
         int lowerBound = int.Parse(inst[0]);
         int upperBound = int.Parse(inst[1]);
