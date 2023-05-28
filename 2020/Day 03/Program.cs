@@ -23,7 +23,7 @@
     List<(int x, int y)> slopeList = new()
     {
         (1,1),  //Right 1, down 1.
-        (3,1),  //Right 3, down 1. (This is the slope you already checked.)
+        (3,1),  //Right 3, down 1.
         (5,1),  //Right 5, down 1.
         (7,1),  //Right 7, down 1.
         (1,2)   //Right 1, down 2.
