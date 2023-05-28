@@ -14,8 +14,8 @@
 - **Solution:** Part one was a straight forward loop. Part two turned it into a function.
 
 ### [Day 4](Day%2004) - Passport Processing
-- **Problem:**
-- **Solution:**
+- **Problem:** Data validation.
+- **Solution:** Rolled each line out into a dictionary, then applied various logical checks to each entry.
 
 ### [Day 5](Day%2005) - Binary Boarding
 - **Problem:**
