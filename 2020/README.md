@@ -30,8 +30,8 @@
 - **Solution:** Recursive tree search.
 
 ### [Day 8](Day%2008) - Handheld Halting 
-- **Problem:**
-- **Solution:**
+- **Problem:** The year's first VM.
+- **Solution:** Worked with a stripped down version of last years Intcode VM, adding infinite loop detection in part one. For part two had the system try to fix itself by iteratively swapping out instructions until it ran successfully. 
 
 ### [Day 9](Day%2009) - Encoding Error
 - **Problem:**
