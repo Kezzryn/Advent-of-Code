@@ -34,9 +34,8 @@
 - **Solution:** Worked with a stripped down version of last years Intcode VM, adding infinite loop detection in part one. For part two had the system try to fix itself by iteratively swapping out instructions until it ran successfully. 
 
 ### [Day 9](Day%2009) - Encoding Error
-- **Problem:**
-- **Solution:**
-
+- **Problem:** Sums of lists.
+- **Solution:** Part one I built a cache of the previous sums, so each step I'd only need to re-compute 24 items, and not the entire set of 300. For part two I initially iterated a fixed sized window over a list of precomputed sums. The mega-thread had a very cool solution with a variable sized window that runs quicker, and with a fraction of the lines of code.
 ### [Day 10](Day%2010) - Adapter Array
 - **Problem:**
 - **Solution:**
