@@ -30,7 +30,7 @@ There are two files provided, `challenge.bin` and `arch-spec`. Leaving the bin f
 
 Creating a new C# console project, I read through the specification again, then started laying out some basics as I felt out what I would need to implement the program.
 
-The specification states all numbers are unsigned 15 bit integers. I set aside `int` and welcomed my new best friend, `ushort`. `ushort` is a 16 bit number, thus it can contain larger values then the specification permits. I'll need to setup some boundries to keep things in line.
+The specification states all numbers are unsigned 15 bit integers. I set aside `int` and welcomed my new best friend, `ushort`. `ushort` is a 16 bit number, thus it can contain larger values then the specification permits. I'll need to setup some boundaries to keep things in line.
 
 ```csharp
 const ushort MAIN_MEMORY_MAX = 36768;
@@ -89,7 +89,7 @@ With that in mind, the immediate goal was to finish off the framework. First up 
 
 The run loop had the sole responsibility to grab the current instruction with any possible parameters and feed them both to the `DoInstruction()` function. I didn't know how clean the binary would be, so I built in some super awkward bounds checking around the `param` array to ward against array out of bounds checks.
 
-`isRunning` was a global boolean to signal a halt. 
+`isRunning` was a global Boolean to signal a halt. 
 
  ```csharp
 while (isRunning)
@@ -99,7 +99,7 @@ while (isRunning)
     cursor = DoInstruction(cursor, param); // error handle this, 'cause I bet it blows up one day.
 }
 ```
-I love that comment. It never did blow up because over the next day, I refactored the entire param array idea out, never to return.
+I love that comment. It never did blow up because over the next day, I refactored the entire parameter array idea out, never to return.
 
 In `DoCommands()` I built a massive `switch` statement to handle the op-code processing. I filled each code with placeholder statements and the description of the appropriate op-codes from the architecture document.
 
@@ -180,7 +180,7 @@ At this stage I made an architectural decision. Taking my cue from the streaming
 
 This simplified my code immensely. Nothing in the program would need to track or communicate anything about any particular op-code's requirements. The act of an op-code requesting data would automatically set the pointer to the proper location for the next request.
 
-I broke the op-codes into smaller methods of related functionality. There is no technical reason to do this, I did it to keep the code orgainized. In a larger project, I might have gone as far as giving each op code its own method. 
+I broke the op-codes into smaller methods of related functionality. There is no technical reason to do this, I did it to keep the code organized. In a larger project, I might have gone as far as giving each op code its own method. 
 
 Each block shared the same basic format, similar to the final form of the one below.
 ```csharp
@@ -261,7 +261,7 @@ What do you do?
 ```
 An excellent question with an easy answer. I had one more op-code to implement, 20, the input. 
 
-During my snooping for answers regarding `wmem` I unfortuainly caught a hint of how to handle this. "Input buffer."
+During my snooping for answers regarding `wmem` I unfortunately caught a hint of how to handle this. "Input buffer."
 
 C# has three ways to read console input. `Console.Read()`, `Console.ReadKey()`, and `Console.ReadLine()`. These will read a `char`, a keypress and a `string` respectively.
 
@@ -269,7 +269,7 @@ At first glance, `ReadLine()` seemed to be the way to go, and early implementati
 
 I setup two loops. The first loop was in the main program. I created a basic command tree to load and run the challenge file. After starting to run, the main program shell handed off control to a input loop in the `Synacor9000()` class. An "exit" command would pass control back the outer shell.
 
-This snippit was the guts of the op-code key processor. That's ... a bunch.
+This snippet was the guts of the op-code key processor. That's ... a bunch.
 ```csharp
 ConsoleKeyInfo cki;
 StringBuilder sb = new();
@@ -492,7 +492,7 @@ For example:
 
 > `!drop table` is sent to the command processor and could make for a bad day in production.
 
-In rough psudocode, this is the outer loop flow.
+In rough pseudocode, this is the outer loop flow.
 ```
 while shell is running 
     read the input.
@@ -560,7 +560,7 @@ Find all "reg[7]", Current document
 
 Fiddling with breakpoints, I found that this is called after the "use teleporter" command is issued. 
 
-The eighth register is initialized to zero, so following the jump to `5605` is likely the path that leads to Synacore headquarters.
+The eighth register is initialized to zero, so following the jump to `5605` is likely the path that leads to Synacor headquarters.
 
 I have the tools, now time to put them to use.
 
@@ -604,7 +604,7 @@ PROGRAM OUT:   "Unusual setting detected!  Starting confirmation process!  Estim
 PROGRAM OUT:
 ```
 
-Turning back to the full dump, after the text output there is a block of noop codes. The next interesting set of instructions start at `5483`.
+Turning back to the full dump, after the text output there is a block of no-op codes. The next interesting set of instructions start at `5483`.
 
 ```
 5483  set  reg[0]       4
@@ -860,7 +860,7 @@ As a final note, in this scenario not using `Task()` is faster than using it. Re
 
 Through the teleporter and out the other side to a brand new location. Time to go exploring. Exploring the tropical island I found a journal that talked about a locked vault and a mysterious orb that would gain or lose weight as it was moved from room to room. There is mention of a hourglass, so it's likely that we need to move quickly, possibly in the fewest number of moves. 
 
-Orb puzzle consisted of a simple 4x4 grid. Each room had a number or a symbol associated with it. Inspecting the orb reveled the number 22. The vault door had the number 30 carved into it. 
+Orb puzzle consisted of a simple 4x4 grid. Each room had a number or a symbol associated with it. Inspecting the orb revealed the number 22. The vault door had the number 30 carved into it. 
 
 One quick map later... 
 ```
@@ -888,7 +888,7 @@ Almost predictably, it was wrong.
 
 It didn't take me long to figure out my oversight. I'd setup my steps to be up/down then left/right and vice versa. I did not account for double up/down or double left/right.
 
-One quick correction later, and volia!
+One quick correction later, and voilà!
 
 ```
 == Vault ==
