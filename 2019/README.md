@@ -27,7 +27,7 @@
 
 ### [Day 7](Day%2007) - Amplification Circuit
 - **Problem:** Intcode computer extension, now with more IO.
-- **Solution:** Fairly straigh forward extensions to the I/O systems. Made it work manually first, then automated the process. Once again (still?) borrowed heavily from [Synacor VM](../Synacor%20Challenge).
+- **Solution:** Fairly straight forward extensions to the I/O systems. Made it work manually first, then automated the process. Once again (still?) borrowed heavily from [Synacor VM](../Synacor%20Challenge).
 
 ### [Day 8](Day%2008) - Space Image Format
 - **Problem:** Data slicing!
@@ -35,7 +35,7 @@
 
 ### [Day 9](Day%2009) - Sensor Boost
 - **Problem:** Intcode computer extension, now with more address modes.
-- **Solution:** Just as in the Synacore puzzle, I really struggled with getting the modes right. Returning the value vs. the value at an address is my bane. In the end I had to refer to [reddit]( https://www.reddit.com/r/adventofcode/comments/e8aw9j/2019_day_9_part_1_how_to_fix_203_error/) to resolve the conflict.
+- **Solution:** Just as in the Synacor puzzle, I really struggled with getting the modes right. Returning the value vs. the value at an address is my bane. In the end I had to refer to [reddit]( https://www.reddit.com/r/adventofcode/comments/e8aw9j/2019_day_9_part_1_how_to_fix_203_error/) to resolve the conflict.
 
 ### [Day 10](Day%2010) - Monitoring Station
 - **Problem:** Let's learn trig!
@@ -43,11 +43,11 @@
 
 ### [Day 11](Day%2011) - Space Police
 - **Problem:** Direct a robot to paint letters.
-- **Solution:** More Intcode machine. Only a minor change to it, to test for the existance of available output. Everything else was a straight forward shell implementation around the VM. Part one makes a nifty picture. 
+- **Solution:** More Intcode machine. Only a minor change to it, to test for the existence of available output. Everything else was a straight forward shell implementation around the VM. Part one makes a nifty picture. 
 
 ### [Day 12](Day%2012) - The N-Body Problem
 - **Problem:** Simulate a repeating quasi-orbit.
-- **Solution:** This one I needed a little help with. My initial attempt tried to find the interval of each moon indivdually. This worked for one of the test cases, but not the other. I needed to find the interval of each axis of moons. Looking at some other code, I learned about `Math.Sign()` and simplified a whole pile of code. Had to brush up on [Least Common Multiple](https://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers/29717490#29717490) as well. I had the right initial idea, but the wrong forumalas.  
+- **Solution:** This one I needed a little help with. My initial attempt tried to find the interval of each moon individually. This worked for one of the test cases, but not the other. I needed to find the interval of each axis of moons. Looking at some other code, I learned about `Math.Sign()` and simplified a whole pile of code. Had to brush up on [Least Common Multiple](https://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers/29717490#29717490) as well. I had the right initial idea, but the wrong formulas.  
 
 ### [Day 13](Day%2013) - Care Package
 - **Problem:** Intcode breakout.
@@ -64,7 +64,7 @@
 
 ### [Day 16](Day%2016) - Flawed Frequency Transmission
 - **Problem:** F.F.T. ... missed that hint. 
-- **Solution:** Part one was easy enough to implement. Part two, predictibly, exploded the search space. I implmented a few optimizations that cut down the processing space, however, the biggest optimzation came from a reddit hint to precompute partial sums. After that, it was the normal amount of index issues.
+- **Solution:** Part one was easy enough to implement. Part two, predictably, exploded the search space. I implemented a few optimizations that cut down the processing space, however, the biggest optimization came from a reddit hint to precompute partial sums. After that, it was the normal amount of index issues.
 
 ### [Day 17](Day%2017) - Set and Forget
 - **Problem:** Intcode computer time! Get output from a bot and work out a pathfinding solution for it.
@@ -98,9 +98,9 @@
 - **Solution:** Turned out to be a very straight forward implementation to read/write each machine.
 
 ### [Day 24](Day%2024) - Planet of Discord
-- **Problem:** Cell automta, but recursive!
-- **Solution:** I did a bunch of bit twiddling for part one. Part two got crazy and I expanded things out to a linked list with all the null pointer issues that involves. After this and [Day 18](Day%2018) I'm much more comfortable with using ints as bitfields to store the puzzle data.
+- **Problem:** Cell automata, but recursive!
+- **Solution:** I did a bunch of bit twiddling for part one. Part two got crazy and I expanded things out to a linked list with all the null pointer issues that involves. After this and [Day 18](Day%2018) I'm much more comfortable with using `int` as bitfields to store the puzzle data.
 
 ### [Day 25](Day%2025) - Cryostasis
 - **Problem:** Save Santa!
-- **Solution:** Supplimenting the Intcode VM with some Synacore code to handle input, I worked through the text adventure, collecting and exploring Santa's ship. The final solution was solved through some directed trial and error. Finding what items the bot must have, then given that constraint, find what it must not have, leads to a very short list to balance the bot.
+- **Solution:** Supplementing the Intcode VM with some Synacor code to handle input, I worked through the text adventure, collecting and exploring Santa's ship. The final solution was solved through some directed trial and error. Finding what items the bot must have, then given that constraint, find what it must not have, leads to a very short list to balance the bot.
