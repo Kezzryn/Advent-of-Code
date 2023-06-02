@@ -42,8 +42,8 @@
 - **Solution:** Part one was a straight forward iteration. I spent a lot of time in part two trying to work out a math formula. However, I couldn't account for certain combos without a more direct simulation. I found break points in the number array and build a simple recursive function to walk the possibilities.
 
 ### [Day 11](Day%2011) - Seating System
-- **Problem:**
-- **Solution:**
+- **Problem:** Cell automata!
+- **Solution:** For part one I worked everything into a single dimension array so I could take nice slices to count for hte neighbors. For part two that got thrown out for the system in the code now. Building a buffer around the puzzle data greatly simplified edge and bounds testing.
 
 ### [Day 12](Day%2012) - Rain Risk
 - **Problem:**
