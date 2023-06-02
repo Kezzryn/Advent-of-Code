@@ -46,8 +46,8 @@
 - **Solution:** For part one I worked everything into a single dimension array so I could take nice slices to count for hte neighbors. For part two that got thrown out for the system in the code now. Building a buffer around the puzzle data greatly simplified edge and bounds testing.
 
 ### [Day 12](Day%2012) - Rain Risk
-- **Problem:**
-- **Solution:**
+- **Problem:** Navigation
+- **Solution:** Complex Numbers once again. This time they made rotation and translation trivial.
 
 ### [Day 13](Day%2013) - Shuttle Search 
 - **Problem:**
