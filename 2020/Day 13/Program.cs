@@ -3,64 +3,45 @@
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    int currentTime = int.Parse(puzzleInput[0]);
-    List<int> busses = puzzleInput[1].Replace("x","-1").Split(',').Select(int.Parse).ToList();
+    long currentTime = int.Parse(puzzleInput[0]);
+    List<long> busses = puzzleInput[1].Replace("x","-1").Split(',').Select(long.Parse).ToList();
+    
+    long part1Answer = long.MaxValue;
+    long busID = 0;
 
-    Dictionary<int, int> busSlot = new();
-
-    int part1Answer = int.MaxValue;
-    int busID = 0;
-
-    foreach(int bus in busses.Where(x => x != -1))
+    // Part 1 is a simple comparison.
+    foreach (long bus in busses.Where(x => x != -1))
     {
-        int nextBus = currentTime + (bus - (currentTime % bus) - currentTime);
-        busSlot.Add(bus, bus - busses.IndexOf(bus));
-
-        if (nextBus < part1Answer)
+        long nextBusTime = currentTime + (bus - (currentTime % bus) - currentTime);
+        if (nextBusTime < part1Answer)
         {
-            part1Answer = nextBus;
+            part1Answer = nextBusTime;
             busID = bus;
         }
     }
 
     part1Answer *= busID;
 
+    Console.WriteLine($"Part 1: The checksum for the next bus and the time to wait is {part1Answer}.");
 
-    //17,x,13,19 is 3417
-    //busses = new() { 1789, 37, 47, 1889 };
-    //busSlot = new()
-    //{
-    //    { 1789, 0 },
-    //    { 37, 36 },
-    //    { 47, 45 },
-    //    { 1889, 1886 }
-    //};
-    
-    busses.RemoveAll(x => x == -1);
+    // Part 2 find a match, then roll it forward, cumulating the steps with the Least Common Multipliter.
+    // As our data is all prime, we can shortcut the LCM with a simple multiple.
+    Dictionary<long, long> busTimeSlots = new();
+    busses.ForEach(x => busTimeSlots.Add(x, busses.IndexOf(x)));
 
-    long factor = busses.Aggregate((a, b) => a * b);
-    long part2Answer = 0;
-    long time = 0;
-    while (part2Answer == 0)
+    long part2Answer = busTimeSlots.First().Key;
+    long step = busTimeSlots.First().Key;
+
+    foreach ((long bus, long offset) in busTimeSlots.Skip(1))
     {
-        bool isFound = true;
-        foreach(int bus in busses.Skip(1))
+        while (((part2Answer + offset) % bus) != 0) 
         {
-            if ((time % bus) != busSlot[bus])
-            {
-                isFound = false;
-                break;
-            }
+            part2Answer += step;
         }
-        if(isFound) part2Answer = time;
-
-        time += busses.First();
-        if (time < 0) part2Answer = -1; // overflow check :P
+        step *= bus;
     }
 
-
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    Console.WriteLine($"Part 2: The busses line up every {part2Answer} minutes.");
 }
 catch (Exception e)
 {

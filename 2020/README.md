@@ -50,8 +50,8 @@
 - **Solution:** Complex Numbers once again. This time they made rotation and translation trivial.
 
 ### [Day 13](Day%2013) - Shuttle Search 
-- **Problem:**
-- **Solution:**
+- **Problem:** Factoring primes.
+- **Solution:** I think I get this now. I recognized several parts, but didn't put it together the right way. The bug that didn't impact my test data didn't help.
 
 ### [Day 14](Day%2014) - Docking Data
 - **Problem:**
