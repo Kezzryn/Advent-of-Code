@@ -1,4 +1,5 @@
-﻿static long getBit(long x, int pos) => (x & (1L << pos)) != 0 ? 1 : 0;
+﻿// use 1L and not 1, or there will be integer vs long issues in these functions.
+static long getBit(long x, int pos) => (x & (1L << pos)) != 0 ? 1 : 0;
 static long setBit(long x, int pos) => x |= (1L << pos);
 static long clearBit(long x, int pos) => x &= ~(1L << pos);
 
