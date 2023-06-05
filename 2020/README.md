@@ -54,8 +54,8 @@
 - **Solution:** I think I get this now. I recognized several parts, but didn't put it together the right way. The bug that didn't impact my test data didn't help.
 
 ### [Day 14](Day%2014) - Docking Data
-- **Problem:**
-- **Solution:**
+- **Problem:** Bitmasking.
+- **Solution:** Part one worked out to be two masks. Part two had a moment of trickery. The test data worked. However, I had overlooked that `1` is an `int` and it borked the various bit mainuplation functions I swiped from [2019](../2019/Day%2024).
 
 ### [Day 15](Day%2015) - Rambunctious Recitation
 - **Problem:**
