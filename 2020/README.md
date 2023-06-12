@@ -58,9 +58,8 @@
 - **Solution:** Part one worked out to be two masks. Part two had a moment of trickery. The test data worked. However, I had overlooked that `1` is an `int` and it borked the various bit mainuplation functions I swiped from [2019](../2019/Day%2024).
 
 ### [Day 15](Day%2015) - Rambunctious Recitation
-- **Problem:**
-- **Solution:**
-- **Future Fun:**
+- **Problem:** Number sequence based on a set of rules.
+- **Solution:** Careful use of a dictionary to track historical data.
 
 ### [Day 16](Day%2016) - Ticket Translation
 - **Problem:**
