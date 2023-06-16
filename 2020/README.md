@@ -54,16 +54,16 @@
 - **Solution:** I think I get this now. I recognized several parts, but didn't put it together the right way. The bug that didn't impact my test data didn't help.
 
 ### [Day 14](Day%2014) - Docking Data
-- **Problem:** Bitmasking.
-- **Solution:** Part one worked out to be two masks. Part two had a moment of trickery. The test data worked. However, I had overlooked that `1` is an `int` and it borked the various bit mainuplation functions I swiped from [2019](../2019/Day%2024).
+- **Problem:** Bit-masking.
+- **Solution:** Part one worked out to be two masks. Part two had a moment of trickery. The test data worked. However, I had overlooked that `1` is an `int` and it borked the various bit manipulation functions I swiped from [2019](../2019/Day%2024).
 
 ### [Day 15](Day%2015) - Rambunctious Recitation
 - **Problem:** Number sequence based on a set of rules.
 - **Solution:** Careful use of a dictionary to track historical data.
 
 ### [Day 16](Day%2016) - Ticket Translation
-- **Problem:**
-- **Solution:**
+- **Problem:** Validate data.
+- **Solution:** Part one had a simple exclusion. Part two required turning the data on the side, and filtering. Then deducing which columns fit, based on work previously.
 
 ### [Day 17](Day%2017) - Conway Cubes
 - **Problem:**

@@ -6,64 +6,112 @@
     string[] puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(CRLF + CRLF);
 
     string[] rules = puzzleInput[0].Split(CRLF);
-    string myticket = puzzleInput[1].Split(CRLF).Last();
-    string[] otherTickets = puzzleInput[2].Split(CRLF).Skip(1).ToArray();
-
+    int[] myTicket = puzzleInput[1].Split(CRLF).Last().Split(',').Select(int.Parse).ToArray();
+    int[][] nearbyTickets = puzzleInput[2].Split(CRLF).Skip(1).Select(x => x.Split(',').Select(int.Parse).ToArray()).ToArray();
 
     Dictionary<string, TicketField> ticketRules = new();
 
     foreach (string rule in rules)
     {
+        // 48-399 or 420-967
         int indexOfColon = rule.IndexOf(':');
         int[] ranges = rule[(indexOfColon + 1)..].Replace('-', ' ').Replace("or", " ").Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-        // 48-399 or 420-967
 
         ticketRules.Add(rule[..indexOfColon], new(ranges[0], ranges[1], ranges[2], ranges[3]));
     }
 
     int part1Answer = 0;
-    int part2Answer = 0;
-    Dictionary<string, int> placements = new();
+    long part2Answer = 0;
+    List<int[]> cleanTickets = new();
 
-    foreach (string ticket in otherTickets)
+    foreach (int[] ticket in nearbyTickets)
     {
-        //placements.Clear();
-        int[] ticketValue = ticket.Split(',').Select(int.Parse).ToArray();
-
-        
-        for (int pos = 0; pos < ticketValue.Length; pos++)
+        bool isBadValue = true;
+        for (int pos = 0; pos < ticket.Length; pos++)
         {
-
-            bool noMatch = true;
-            foreach ((string name, TicketField rule) in ticketRules)
+            isBadValue = true;
+            foreach (TicketField rule in ticketRules.Values)
             {
-                if (rule.InRange(ticketValue[pos])) 
+                if (rule.InRange(ticket[pos])) 
                 {
-                    noMatch = false;
-                    if(!placements.TryAdd(name, 1)) placements[name]++;
+                    isBadValue = false;
+                    break;
                 }
             }
 
-            if (noMatch)
+            if (isBadValue)
             {
-                part1Answer += ticketValue[pos];
+                part1Answer += ticket[pos];
                 break;
             }
         }
 
-        if (!noMatch)
+        if (!isBadValue) cleanTickets.Add(ticket);
+    }
+
+    // Part 2
+    Dictionary<string, List<int>> answerKey = new();
+
+    foreach(string ID in ticketRules.Keys)
+    {
+        answerKey.Add(ID, new());
+    }
+     
+    cleanTickets.Add(myTicket);
+    foreach((string ID, TicketField rule) in ticketRules)
+    {
+        for (int pos = 0; pos < ticketRules.Count; pos++)
         {
-            foreach ((string name, int value) in placements)
+            bool allInRange = true;
+            foreach(int[] ticket in cleanTickets)
             {
-                Console.Write($"{value} ");
+                if (!rule.InRange(ticket[pos])) 
+                {
+                    allInRange = false;
+                    break;
+                }
             }
-            Console.WriteLine();
+            if (allInRange)
+            {
+                answerKey[ID].Add(pos);
+            }
         }
     }
 
-    
+    // Filter down the answerKey.
+    while (answerKey.Any(x => x.Value.Count > 1))
+    {
+        foreach (var kvp in answerKey.Where(x => x.Value.Count == 1))
+        {
+            foreach (var kvp2 in answerKey.Where(x => x.Value.Count > 1))
+            {
+                kvp2.Value.Remove(kvp.Value.FirstOrDefault(-1));
+            }
+        }
+    }
+
+
+    foreach ((string ID, List<int> values) in answerKey)
+    {
+        Console.Write($"ID: {ID} ");
+        foreach (int value in values)
+        {
+            Console.Write($"{value} ");
+        }
+        Console.WriteLine();
+    }
+
+    part2Answer = 1;
+
+    foreach((string ID, List<int> pos) in answerKey.Where(x => x.Key.Contains("departure")))
+    {
+        part2Answer *= myTicket[pos.FirstOrDefault(0)];
+    }
+
+    Console.WriteLine();
+
     Console.WriteLine($"Part 1: The ticket error scanning rate is {part1Answer}.");
-    Console.WriteLine($"Part 2: {part2Answer} {otherTickets.Length}");
+    Console.WriteLine($"Part 2: {part2Answer}");
 }
 catch (Exception e)
 {
@@ -78,27 +126,10 @@ internal class TicketField
     public int MaxB { get; set; } = 0;
     public TicketField(int minA, int maxA, int minB, int maxB)
     {
-        if (minA < maxA)
-        {
-            MaxA = maxA;
             MinA = minA;
-        } 
-        else
-        {
-            MaxA = minA;
-            MinA = maxA;
-        }
-
-        if (minB < maxB)
-        {
+            MaxA = maxA;
             MaxB = maxB;
             MinB = minB;
-        }
-        else
-        {
-            MaxB = minB;
-            MinB = maxB;
-        }
     }
     public bool InRange(int x)
     {
