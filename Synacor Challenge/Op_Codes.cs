@@ -42,7 +42,7 @@
                 case 19 or 20:
                     return Op_Terminal(instruction);
                 case 21:                    // noop: 21  no operation 
-                    return State.Running;   //redundent, but explicit. 
+                    return State.Running;   //redundant, but explicit. 
                 default:
                     throw new NotImplementedException($"{instruction}");
             }

@@ -4,7 +4,7 @@
     {
         /*
          * This file contains the save/load functionality.
-         * This is implemented as a simple stream dump of each memory location, main, registers, stack and instPtr in order and seperated by FFFF. The load will read back in the same order.
+         * This is implemented as a simple stream dump of each memory location, main, registers, stack and instPtr in order and separated by FFFF. The load will read back in the same order.
          * The only partial load supported is one of main memory only.
          */
         private const ushort MARKER = ushort.MaxValue;
