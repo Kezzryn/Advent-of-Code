@@ -13,8 +13,8 @@
 
     foreach (string rule in rules)
     {
-        // 48-399 or 420-967
         int indexOfColon = rule.IndexOf(':');
+
         int[] ranges = rule[(indexOfColon + 1)..].Replace('-', ' ').Replace("or", " ").Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
 
         ticketRules.Add(rule[..indexOfColon], new(ranges[0], ranges[1], ranges[2], ranges[3]));
@@ -88,17 +88,6 @@
                 kvp2.Value.Remove(kvp.Value.FirstOrDefault(-1));
             }
         }
-    }
-
-
-    foreach ((string ID, List<int> values) in answerKey)
-    {
-        Console.Write($"ID: {ID} ");
-        foreach (int value in values)
-        {
-            Console.Write($"{value} ");
-        }
-        Console.WriteLine();
     }
 
     part2Answer = 1;
