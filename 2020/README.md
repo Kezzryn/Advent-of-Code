@@ -66,8 +66,8 @@
 - **Solution:** Part one had a simple exclusion. Part two required turning the data on the side, and filtering. Then deducing which columns fit, based on work previously.
 
 ### [Day 17](Day%2017) - Conway Cubes
-- **Problem:**
-- **Solution:**
+- **Problem:** Game of life in 3 and 4 dimensions.
+- **Solution:** Pulled from various code I'd used before. 4th dimension solving took a long time. Based on some code snippets, I changed my code to made a map / cache the neighbors and used that as my comparison, greatly cutting down on duplicate cell lookups. 
 
 ### [Day 18](Day%2018) - Operation Order
 - **Problem:**
