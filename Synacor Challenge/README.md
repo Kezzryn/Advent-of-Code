@@ -826,7 +826,7 @@ Wait a second.
 *** : Load of teleporter.syn9k done.
 > !solve_teleporter
 *** : The teleporter solution code found: [teleporter code]
-> !set register 7 {teleporter code]
+> !set register 7 [teleporter code]
 register: 7 set to: [teleporter code] 
 > !set addy 5485 6
 address: 5485 set to: 6
@@ -888,7 +888,7 @@ Almost predictably, it was wrong.
 
 It didn't take me long to figure out my oversight. I'd setup my steps to be up/down then left/right and vice versa. I did not account for double up/down or double left/right.
 
-One quick correction later, and voil‡!
+One quick correction later, and voil√†!
 
 ```
 == Vault ==
