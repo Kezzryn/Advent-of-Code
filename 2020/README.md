@@ -70,8 +70,8 @@
 - **Solution:** Pulled from various code I'd used before. 4th dimension solving took a long time. Based on some code snippets, I changed my code to made a map / cache the neighbors and used that as my comparison, greatly cutting down on duplicate cell lookups. 
 
 ### [Day 18](Day%2018) - Operation Order
-- **Problem:**
-- **Solution:**
+- **Problem:** Do with with alternative operation orders. 
+- **Solution:** Parse out the strings, and recursivly solve brackes as they're parsed. Main loop then looks for operator symbols and collapsses the list as it goes until only the answer remains.
  
 ### [Day 19](Day%2019) - Monster Messages
 - **Problem:**
