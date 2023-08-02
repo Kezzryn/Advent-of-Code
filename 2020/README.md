@@ -70,7 +70,7 @@
 - **Solution:** Pulled from various code I'd used before. 4th dimension solving took a long time. Based on some code snippets, I changed my code to made a map / cache the neighbors and used that as my comparison, greatly cutting down on duplicate cell lookups. 
 
 ### [Day 18](Day%2018) - Operation Order
-- **Problem:** Do with with alternative operation orders. 
+- **Problem:** Do math with with alternative operation orders. 
 - **Solution:** Parse out the strings, and recursivly solve brackes as they're parsed. Main loop then looks for operator symbols and collapsses the list as it goes until only the answer remains.
  
 ### [Day 19](Day%2019) - Monster Messages
@@ -86,8 +86,8 @@
 - **Solution:**
 
 ### [Day 22](Day%2022) - Crab Combat
-- **Problem:**
-- **Solution:**
+- **Problem:** Card deck manipulation.
+- **Solution:** Part one was a straight forward loop. Part two needed some more logic, but was conceptually simple. Hit a snag where my history check wasn't looking at the order of the cards, only their existance. Bitmaps are not for everything.
 
 ### [Day 23](Day%2023) - Crab Cups
 - **Problem:**
