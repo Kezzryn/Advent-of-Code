@@ -90,8 +90,8 @@
 - **Solution:** Part one was a straight forward loop. Part two needed some more logic, but was conceptually simple. Hit a snag where my history check wasn't looking at the order of the cards, only their existance. Bitmaps are not for everything.
 
 ### [Day 23](Day%2023) - Crab Cups
-- **Problem:**
-- **Solution:**
+- **Problem:** Cup shuffling. 
+- **Solution:** A single direction circular linked list. Pulled the Mixer from [2022 Day 20](../2022/Day%2020) as my baseline. Biggest trouble was with initalizing the larger array. The overall solution could be simplified by reworking the array to be a simple one with the index being the cup number and the value being the pointer.
 
 ### [Day 24](Day%2024) - Lobby Layout
 - **Problem:**
