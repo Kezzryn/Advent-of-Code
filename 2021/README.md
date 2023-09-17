@@ -5,9 +5,9 @@
 - **Problem:** Compare and sum!
 - **Solution:** Indexed where clauses did the comparisons. A basic loop grouped the values for part two.
 
-### [Day 2](Day%2002) - Password Dive!
-- **Problem:**
-- **Solution:**
+### [Day 2](Day%2002) - Dive!
+- **Problem:** Distance iteration. 
+- **Solution:** Basic loop and switch.
 
 ### [Day 3](Day%2003) - Binary Diagnostic
 - **Problem:**
