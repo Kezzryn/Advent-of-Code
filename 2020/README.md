@@ -74,8 +74,8 @@
 - **Solution:** Parse out the strings, and recursivly solve brackes as they're parsed. Main loop then looks for operator symbols and collapsses the list as it goes until only the answer remains.
  
 ### [Day 19](Day%2019) - Monster Messages
-- **Problem:**
-- **Solution:**
+- **Problem:** Patten matching.
+- **Solution:** The key to this puzzle is to realize that there is a sub pattern one level under the root. Working to calculate the sub pattern and then matching it against the strings makes the puzzle MUCH easier.
 
 ### [Day 20](Day%2020) - Jurassic Jigsaw
 - **Problem:**
