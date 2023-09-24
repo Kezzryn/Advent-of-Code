@@ -94,8 +94,8 @@
 - **Solution:** A single direction circular linked list. Pulled the Mixer from [2022 Day 20](../2022/Day%2020) as my baseline. Biggest trouble was with initalizing the larger array. The overall solution could be simplified by reworking the array to be a simple one with the index being the cup number and the value being the pointer.
 
 ### [Day 24](Day%2024) - Lobby Layout
-- **Problem:**
-- **Solution:**
+- **Problem:** Cell Automata.
+- **Solution:** With hex grids, which are like normal grids, but with weird movement rules. I tweaked the code from [2017 Day 11](../2017/Day%2011) to walk the grid and count neighbors. Everything else was a normal automata problem.
 
 ### [Day 25](Day%2025) - Combo Breaker
 - **Problem:**
