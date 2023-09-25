@@ -10,8 +10,8 @@
 - **Solution:** Basic loop and switch.
 
 ### [Day 3](Day%2003) - Binary Diagnostic
-- **Problem:**
-- **Solution:**
+- **Problem:** Processing data in columns.
+- **Solution:** I got clever here and used bit manipulation for both parts. I converted everything to integers at the top. [2019 Day 24](../2022/Day%2020) provided `getBit()` and `setBit()` functions, which I used to sum and set bits set in the various columns for part one. Part two used `List<int>` and some light predicate functions to filter things down.
 
 ### [Day 4](Day%2004) - Giant Squid
 - **Problem:**
