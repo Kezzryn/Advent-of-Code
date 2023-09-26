@@ -11,11 +11,11 @@
 
 ### [Day 3](Day%2003) - Binary Diagnostic
 - **Problem:** Processing data in columns.
-- **Solution:** I got clever here and used bit manipulation for both parts. I converted everything to integers at the top. [2019 Day 24](../2022/Day%2020) provided `getBit()` and `setBit()` functions, which I used to sum and set bits set in the various columns for part one. Part two used `List<int>` and some light predicate functions to filter things down.
+- **Solution:** I got clever here and used bit manipulation for both parts. I converted everything to integers at the top. [2019 Day 24](../2019/Day%2024) provided `getBit()` and `setBit()` functions, which I used to sum and set bits set in the various columns for part one. Part two used `List<int>` and some light predicate functions to filter things down.
 
 ### [Day 4](Day%2004) - Giant Squid
-- **Problem:**
-- **Solution:**
+- **Problem:** B.I.N.G.O and giant squid is his name-o. 
+- **Solution:** More bitmasking with [2019 Day 24's](../2019/Day%2024) helper functions. I turned the 2D card into a 1D list and bit flipped an int to track which numbers had been called on the card. A precomputed bitmask was then applied to check for a win condition. Part two took me a little bit to figure out how to stop processing cards that had already won, but it was obvious in hindsight. 
 
 ### [Day 5](Day%2005) - Hydrothermal Venture
 - **Problem:**
