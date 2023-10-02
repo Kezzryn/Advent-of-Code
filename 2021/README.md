@@ -18,8 +18,8 @@
 - **Solution:** More bitmasking with [2019 Day 24's](../2019/Day%2024) helper functions. I turned the 2D card into a 1D list and bit flipped an int to track which numbers had been called on the card. A precomputed bitmask was then applied to check for a win condition. Part two took me a little bit to figure out how to stop processing cards that had already won, but it was obvious in hindsight. 
 
 ### [Day 5](Day%2005) - Hydrothermal Venture
-- **Problem:**
-- **Solution:**
+- **Problem:** Line intersections.
+- **Solution:** Walked the lines with basic loops. The diagonal took a bit to noodle out, and had an early error where it would skip the final point on the line. Oops.
 
 ### [Day 6](Day%2006) - Lanternfish
 - **Problem:**
