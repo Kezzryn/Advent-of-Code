@@ -78,8 +78,8 @@
 - **Solution:** The key to this puzzle is to realize that there is a sub pattern one level under the root. Working to calculate the sub pattern and then matching it against the strings makes the puzzle MUCH easier.
 
 ### [Day 20](Day%2020) - Jurassic Jigsaw
-- **Problem:**
-- **Solution:**
+- **Problem:** Jigsaw Puzzle solving.
+- **Solution:** Part one was fairly straight foward, once you realize that each piece can only line up with one other piece. Changing the edges from strings to integers, and precomputing the flipped value makes comparisons easier. Part two. Oh gawd getting the rotation code to work... Make sure you understand the direction the matrix is rotating in, and flip AFTER rotation.
 
 ### [Day 21](Day%2021) - Allergen Assessment
 - **Problem:**
