@@ -82,8 +82,8 @@
 - **Solution:** Part one was fairly straight foward, once you realize that each piece can only line up with one other piece. Changing the edges from strings to integers, and precomputing the flipped value makes comparisons easier. Part two. Oh gawd getting the rotation code to work... Make sure you understand the direction the matrix is rotating in, and flip AFTER rotation.
 
 ### [Day 21](Day%2021) - Allergen Assessment
-- **Problem:**
-- **Solution:**
+- **Problem:** Finding common items in multiple lists.
+- **Solution:** Intersect all the things!!! Data structures were a little pesky.
 
 ### [Day 22](Day%2022) - Crab Combat
 - **Problem:** Card deck manipulation.
@@ -98,5 +98,5 @@
 - **Solution:** With hex grids, which are like normal grids, but with weird movement rules. I tweaked the code from [2017 Day 11](../2017/Day%2011) to walk the grid and count neighbors. Everything else was a normal automata problem.
 
 ### [Day 25](Day%2025) - Combo Breaker
-- **Problem:**
-- **Solution:**
+- **Problem:** Public key exchange.
+- **Solution:** Be sure to read all the instructions. Things worked on the test example, but failed on the puzzle. I missed finding the loop size with the subject number of '7', I was searching for working subject numbers to find the loop size with.  This created incorrect results, but worked for the test numbers. 
