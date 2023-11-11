@@ -22,8 +22,8 @@
 - **Solution:** Walked the lines with basic loops. The diagonal took a bit to noodle out, and had an early error where it would skip the final point on the line. Oops.
 
 ### [Day 6](Day%2006) - Lanternfish
-- **Problem:**
-- **Solution:**
+- **Problem:** Fish population tracking.
+- **Solution:** Don't try to reinvent a `Queue()` when you've got one built into the language.
 
 ### [Day 7](Day%2007) - The Treachery of Whales
 - **Problem:**
