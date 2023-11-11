@@ -26,12 +26,12 @@
 - **Solution:** Don't try to reinvent a `Queue()` when you've got one built into the language.
 
 ### [Day 7](Day%2007) - The Treachery of Whales
-- **Problem:**
-- **Solution:**
+- **Problem:** Fuel consumption.
+- **Solution:** Didn't need anything fancy. Simple iteration with some sanity checks worked fine. Built a lookup table for the fuel costs in part two.
 
 ### [Day 8](Day%2008) - Seven Segment Search
-- **Problem:**
-- **Solution:**
+- **Problem:** Determine scrambled codes to work out digits.
+- **Solution:** Noodled the reduction rules out on some paper, then abused some Linq to generate the answers.
 
 ### [Day 9](Day%2009) - Smoke Basin
 - **Problem:**
