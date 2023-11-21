@@ -2,56 +2,55 @@
 
 int ArenaBattle(Wizard startWizard, Boss startBoss, bool isHardMode = false)
 {
-    int BestMana = int.MaxValue;
+    int bestMana = int.MaxValue;
 
-    bool doEffects(Wizard wiz, Boss boz)
+    bool doEffects(Wizard wizard, Boss boss)
     {
-        wiz.DoEffects();
-        boz.DoEffects();
-        if (boz.IsDead && wiz.ManaSpent < BestMana)
-            BestMana = wiz.ManaSpent;
+        wizard.DoEffects();
+        boss.DoEffects();
+        if (boss.IsDead && wizard.ManaSpent < bestMana)
+            bestMana = wizard.ManaSpent;
 
-        return boz.IsDead;
+        return boss.IsDead;
     }
 
-    PriorityQueue<(Wizard player, Boss boss), int> queue = new();
+    PriorityQueue<(Wizard, Boss), int> queue = new();
     foreach (SpellNames spell in Enum.GetValues(typeof(SpellNames)))
     {
-        var wiz = new Wizard(startWizard);
-        var boz = new Boss(startBoss);
+        var cloneWizard = new Wizard(startWizard);
+        var cloneBoss = new Boss(startBoss);
 
-        if (isHardMode) wiz.LoseHP(1);
-        wiz.CastSpell(spell, boz);
-        queue.Enqueue((wiz, boz), wiz.ManaSpent);
+        if (isHardMode) cloneWizard.Bleed(1);
+        cloneWizard.CastSpell(spell, cloneBoss);
+        queue.Enqueue((cloneWizard, cloneBoss), cloneWizard.ManaSpent);
     }
 
-    while (queue.Count > 0)
+    while (queue.TryPeek(out _, out int priority)) // if we fail to peek something's wrong, or the queue's empty
     {
-        if (!queue.TryPeek(out _, out int priority)) break; // if we fail to peek something's wrong. 
-        if (priority >= BestMana) break; // it doesn't get any better than this. 
+        if (priority >= bestMana) break; // it doesn't get any better than this. 
 
-        (Wizard thePlayer, Boss theBoss) = queue.Dequeue();
+        (Wizard theWizard, Boss theBoss) = queue.Dequeue();
         
-        if (doEffects(thePlayer, theBoss)) continue; // if true, game over, boss died!
+        if (doEffects(theWizard, theBoss)) continue; // if true, game over, boss died!
 
-        theBoss.Attack(thePlayer);
-        if (isHardMode) thePlayer.LoseHP(1);
-        if (thePlayer.IsDead) continue; //we lost!
+        theBoss.Attack(theWizard);
+        if (isHardMode) theWizard.Bleed(1);
+        if (theWizard.IsDead) continue; //we lost!
 
-        if (doEffects(thePlayer, theBoss)) continue; // if true, game over, boss died!
+        if (doEffects(theWizard, theBoss)) continue; // if true, game over, boss died!
 
         foreach (SpellNames spell in Enum.GetValues(typeof(SpellNames)))
         {
-            var wiz = new Wizard(thePlayer);
-            var boz = new Boss(theBoss);
+            var cloneWizard = new Wizard(theWizard);
+            var cloneBoss = new Boss(theBoss);
 
-            if (wiz.CastSpell(spell, boz) && wiz.ManaSpent <= BestMana)
+            if (cloneWizard.CastSpell(spell, cloneBoss) && cloneWizard.ManaSpent <= bestMana)
             {
-                queue.Enqueue((wiz, boz), wiz.ManaSpent);
+                queue.Enqueue((cloneWizard, cloneBoss), cloneWizard.ManaSpent);
             }
         }
     }
-    return BestMana;
+    return bestMana;
 }
 
 try

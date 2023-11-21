@@ -8,138 +8,136 @@ namespace AoC_2015_Day_22
         Poison,
         Recharge
     }
-
-    internal class Spell
+    
+    internal abstract class Spell
     {
-        public virtual SpellNames SpellName => throw new NotImplementedException();
-        protected const int _manaCost = 0;
-        public virtual int ManaCost() => throw new NotImplementedException();
-        public virtual void Cast(Wizard source, Entity target) => throw new NotImplementedException();
+        public int ManaCost { get; protected set; }
+        public SpellNames SpellName { get; protected set; }
+        public abstract void Cast(Wizard source, Entity target);       
     }
 
-    internal class Effect : Spell
+    internal abstract class Effect : Spell
     {
-        protected int _upkeepDuration;
-        public int Duration => _upkeepDuration;
-
-        // returns true when expired.
-        public virtual bool Upkeep(Entity source) => throw new NotImplementedException();
-        public virtual Effect Clone() => throw new NotImplementedException();
+        public int Duration { get; protected set; }
+        public abstract int DoUpkeep(Entity source);
+        public abstract Effect Clone();
     }
 
     internal class MagicMissile : Spell
     {
-        public override SpellNames SpellName => SpellNames.MagicMissile;
-        private new const int _manaCost = 53;
         private const int _damage = 4;
-        public override int ManaCost() => _manaCost;
+        public MagicMissile()
+        {
+            SpellName = SpellNames.MagicMissile;
+            ManaCost = 53;
+        }
+     
         public override void Cast(Wizard source, Entity target)
         {
-            source.LoseMana(_manaCost);
+            source.LoseMana(ManaCost);
             target.LoseHP(_damage);
         }
     }
 
     internal class Drain : Spell
     {
-        public override SpellNames SpellName => SpellNames.Drain;
-        private new const int _manaCost = 73;
         private const int _leech = 2;
-        public override int ManaCost() => _manaCost;
+        public Drain()
+        {
+            SpellName = SpellNames.Drain;
+            ManaCost = 73;
+        }
 
         public override void Cast(Wizard source, Entity target)
         {
-            source.LoseMana(_manaCost);
-            source.GainHP(_leech);
-            target.LoseHP(_leech);
+                source.LoseMana(ManaCost);
+                source.GainHP(_leech);
+                target.LoseHP(_leech);
         }
     }
 
     internal class Shield : Effect
     {
-        public override SpellNames SpellName => SpellNames.Shield;
-        private new const int _manaCost = 113;
         private const int _armorAmount = 7;
 
         public Shield(int duration = 6)
         {
-            _upkeepDuration = duration;
+            SpellName = SpellNames.Shield;
+            ManaCost = 113;
+            Duration = duration;
         }
-
-        public override int ManaCost() => _manaCost;
 
         public override void Cast(Wizard source, Entity _)
         {
-            source.LoseMana(_manaCost);
+            source.LoseMana(ManaCost);
             source.GainArmor(_armorAmount);
             source.GainEffect(new Shield());
         }
 
-        public override bool Upkeep(Entity source)
+        public override int DoUpkeep(Entity source)
         {
-            if (--_upkeepDuration <= 0)
+            Duration--;
+            if (Duration <= 0)
             {
                 source.LoseArmor(_armorAmount);
-                return true;
             }
-            return false;
+            return Duration;
         }
 
-        public override Effect Clone() => new Shield(_upkeepDuration);
+        public override Effect Clone() =>  new Shield(Duration);
     }
 
     internal class Poison : Effect
     {
-        public override SpellNames SpellName => SpellNames.Poison;
-        private new const int _manaCost = 173;
         private const int _damage = 3;
 
         public Poison(int duration = 6)
         {
-            _upkeepDuration = duration;
+            SpellName = SpellNames.Poison;
+            ManaCost = 173;
+            Duration = duration;
         }
-
-        public override int ManaCost() => _manaCost;
-
+        
         public override void Cast(Wizard source, Entity target)
         {
-            source.LoseMana(_manaCost);
+            source.LoseMana(ManaCost);
             target.GainEffect(new Poison());
         }
 
-        public override bool Upkeep(Entity source)
+        public override int DoUpkeep(Entity source)
         {
             source.LoseHP(_damage);
-            return --_upkeepDuration <= 0;
+            Duration--;
+            return Duration;
         }
 
-        public override Effect Clone() => new Poison(_upkeepDuration);
+        public override Effect Clone() => new Poison(Duration);
     }
 
     internal class Recharge : Effect
     {
-        public override SpellNames SpellName => SpellNames.Recharge;
-        private new const int _manaCost = 229;
         private const int _recharge = 101;
+
         public Recharge(int duration = 5)
         {
-            _upkeepDuration = duration;
+            SpellName = SpellNames.Recharge;
+            ManaCost = 229;
+            Duration = duration;
         }
-
-        public override int ManaCost() => _manaCost;
-
+        
         public override void Cast(Wizard source, Entity _)
         {
-            source.LoseMana(_manaCost);
+            source.LoseMana(ManaCost);
             source.GainEffect(new Recharge());
         }
 
-        public override bool Upkeep(Entity source)
+        public override int DoUpkeep(Entity source)
         {
-            if (source is Wizard wizard) wizard.GainMana(_recharge);
-            return --_upkeepDuration <= 0;
+            if(source is Wizard wizard) wizard.GainMana(_recharge);
+            Duration--;
+            return Duration;
         }
 
-        public override Effect Clone() => new Recharge(_upkeepDuration);
+        public override Effect Clone() => new Recharge(Duration);
     }
 }
