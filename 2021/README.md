@@ -34,16 +34,16 @@
 - **Solution:** Noodled the reduction rules out on some paper, then abused some Linq to generate the answers.
 
 ### [Day 9](Day%2009) - Smoke Basin
-- **Problem:**
-- **Solution:**
+- **Problem:** Mapping low points.
+- **Solution:** Part one is a simple neighbor comparison. Using those points, it was a simple matter to build a loop around a `Queue` to find the basin sizes.
 
 ### [Day 10](Day%2010) - Syntax Scoring
 - **Problem:**
 - **Solution:**
 
 ### [Day 11](Day%2011) - Dumbo Octopus
-- **Problem:**
-- **Solution:**
+- **Problem:** Cell automata
+- **Solution:** Straight forward implementation, no real surprises. 
 
 ### [Day 12](Day%2012) - Passage Pathing
 - **Problem:**
