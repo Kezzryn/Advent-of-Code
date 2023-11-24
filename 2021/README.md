@@ -38,16 +38,16 @@
 - **Solution:** Part one is a simple neighbor comparison. Using those points, it was a simple matter to build a loop around a `Queue` to find the basin sizes.
 
 ### [Day 10](Day%2010) - Syntax Scoring
-- **Problem:**
-- **Solution:**
+- **Problem:** Matching brackets
+- **Solution:** Part one was easy once I got out of my own way and stopped trying to do it recursivly. For part two it really helped to read the problem description.
 
 ### [Day 11](Day%2011) - Dumbo Octopus
 - **Problem:** Cell automata
 - **Solution:** Straight forward implementation, no real surprises. 
 
 ### [Day 12](Day%2012) - Passage Pathing
-- **Problem:**
-- **Solution:**
+- **Problem:** Finding all the paths.
+- **Solution:** No best path optimization here, we need to find all of them. I didn't complicate this for myself and left everything as strings. Second part needed a little noodling, but the addition of a flag the first time backtracking happens solved the problem.
 
 ### [Day 13](Day%2013) - Transparent Origami
 - **Problem:**
