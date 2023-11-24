@@ -50,8 +50,8 @@
 - **Solution:** No best path optimization here, we need to find all of them. I didn't complicate this for myself and left everything as strings. Second part needed a little noodling, but the addition of a flag the first time backtracking happens solved the problem.
 
 ### [Day 13](Day%2013) - Transparent Origami
-- **Problem:**
-- **Solution:**
+- **Problem:** Folding paper.
+- **Solution:** The trickiest part of this was keeping the X and Y coordinates straight.
 
 ### [Day 14](Day%2014) - Extended Polymerization
 - **Problem:**
