@@ -54,8 +54,8 @@
 - **Solution:** The trickiest part of this was keeping the X and Y coordinates straight.
 
 ### [Day 14](Day%2014) - Extended Polymerization
-- **Problem:**
-- **Solution:**
+- **Problem:** Inserting characters in strings.
+- **Solution:** Part 1 was easily simulated. Part 2 threw all that away for a memoitization scheme.
 
 ### [Day 15](Day%2015) - Chiton 
 - **Problem:**
