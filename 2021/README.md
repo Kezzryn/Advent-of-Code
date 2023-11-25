@@ -58,8 +58,8 @@
 - **Solution:** Part 1 was easily simulated. Part 2 threw all that away for a memoitization scheme.
 
 ### [Day 15](Day%2015) - Chiton 
-- **Problem:**
-- **Solution:**
+- **Problem:** Pathfinding
+- **Solution:** Brought forward the A* implemention I have and tweaked the cost function to make each step "cost" the risk value.
 
 ### [Day 16](Day%2016) - Packet Decoder
 - **Problem:**
