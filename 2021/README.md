@@ -66,8 +66,8 @@
 - **Solution:** One misread on the process and I spent way too long debugging a version where I incorrectly flushed the buffer after gathering the packets. Sorting that out and everything came together nicely.
 
 ### [Day 17](Day%2017) - Trick Shot
-- **Problem:**
-- **Solution:**
+- **Problem:** Curve prediction.
+- **Solution:** Straight forward simulation. There's probably some math function that could have done this easier.
 
 ### [Day 18](Day%2018) - Snailfish
 - **Problem:** 
