@@ -62,8 +62,8 @@
 - **Solution:** Brought forward the A* implemention I have and tweaked the cost function to make each step "cost" the risk value.
 
 ### [Day 16](Day%2016) - Packet Decoder
-- **Problem:**
-- **Solution:**
+- **Problem:** Nested packet decoding
+- **Solution:** One misread on the process and I spent way too long debugging a version where I incorrectly flushed the buffer after gathering the packets. Sorting that out and everything came together nicely.
 
 ### [Day 17](Day%2017) - Trick Shot
 - **Problem:**
