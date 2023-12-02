@@ -5,9 +5,9 @@
 - **Problem:** String parsing. 
 - **Solution:** Part one had simple `IndexOf()` calls. Part two complicated things, requiring some clever replacing.
 
-### [Day 2](Day%2002) - 
-- **Problem:** Distance iteration. 
-- **Solution:** 
+### [Day 2](Day%2002) - Cube Conundrum
+- **Problem:** Finding the maximum number within lists.
+- **Solution:** An unholy mix of `Regex` and `Select().Split()` combined with a bit of LINQ and that's done.
 
 ### [Day 3](Day%2003) - 
 - **Problem:** 
