@@ -70,8 +70,8 @@
 - **Solution:** Straight forward simulation. There's probably some math function that could have done this easier.
 
 ### [Day 18](Day%2018) - Snailfish
-- **Problem:** 
-- **Solution:**
+- **Problem:** Binary tree addition and balancing.
+- **Solution:** So much recursion. Once I realized I had an easy way to return the tree to a string, for the add function, I created new `Node()` with concatinated strings. For part two, some foreach trickery gave me all the combos of strings to add up.
 
 ### [Day 19](Day%2019) - Beacon Scanner
 - **Problem:**
