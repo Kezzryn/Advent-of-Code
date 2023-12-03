@@ -29,15 +29,13 @@ try
         int maxRed = splits.Where(w => w.cubeColor == "red").Max(x => x.cubeCount);
         int maxGreen = splits.Where(w => w.cubeColor == "green").Max(x => x.cubeCount);
         int maxBlue = splits.Where(w => w.cubeColor == "blue").Max(x => x.cubeCount);
-        int theMax = splits.Max(x => x.cubeCount);
-
+       
         if (MAX_ITEMS["red"] >= maxRed && MAX_ITEMS["green"] >= maxGreen && MAX_ITEMS["blue"] >= maxBlue)
         {
             part1Answer += gameID;  
         }
 
         part2Answer += (maxRed * maxGreen * maxBlue);
-        
     }
 
     Console.WriteLine($"Part 1: The sum of the IDs of possible games is {part1Answer}.");
