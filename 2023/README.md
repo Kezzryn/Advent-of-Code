@@ -9,9 +9,9 @@
 - **Problem:** Finding the maximum number within lists.
 - **Solution:** An unholy mix of `Regex` and `Select().Split()` combined with a bit of LINQ and that's done.
 
-### [Day 3](Day%2003) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 3](Day%2003) - Gear Ratios
+- **Problem:** Finding neighboring numbers in a string
+- **Solution:** Straight forward logic. Explored some additional applications of `Select().Where()` when parsing down the data for each symbol.
 
 ### [Day 4](Day%2004) - 
 - **Problem:** 
