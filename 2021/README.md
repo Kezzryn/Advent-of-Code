@@ -82,8 +82,8 @@
 - **Solution:**
 
 ### [Day 21](Day%2021) - Dirac Dice
-- **Problem:**
-- **Solution:**
+- **Problem:** Round and round the board game.
+- **Solution:** Part one was easy to simulate. Part two required some noodling on how to reduce the search space. The key is realizing that while dice rolls will multiply, only the results and how many times those results happen matter.
 
 ### [Day 22](Day%2022) - Reactor Reboot
 - **Problem:**
