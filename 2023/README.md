@@ -14,8 +14,8 @@
 - **Solution:** Straight forward logic. Explored some additional applications of `Select().Where()` when parsing down the data for each symbol.
 
 ### [Day 4](Day%2004) - 
-- **Problem:** 
-- **Solution:** 
+- **Problem:**  Scratch and win!
+- **Solution:** `Intersect()` for part one, and a double `for` loop for part two.
 
 ### [Day 5](Day%2005) - 
 - **Problem:** 
