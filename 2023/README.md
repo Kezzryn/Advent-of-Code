@@ -13,17 +13,17 @@
 - **Problem:** Finding neighboring numbers in a string
 - **Solution:** Straight forward logic. Explored some additional applications of `Select().Where()` when parsing down the data for each symbol.
 
-### [Day 4](Day%2004) - 
+### [Day 4](Day%2004) - Scratchcards 
 - **Problem:**  Scratch and win!
 - **Solution:** `Intersect()` for part one, and a double `for` loop for part two.
 
-### [Day 5](Day%2005) - 
+### [Day 5](Day%2005) - If You Give A Seed A Fertilizer
 - **Problem:** 
 - **Solution:** 
 
-### [Day 6](Day%2006) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 6](Day%2006) - Wait For It
+- **Problem:** Optimization of ranges.
+- **Solution:** Brute force. There is probably a more math way to do this, but the solution set is small enough that the whole thing runs quickly.
 
 ### [Day 7](Day%2007) - 
 - **Problem:** 
