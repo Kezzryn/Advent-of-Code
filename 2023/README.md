@@ -25,9 +25,9 @@
 - **Problem:** Optimization of ranges.
 - **Solution:** Brute force. There is probably a more math way to do this, but the solution set is small enough that the whole thing runs quickly.
 
-### [Day 7](Day%2007) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 7](Day%2007) - Camel Cards
+- **Problem:** Score Poker, Jokers might be wild.
+- **Solution:** Part one was a case of building a table to set bitflags for the winning order of hands, then converting the hands themselves to values. Part two had me add more values to the table.
 
 ### [Day 8](Day%2008) - 
 - **Problem:** 
