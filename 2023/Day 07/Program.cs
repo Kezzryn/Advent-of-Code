@@ -69,9 +69,8 @@ try
         part2Answer += part2Puzzle[i].pot * (i + 1);
     }
 
-
-    Console.WriteLine($"Part 1: {part1Answer}");
-    Console.WriteLine($"Part 2: {part2Answer} 249094737 low");
+    Console.WriteLine($"Part 1: The winnings are: {part1Answer}");
+    Console.WriteLine($"Part 2: When the jokers are wild, the winnings are: {part2Answer}");
 }
 catch (Exception e)
 {
