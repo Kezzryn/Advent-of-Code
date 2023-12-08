@@ -42,16 +42,11 @@ try
 
     int part1Answer = GetSteps("AAA");
 
-    List<int> massSteps = map.Keys.Where(x => x[2] == 'A')
-                            .Select(x => GetSteps(x, true))
-                            .ToList();
-
     //Calculate the Least Common Multiple via the Prime Factorization method.
-    long part2Answer = massSteps
-                        .SelectMany(Factor)
+    long part2Answer = map.Keys.Where(x => x[2] == 'A')
+                        .Select(x => GetSteps(x, true))
+                        .SelectMany(x => Factor(x).Where(w => w != x).Select(x => (long)x)) //remove the answer from the factorization and convert to long
                         .Distinct()
-                        .Where(w => !massSteps.Contains(w))
-                        .Select(x => (long)x)
                         .Aggregate((x, y) => x * y);
 
     Console.WriteLine($"Part 1: It will take {part1Answer} steps to walk the path following the map.");
