@@ -29,9 +29,9 @@
 - **Problem:** Score Poker, Jokers might be wild.
 - **Solution:** Part one was a case of building a table to set bitflags for the winning order of hands, then converting the hands themselves to values. Part two had me add more values to the table.
 
-### [Day 8](Day%2008) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 8](Day%2008) - Haunted Wasteland
+- **Problem:** Follow a map.
+- **Solution:** Part one is a very simple dictionary follow. Part two is the same, with a splash of LCM. Thanks [2015 Day 20](../2015/Day%2020) for the factorization code.
 
 ### [Day 9](Day%2009) - 
 - **Problem:** 
