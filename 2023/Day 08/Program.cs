@@ -29,13 +29,10 @@ try
     int GetSteps(string mapCursor, bool doPart2 = false)
     {
         int numSteps = 0;
-        int stepCursor = 0;
         bool isDone = false;
         do
         {
-            mapCursor = steps[stepCursor] == 'L' ? map[mapCursor].Left : map[mapCursor].Right;
-            stepCursor = (stepCursor + 1) % steps.Length;
-            numSteps++;
+            mapCursor = steps[numSteps++ % steps.Length] == 'L' ? map[mapCursor].Left : map[mapCursor].Right;
             isDone = doPart2 ? mapCursor[^1] == 'Z' : mapCursor == "ZZZ";
         }
         while (!isDone);
@@ -53,8 +50,8 @@ try
     long part2Answer = massSteps
                         .SelectMany(Factor)
                         .Distinct()
-                        .Where(x => x != 1 && !massSteps.Contains(x))
-                        .Select(x => (long)x) 
+                        .Where(w => !massSteps.Contains(w))
+                        .Select(x => (long)x)
                         .Aggregate((x, y) => x * y);
 
     Console.WriteLine($"Part 1: It will take {part1Answer} steps to walk the path following the map.");
