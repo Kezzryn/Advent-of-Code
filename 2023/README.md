@@ -18,8 +18,9 @@
 - **Solution:** `Intersect()` for part one, and a double `for` loop for part two.
 
 ### [Day 5](Day%2005) - If You Give A Seed A Fertilizer
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Number translation through range maps. 
+- **Solution:** Part one was simple to solve. Part two was not. I eventually parallized my query and the whole mess ran in about 180 seconds.
+- Future fun: Go back and code a real query for this.
 
 ### [Day 6](Day%2006) - Wait For It
 - **Problem:** Optimization of ranges.
@@ -33,9 +34,9 @@
 - **Problem:** Follow a map.
 - **Solution:** Part one is a very simple dictionary follow. Part two is the same, with a splash of LCM. Thanks [2015 Day 20](../2015/Day%2020) for the factorization code.
 
-### [Day 9](Day%2009) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 9](Day%2009) - Mirage Maintenance
+- **Problem:** Follow a path.
+- **Solution:** Part one was easy to do by following the example. The hard part was squashing everything down to a couple lines of `LINQ.`
 
 ### [Day 10](Day%2010) -
 - **Problem:** 
