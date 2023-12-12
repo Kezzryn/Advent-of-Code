@@ -38,13 +38,13 @@
 - **Problem:** Follow a path.
 - **Solution:** Part one was easy to do by following the example. The hard part was squashing everything down to a couple lines of `LINQ.`
 
-### [Day 10](Day%2010) -
-- **Problem:** 
-- **Solution:** 
+### [Day 10](Day%2010) - Pipe Maze
+- **Problem:** Walk a map permimeter then divide the area into inside and outside.
+- **Solution:** Part one is a simple walk around the perimeter. Part two required an expantion of the map, as I couldn't figure out clean logic for "squeezing". 
 
-### [Day 11](Day%2011) -
-- **Problem:** 
-- **Solution:** 
+### [Day 11](Day%2011) - Cosmic Expansion
+- **Problem:** Distances on a 2D map. 
+- **Solution:** Taxi distance with a multiplative offset on the X and Y.
 
 ### [Day 12](Day%2012) -
 - **Problem:** 
