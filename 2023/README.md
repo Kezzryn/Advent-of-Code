@@ -19,7 +19,7 @@
 
 ### [Day 5](Day%2005) - If You Give A Seed A Fertilizer
 - **Problem:** Number translation through range maps. 
-- **Solution:** Part one was simple to solve. Part two was not. I eventually parallized my query and the whole mess ran in about 180 seconds.
+- **Solution:** Part one was simple to solve. Part two was not. I eventually paralyzed my query and the whole mess ran in about 180 seconds.
 - Future fun: Go back and code a real query for this.
 
 ### [Day 6](Day%2006) - Wait For It
@@ -39,16 +39,16 @@
 - **Solution:** Part one was easy to do by following the example. The hard part was squashing everything down to a couple lines of `LINQ.`
 
 ### [Day 10](Day%2010) - Pipe Maze
-- **Problem:** Walk a map permimeter then divide the area into inside and outside.
-- **Solution:** Part one is a simple walk around the perimeter. Part two required an expantion of the map, as I couldn't figure out clean logic for "squeezing". 
+- **Problem:** Walk a map perimeter then divide the area into inside and outside.
+- **Solution:** Part one is a simple walk around the perimeter. Part two required an expansion of the map, as I couldn't figure out clean logic for "squeezing". 
 
 ### [Day 11](Day%2011) - Cosmic Expansion
 - **Problem:** Distances on a 2D map. 
-- **Solution:** Taxi distance with a multiplative offset on the X and Y.
+- **Solution:** Taxi distance with a mutilative offset on the X and Y.
 
-### [Day 12](Day%2012) -
-- **Problem:** 
-- **Solution:** 
+### [Day 12](Day%2012) - Hot Springs
+- **Problem:** Counting combinations
+- **Solution:** Part one is straight forward and easily brute force-able. Part two took a pile of loop optimization and ultimately I had the right idea. The final bit of pruning I found in a reddit post.
 
 ### [Day 13](Day%2013) - Point of Incidence
 - **Problem:** Finding the reflection line in a pattern.
