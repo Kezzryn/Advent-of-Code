@@ -50,9 +50,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 13](Day%2013) -
-- **Problem:** 
-- **Solution:** 
+### [Day 13](Day%2013) - Point of Incidence
+- **Problem:** Finding the reflection line in a pattern.
+- **Solution:** Part one was straight forward. Part two was initially overcomplicated with a scheme to fix the bad data. It almost worked, however, the program was matching non-reflecting lines. Sleeping on the issue had me throw out all that code and add an "Off by one" check to the main reflection check.
 
 ### [Day 14](Day%2014) -
 - **Problem:** 
