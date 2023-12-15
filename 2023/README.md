@@ -40,7 +40,7 @@
 
 ### [Day 10](Day%2010) - Pipe Maze
 - **Problem:** Walk a map perimeter then divide the area into inside and outside.
-- **Solution:** Part one is a simple walk around the perimeter. Part two required an expansion of the map, as I couldn't figure out clean logic for "squeezing". 
+- **Solution:** Part one is a simple walk around the perimeter. Part two required an expansion of the map, as I couldn't figure out clean logic for "squeezing".
 
 ### [Day 11](Day%2011) - Cosmic Expansion
 - **Problem:** Distances on a 2D map. 
