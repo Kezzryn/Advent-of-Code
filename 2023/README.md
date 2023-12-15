@@ -58,9 +58,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 15](Day%2015) -
-- **Problem:** 
-- **Solution:** 
+### [Day 15](Day%2015) - Lens Library
+- **Problem:** Shuffling data
+- **Solution:** So much `LINQ`.
 
 ### [Day 16](Day%2016) -
 - **Problem:** 
