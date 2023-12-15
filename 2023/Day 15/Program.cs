@@ -16,7 +16,7 @@
     {
         char opCode = input.Contains(OP_EQUAL) ? OP_EQUAL : OP_MINUS;
 
-        string label = opCode == OP_MINUS ? input[..^1] :input[..input.IndexOf('=')];
+        string label = input[..input.IndexOfAny("-=".ToCharArray())];
         int hashIndex = HASH(label);
 
         int index = boxes[hashIndex].FindIndex(x => x.StartsWith(label));
