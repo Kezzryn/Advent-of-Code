@@ -54,9 +54,9 @@
 - **Problem:** Finding the reflection line in a pattern.
 - **Solution:** Part one was straight forward. Part two was initially overcomplicated with a scheme to fix the bad data. It almost worked, however, the program was matching non-reflecting lines. Sleeping on the issue had me throw out all that code and add an "Off by one" check to the main reflection check.
 
-### [Day 14](Day%2014) -
-- **Problem:** 
-- **Solution:** 
+### [Day 14](Day%2014) - Parabolic Reflector Dish
+- **Problem:** Tilting rocks
+- **Solution:** Slicing the map into arrays that could be processed individually saved a lot of time and headaches. Which simply pushed the headache to rediscovering how to calculate the final answer for part two.
 
 ### [Day 15](Day%2015) - Lens Library
 - **Problem:** Shuffling data
