@@ -63,8 +63,8 @@
 - **Solution:** So much `LINQ`.
 
 ### [Day 16](Day%2016) -
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Follow a beam of light past mirrors and prisms. 
+- **Solution:** Pathfinding with complex numbers. Implemeted a `Cursor()` class. Surprised I've not felt the need to do that before. Loop detection was the hardest thing.
 
 ### [Day 17](Day%2017) -
 - **Problem:** 
