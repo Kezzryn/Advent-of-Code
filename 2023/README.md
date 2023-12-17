@@ -68,7 +68,7 @@
 
 ### [Day 17](Day%2017) - Clumsy Crucible
 - **Problem:** A to B with the least heat loss.
-- **Solution:** This looked like a solution for A*. It was not. There's no good heuristic for the algorthm to function. Additionally, part two found an incorrect answer first due to the way stepping works, so I had to back up and cut it down to a normal search.
+- **Solution:** This looked like a solution for A*. It was not. There's no good heuristic for the algorthm to function. Additionally, part two found an incorrect answer first due to the way stepping works, so I had to back up and cut it down to a normal search. I did get to reuse my `Cursor()` class from [Day 16](Day%2016) so that was good.
 
 ### [Day 18](Day%2018) -
 - **Problem:** 
