@@ -74,9 +74,9 @@
 - **Problem:** 
 - **Solution:**
 
-### [Day 19](Day%2019) -
-- **Problem:**
-- **Solution:**
+### [Day 19](Day%2019) - Aplenty
+- **Problem:** Combonomics.
+- **Solution:** Part one was a simple tree to walk. Part two took a lot of noodling, but got it down to a recursive call that sectioned the data.
 
 ### [Day 20](Day%2020) -
 - **Problem:**
