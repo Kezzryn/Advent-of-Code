@@ -62,7 +62,7 @@
 - **Problem:** Shuffling data
 - **Solution:** So much `LINQ`.
 
-### [Day 16](Day%2016) -
+### [Day 16](Day%2016) - The Floor Will Be Lava
 - **Problem:** Follow a beam of light past mirrors and prisms. 
 - **Solution:** Pathfinding with complex numbers. Implemeted a `Cursor()` class. Surprised I've not felt the need to do that before. Loop detection was the hardest thing.
 
