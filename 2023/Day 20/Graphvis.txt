@@ -1,0 +1,81 @@
+https://dreampuf.github.io/
+
+
+digraph G {
+
+broadcaster -> hp, zb, xv, qn
+
+subgraph cluster_1 {
+    kh -> rx
+    hz -> kh
+    pv -> kh
+    xm -> kh
+    qh -> kh
+  }
+
+  subgraph cluster_2 {
+    hd -> hp, js, hz
+    hp -> dt, hd
+    dt -> fm, hd
+    fm -> mp, hd
+    mp -> js, hd
+    js -> mv
+    mv -> hd, gr
+    gr -> hd, pb
+    pb -> hd, kj
+    kj -> tl, hd
+    tl -> jk, hd
+    jk -> zq, hd
+    zq -> hd
+  }
+
+  subgraph cluster_3 {
+    fl -> xv, tx, sl, df, qh, zc, zm
+    xv -> zc, fl
+    zc -> tx
+    tx -> df
+    df -> bb
+    bb -> fl, lb
+    lb -> zm, fl
+    zm -> mb    
+    mb -> fl, sl
+    sl -> vz
+    vz -> fl, bh
+    bh -> fl, gz    
+    gz -> fl
+  }
+  
+  subgraph cluster_4 {
+    kc -> zb, xp, pd, fc, xm
+    zb -> gs, kc
+    gs -> kc, pd
+    pd -> lq
+    lq -> kc, lj
+    lj -> fc, kc
+    fc -> rt
+    rt -> kc, xp
+    xp -> lg
+    lg -> kc, nk
+    nk -> kc, vx
+    vx -> kc, sz
+    sz -> kc
+  }
+  
+  subgraph cluster_5 {
+    tb -> sx, qn, vj, qq, sk, pv
+    qn -> sk, tb
+    sk -> sx
+    sx -> vj
+    vj -> gb
+    gb -> qq, tb
+    qq -> jm
+    jm -> tb, db
+    db -> xh, tb
+    xh -> cd, tb
+    cd -> gf, tb
+    gf -> pm, tb
+    pm -> tb
+
+  }
+
+}

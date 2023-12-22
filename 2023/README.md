@@ -13,7 +13,7 @@
 - **Problem:** Finding neighboring numbers in a string
 - **Solution:** Straight forward logic. Explored some additional applications of `Select().Where()` when parsing down the data for each symbol.
 
-### [Day 4](Day%2004) - Scratchcards 
+### [Day 4](Day%2004) - Scratch cards 
 - **Problem:**  Scratch and win!
 - **Solution:** `Intersect()` for part one, and a double `for` loop for part two.
 
@@ -64,29 +64,29 @@
 
 ### [Day 16](Day%2016) -
 - **Problem:** Follow a beam of light past mirrors and prisms. 
-- **Solution:** Pathfinding with complex numbers. Implemeted a `Cursor()` class. Surprised I've not felt the need to do that before. Loop detection was the hardest thing.
+- **Solution:** Pathfinding with complex numbers. Implemented a `Cursor()` class. Surprised I've not felt the need to do that before. Loop detection was the hardest thing.
 
 ### [Day 17](Day%2017) - Clumsy Crucible
 - **Problem:** A to B with the least heat loss.
-- **Solution:** This looked like a solution for A*. It was not. There's no good heuristic for the algorthm to function. Additionally, part two found an incorrect answer first due to the way stepping works, so I had to back up and cut it down to a normal search. I did get to reuse my `Cursor()` class from [Day 16](Day%2016) so that was good.
+- **Solution:** This looked like a solution for A*. It was not. There's no good heuristic for the algorithm to function. Additionally, part two found an incorrect answer first due to the way stepping works, so I had to back up and cut it down to a normal search. I did get to reuse my `Cursor()` class from [Day 16](Day%2016) so that was good.
 
 ### [Day 18](Day%2018) - Lavaduct Lagoon
 - **Problem:** Get the area of a polygon. 
-- **Solution:** From Day 12, I'd seen some references to the shoelace formula. This is half of the solution. The other half is using the shoelace to feed into Pick's Theorm. The third half is making sure the X and Y are `long` and not `int`. 
+- **Solution:** From Day 12, I'd seen some references to the shoelace formula. This is half of the solution. The other half is using the shoelace to feed into Pick's Theorem. The third half is making sure the X and Y are `long` and not `int`. 
 
 ### [Day 19](Day%2019) - Aplenty
 - **Problem:** Combonomics.
 - **Solution:** Part one was a simple tree to walk. Part two took a lot of noodling, but got it down to a recursive call that sectioned the data.
 
-### [Day 20](Day%2020) -
+### [Day 20](Day%2020) - Pulse Propagation
+- **Problem:** Work out the flow of pulses through a grid. 
+- **Solution:** With all my previous knowledge, part one was a straight forward simulation. Part two required working out what the machine was doing. An accidental reddit spoiler showed people using Graphvis to do so, so I followed suit. Interpreting the graph was the second challenge.
+
+### [Day 21](Day%2021) - Step Counter
 - **Problem:**
 - **Solution:**
 
-### [Day 21](Day%2021) -
-- **Problem:**
-- **Solution:**
-
-### [Day 22](Day%2022) -
+### [Day 22](Day%2022) - Sand Slabs
 - **Problem:**
 - **Solution:**
 
