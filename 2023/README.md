@@ -83,14 +83,14 @@
 - **Solution:** With all my previous knowledge, part one was a straight forward simulation. Part two required working out what the machine was doing. An accidental reddit spoiler showed people using Graphvis to do so, so I followed suit. Interpreting the graph was the second challenge.
 
 ### [Day 21](Day%2021) - Step Counter
-- **Problem:**
-- **Solution:**
+- **Problem:** Map step counting.
+- **Solution:** Part one was a simple loop, with the added bonus of realizing that you can only reach even steps from the starting point. Part two was conceptually simple, with a whole of of getting lost in the minuta of step counting and board polarity.
 
 ### [Day 22](Day%2022) - Sand Slabs
 - **Problem:**
 - **Solution:**
 
-### [Day 23](Day%2023) -
+### [Day 23](Day%2023) - A Long Walk
 - **Problem:** 
 - **Solution:**
 
