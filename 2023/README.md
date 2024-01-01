@@ -91,8 +91,8 @@
 - **Solution:** Part one was a simple simulation, with one annoying bug in my collision detection. Given the small size of the data set, I simply brute forced part two through simulation. It could be done faster with some dictionaries linking adjoining blocks.
 
 ### [Day 23](Day%2023) - A Long Walk
-- **Problem:** 
-- **Solution:**
+- **Problem:** Maximizing a maze crawl.
+- **Solution:** Part one was straight forward. Part two required the map to be simplified, and a better/faster history to be used. 
 
 ### [Day 24](Day%2024) -
 - **Problem:**
