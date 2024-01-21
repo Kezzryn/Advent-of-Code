@@ -87,7 +87,7 @@
 - **Solution:** I worked out part one. Part two involved a lookahead which took a bit of noodling which is documented in the instruction set.
 
 ### [Day 22](Day%2022) - Slam Shuffle
-- **Problem:** Shuffle a deck. Then shuffle a REALLY big deck. This turns out to be a 
+- **Problem:** Shuffle a deck. Then shuffle a REALLY big deck.
 - **Solution:** Part one could be simulated. Part two required a lot of reading about a lot of math that I'm not sure I fully understand.
 [Spheniscine's blog](https://codeforces.com/blog/entry/72593)
 [Solution discussion from u/asgardian28](https://www.reddit.com/r/adventofcode/comments/ees6bj/2019_day_22_part_2_story_of_solving_spoilers/)
