@@ -49,7 +49,7 @@ try
         HashSet<int> partNumbers = neighbors
             .Select(n => (nX: n.X + X, nY: n.Y + Y))
             .Where(w => w.nX >= 0 && w.nX <= maxX && w.nY >= 0 && w.nY <= maxY)
-                .Select(s => GetNumber(puzzleInput[s.nX], s.nY))
+                .Select(s => GetNumber(puzzleInput[s.nY], s.nX))
                 .Where(num => num != -1)
                 .ToHashSet();
         
