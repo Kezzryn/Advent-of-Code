@@ -98,6 +98,6 @@
 - **Problem:**
 - **Solution:**
 
-### [Day 25](Day%2025) -
-- **Problem:**
-- **Solution:**
+### [Day 25](Day%2025) - Snowverload 
+- **Problem:** Split a graph into two.
+- **Solution:** I tried some edge contraction. When that didn't work, I implemented another suggestion to pathfind from two nodes and cut the paths found.
