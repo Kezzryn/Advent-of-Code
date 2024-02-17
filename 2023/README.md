@@ -94,9 +94,9 @@
 - **Problem:** Maximizing a maze crawl.
 - **Solution:** Part one was straight forward. Part two required the map to be simplified, and a better/faster history to be used. 
 
-### [Day 24](Day%2024) -
-- **Problem:**
-- **Solution:**
+### [Day 24](Day%2024) - Never Tell Me The Odds
+- **Problem:** Line and Ray intersections.
+- **Solution:** Part one was easy once I realized I was looking at the wrong formulas. I don't need intersectons on a line, I need them on a ray. Part two I thrashed at for a while, then I read all the threads about it and I thrashed at it even longer, until I was fighting floating point precision errors and not the puzzle itself. This has been the most frustrating puzzle of all the years I've worked on.
 
 ### [Day 25](Day%2025) - Snowverload 
 - **Problem:** Split a graph into two.
