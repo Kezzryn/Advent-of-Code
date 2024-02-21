@@ -98,5 +98,5 @@
 - **Solution:**
 
 ### [Day 25](Day%2025) - Sea Cucumber
-- **Problem:**
-- **Solution:**
+- **Problem:** Track the migration habits of Sea Cucumbers
+- **Solution:** This was a straight forward simulation. I initially did it with flipping boards, but realized that it'd be easier with one board and careful moves.
