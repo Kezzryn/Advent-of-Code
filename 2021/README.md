@@ -78,8 +78,8 @@
 - **Solution:**
 
 ### [Day 20](Day%2020) - Trench Map
-- **Problem:**
-- **Solution:**
+- **Problem:** Cellular automata.
+- **Solution:** Cellular automata is becoming a straightforward problem. The trick was to figure out how to handle the infinate boarder that changed state each step. A logic test on the border solved that.
 
 ### [Day 21](Day%2021) - Dirac Dice
 - **Problem:** Round and round the board game.
