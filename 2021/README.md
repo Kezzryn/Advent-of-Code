@@ -74,8 +74,8 @@
 - **Solution:** So much recursion. Once I realized I had an easy way to return the tree to a string, for the add function, I created new `Node()` with concatinated strings. For part two, some foreach trickery gave me all the combos of strings to add up.
 
 ### [Day 19](Day%2019) - Beacon Scanner
-- **Problem:**
-- **Solution:**
+- **Problem:** Rotations and translations. 
+- **Solution:** Heavy iteration, and some surprisingly light matrix calls. The biggest bottleneck is the the `Intersect` call to determine overlaps. Removing this would require some restructuring of the solution.
 
 ### [Day 20](Day%2020) - Trench Map
 - **Problem:** Cellular automata.
