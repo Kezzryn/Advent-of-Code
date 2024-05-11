@@ -94,8 +94,8 @@
 - **Solution:** I thought making A* work might be too much for this, ... so this finished with something that looks a lot like A*. Culling duplicate states was the biggest speedup, with the next ones being precomputing the move distanaces and storing if a critter is in its final position.
 
 ### [Day 24](Day%2024) - Arithmetic Logic Unit
-- **Problem:**
-- **Solution:**
+- **Problem:** Incode decompiling.
+- **Solution:** Fourteen functions that feed into each other. Working them backward had some promising early results. The key hint is that the functions are paired in a way where when the output of one is the input of the next, it'll return the key value to it's origional state. The real trick was getting my output to a place where it was useful.
 
 ### [Day 25](Day%2025) - Sea Cucumber
 - **Problem:** Track the migration habits of Sea Cucumbers
