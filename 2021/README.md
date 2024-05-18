@@ -86,8 +86,8 @@
 - **Solution:** Part one was easy to simulate. Part two required some noodling on how to reduce the search space. The key is realizing that while dice rolls will multiply, only the results and how many times those results happen matter.
 
 ### [Day 22](Day%2022) - Reactor Reboot
-- **Problem:**
-- **Solution:**
+- **Problem:** Intersections of Cuboids
+- **Solution:** Part one could be brute forced, but I skipped doing that and focused instead on merging and splitting cubeoids. I had a nearly working solution that broke a pair of cuboids into 27 bits. Looking at the solution thread told me I was on the right track and [this post](https://www.reddit.com/r/adventofcode/comments/rlxhmg/comment/hpv4sjl/) showed me where I was messing up.
 
 ### [Day 23](Day%2023) - Amphipod
 - **Problem:** Sort Amphipods back into their homes.
