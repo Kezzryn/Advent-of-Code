@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>_2015_Day_1</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>AoC_2015_Day_1</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\EnumExtentions\BKH.EnumExtentions.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="PuzzleInput.txt">

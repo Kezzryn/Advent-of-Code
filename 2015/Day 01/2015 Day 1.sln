@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2015 Day 1", "2015 Day 1.csproj", "{D0F7AE43-0E92-406A-BDB7-9123573E12D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2015 Day 1", "2015 Day 1.csproj", "{D0F7AE43-0E92-406A-BDB7-9123573E12D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BKH.EnumExtentions", "..\..\Libraries\EnumExtentions\BKH.EnumExtentions.csproj", "{AB14B057-9B27-49B8-B49D-246EDA0BED2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D0F7AE43-0E92-406A-BDB7-9123573E12D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0F7AE43-0E92-406A-BDB7-9123573E12D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0F7AE43-0E92-406A-BDB7-9123573E12D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB14B057-9B27-49B8-B49D-246EDA0BED2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB14B057-9B27-49B8-B49D-246EDA0BED2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB14B057-9B27-49B8-B49D-246EDA0BED2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB14B057-9B27-49B8-B49D-246EDA0BED2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

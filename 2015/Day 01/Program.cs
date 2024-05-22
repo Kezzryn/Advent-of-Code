@@ -1,27 +1,15 @@
-﻿try
+﻿using BKH.EnumExtentions;
+
+try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    string santaSteps = File.ReadAllText(PUZZLE_INPUT);
+    IEnumerable<int> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Select(x => x == '(' ? 1 : -1);
 
-    int partOne = santaSteps.Sum(x => x == '(' ? 1 : -1);
-    Console.WriteLine($"Part 1: Santa is on floor: {partOne}");
-
-    int currentFloor = 0; 
-    int numSteps = 0;
-    
-    foreach (char floor in santaSteps)
-    {
-        numSteps++;
-        currentFloor += floor switch {
-            '(' => +1,
-            ')' => -1,
-            _ => throw new Exception($"WTF {floor}")
-        };
-
-        if (currentFloor < 0) break;
-    }
-    
-    Console.WriteLine($"Part 2: Santa first enters the basement at {numSteps}");
+    int part1Answer = puzzleInput.Sum();
+    int part2Answer = puzzleInput.CumulativeSum().Select((x, i) => (Floor: x, Index: (i + 1))).Where(x => x.Floor < 0).First().Index;
+ 
+    Console.WriteLine($"Part 1: Santa is on floor: {part1Answer}");
+    Console.WriteLine($"Part 2: Santa first enters the basement at {part2Answer}");
 }
 catch (Exception e)
 {
