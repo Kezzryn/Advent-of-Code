@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Point2D", "Point2D\Point2D.csproj", "{9F0822F5-9E32-4B85-96FB-B6A2B6505DE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Point3D", "Point3D\Point3D.csproj", "{D857B942-576B-47C9-9B53-518F00173AF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F0822F5-9E32-4B85-96FB-B6A2B6505DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0822F5-9E32-4B85-96FB-B6A2B6505DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0822F5-9E32-4B85-96FB-B6A2B6505DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0822F5-9E32-4B85-96FB-B6A2B6505DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D857B942-576B-47C9-9B53-518F00173AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D857B942-576B-47C9-9B53-518F00173AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D857B942-576B-47C9-9B53-518F00173AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D857B942-576B-47C9-9B53-518F00173AF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45080BC9-A422-44D2-A055-E4E16AA193A9}
+	EndGlobalSection
+EndGlobal
