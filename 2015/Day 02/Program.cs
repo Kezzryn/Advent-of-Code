@@ -1,19 +1,22 @@
-﻿int GetArea(int[] d) => (2 * d[0] * d[1]) + (2 * d[1] * d[2]) + (2 * d[2] * d[0]);
-int GetVolume(int[] d) => d.Aggregate((a,b) => a * b);
-int GetSlack(int[] d) => d.Take(2).Aggregate((a,b) => a * b);
-int GetPerimeter(int[] d) => d.Take(2).Aggregate((a, b) => 2 * (a + b));
+﻿static int GetSurfaceArea(List<int> d) => (2 * d[0] * d[1]) + (2 * d[1] * d[2]) + (2 * d[2] * d[0]);
+static int GetVolume(List<int> d) => d.Aggregate((a,b) => a * b);
+static int GetSlack(List<int> d) => d.Take(2).Aggregate((a,b) => a * b);
+static int GetSmallestPerimeter(List<int> d) => d.Take(2).Aggregate((a, b) => 2 * (a + b));
 
 try
 {
-    // This could be further simplified by merging the four formulas to a pair.
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    int[][] boxes = File.ReadAllLines(PUZZLE_INPUT).Select(x => x.Split('x').Select(int.Parse).OrderBy(x => x).ToArray()).ToArray();
-    
-    int part1 = boxes.Sum(x => GetArea(x) + GetSlack(x));
-    Console.WriteLine($"The total paper we will need is {part1} cubic feet.");
+    List<List<int>> puzzleInput = File.ReadAllLines(PUZZLE_INPUT)
+        .Select(x => x.Split('x')
+            .Select(int.Parse)
+            .OrderBy(x => x).ToList()
+            ).ToList();
 
-    int part2 = boxes.Sum(x => GetVolume(x) + GetPerimeter(x));
-    Console.WriteLine($"The total amount of ribbon we will need is {part2} feet.");
+    int part1Answer = puzzleInput.Sum(x => GetSurfaceArea(x) + GetSlack(x));
+    int part2Answer = puzzleInput.Sum(x => GetVolume(x) + GetSmallestPerimeter(x));
+
+    Console.WriteLine($"Part 1: The we will need a total of {part1Answer} cubic feet of paper.");
+    Console.WriteLine($"Part 2: The we will need {part2Answer} cubic feet of ribben.");
 }
 catch (Exception e)
 {
