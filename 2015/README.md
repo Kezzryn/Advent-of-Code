@@ -22,6 +22,7 @@
 ### [Day 5](Day%2005) - Doesn't He Have Intern-Elves For This?
 - **Problem:** Substring parsing.
 - **Solution:** In part one, I used language tools to find the target strings. Part two is some simple looping, but could probably be improved with liberal application of Regex.
+- **Update:** 5/22/2024: Now with triple the Regex!
 
 ### [Day 6](Day%2006) - Probably a Fire Hazard
 - **Problem:** Change the values in a 1000x1000 grid.
