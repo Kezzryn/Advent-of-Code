@@ -1,51 +1,48 @@
-﻿using System.Drawing;
+﻿using BKH.AoC_Point2D;
 
 try
 {
-    Dictionary<char, Size> directions = new()
+    Dictionary<char, Point2D> directions = new()
     {
-        { '<', new Size(-1, 0) },
-        { '>', new Size(1, 0)  },
-        { 'v', new Size(0, -1) },
-        { '^', new Size(0, 1)  }
+        { '<', new Point2D(-1,  0) },
+        { '>', new Point2D( 1,  0) },
+        { 'v', new Point2D( 0, -1) },
+        { '^', new Point2D( 0,  1) }
     };
 
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    string moves = File.ReadAllText(PUZZLE_INPUT);
+    List<Point2D> puzzleInput = File.ReadAllText(PUZZLE_INPUT)
+           .Select(x => directions[x]).ToList();
 
-    HashSet<Point> visitedHousesPart1 = new ();
-    HashSet<Point> visitedHousesPart2 = new();
+    HashSet<Point2D> part1Answer = [ Point2D.Origin ];
+    HashSet<Point2D> part2Answer = [ Point2D.Origin ];
 
-    Point soloSanta = new(0,0);
-
-    Point santa = new(0, 0);
-    Point roboSanta = new(0, 0);
+    Point2D soloSanta = new(0,0);
+    Point2D pairSanta = new(0, 0);
+    Point2D roboSanta = new(0, 0);
 
     bool isRoboSanta = false; 
 
-    visitedHousesPart1.Add(santa);
-    visitedHousesPart2.Add(roboSanta);
-
-    foreach (char direction in moves)
+    foreach (Point2D step in puzzleInput)
     {
-        soloSanta += directions[direction];
-        visitedHousesPart1.Add(soloSanta);
+        soloSanta += step;
+        part1Answer.Add(soloSanta);
 
         if (isRoboSanta)
         {
-            roboSanta += directions[direction];
-            visitedHousesPart2.Add(roboSanta);
+            roboSanta += step;
+            part2Answer.Add(roboSanta);
         }
         else
         {
-            santa += directions[direction];
-            visitedHousesPart2.Add(santa);
+            pairSanta += step;
+            part2Answer.Add(pairSanta);
         }
         isRoboSanta = !isRoboSanta;
     }
-    Console.WriteLine($"Part 1: Santa visited {visitedHousesPart1.Count} houses.");
-    Console.WriteLine($"Part 2: Santa and Robo Santa visited {visitedHousesPart2.Count} houses.");
 
+    Console.WriteLine($"Part 1: Santa visited {part1Answer.Count} houses.");
+    Console.WriteLine($"Part 2: Santa and Robo Santa visited {part2Answer.Count} houses.");
 }
 catch (Exception e)
 {
