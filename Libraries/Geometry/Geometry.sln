@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rectangle", "Geometry\Rectangle.csproj", "{267B8D07-9F91-4B9B-ACED-64B7560A638B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuboid", "Cuboid\Cuboid.csproj", "{6B8CE6D2-247C-44E2-B19E-2EB099BEA8CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{267B8D07-9F91-4B9B-ACED-64B7560A638B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267B8D07-9F91-4B9B-ACED-64B7560A638B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267B8D07-9F91-4B9B-ACED-64B7560A638B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267B8D07-9F91-4B9B-ACED-64B7560A638B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B8CE6D2-247C-44E2-B19E-2EB099BEA8CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B8CE6D2-247C-44E2-B19E-2EB099BEA8CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B8CE6D2-247C-44E2-B19E-2EB099BEA8CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B8CE6D2-247C-44E2-B19E-2EB099BEA8CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DCF10E5-ED5B-4740-90E1-4616D412248E}
+	EndGlobalSection
+EndGlobal
