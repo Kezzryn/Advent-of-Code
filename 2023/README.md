@@ -19,7 +19,7 @@
 
 ### [Day 5](Day%2005) - If You Give A Seed A Fertilizer
 - **Problem:** Number translation through range maps. 
-- **Solution:** Part one was simple to solve. Part two was not. I eventually paralyzed my query and the whole mess ran in about 180 seconds.
+- **Solution:** Part one was simple to solve. Part two was not. I eventually parallelized my query and the whole mess ran in about 180 seconds.
 - Future fun: Go back and code a real query for this.
 
 ### [Day 6](Day%2006) - Wait For It
