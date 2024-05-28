@@ -17,9 +17,9 @@ try
     HashSet<Point2D> part1Answer = [ Point2D.Origin ];
     HashSet<Point2D> part2Answer = [ Point2D.Origin ];
 
-    Point2D soloSanta = new(0,0);
-    Point2D pairSanta = new(0, 0);
-    Point2D roboSanta = new(0, 0);
+    Point2D soloSanta = Point2D.Origin;
+    Point2D pairSanta = Point2D.Origin;
+    Point2D roboSanta = Point2D.Origin;
 
     bool isRoboSanta = false; 
 
@@ -42,7 +42,7 @@ try
     }
 
     Console.WriteLine($"Part 1: Santa visited {part1Answer.Count} houses.");
-    Console.WriteLine($"Part 2: Santa and Robo Santa visited {part2Answer.Count} houses.");
+    Console.WriteLine($"Part 2: Santa and Robo Santa visited a total of {part2Answer.Count} houses.");
 }
 catch (Exception e)
 {
