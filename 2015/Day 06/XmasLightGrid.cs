@@ -1,59 +1,110 @@
-﻿using System.Drawing;
+﻿using BKH.Geometry;
 using System.Text.RegularExpressions;
+using static AoC_2015_Day_06.XmasLightGrid;
 
-namespace AoC_2015_Day_6
+namespace AoC_2015_Day_06
 {
-    internal static class RuleSet
+    internal partial class XmasLightGrid(Ruleset ruleSet)
     {
-        public const int Toggle = 0;
-        public const int Brighten = 1;
-    }
+        private readonly List<Rectangle> _lights = [];
+        private readonly List<int> _lightBrightness = [];
+        private readonly Ruleset _ruleSet = ruleSet;
+        public string LightCount => $"{_lights.Count}";
 
-    internal partial class XmasLightGrid
-    {
-        private readonly Dictionary<Point, int> _lightGrid = new();
-        private readonly int ToggleOrBright;
-
-        public XmasLightGrid(int ruleSet = RuleSet.Toggle)
+        private void BrightenLights(Rectangle flipReq, Action action)
         {
-            ToggleOrBright = ruleSet;
+            IEnumerable<(Rectangle rect, int i)> overlapList = _lights.Select((x, i) => (x,i)).Where(x => flipReq.Overlap(x.x));
+
+            List<(Rectangle rect, int brightness)> intersections = [];
+            List<(Rectangle rect, int brightness)> existingRects = [];
+
+            foreach((Rectangle rectangle, int i) in overlapList)
+            {
+                int currentBrightness = _lightBrightness[i];
+                int newBrightness = currentBrightness + action switch
+                {
+                    Action.Toggle =>   2,
+                    Action.TurnOff => -1,
+                    Action.TurnOn =>   1,
+                    _ => throw new NotImplementedException($"action {action}")
+                };
+
+                intersections.Add((rectangle.Intersect(flipReq), newBrightness));
+                existingRects.AddRange(rectangle.Exclude(flipReq).Select(x => (x,currentBrightness)));
+            }
+
+            foreach(int i in overlapList.OrderByDescending(x => x.i).Select(x => x.i))
+            {
+                _lights.RemoveAt(i);
+                _lightBrightness.RemoveAt(i);
+            }
+
+            _lights.AddRange(intersections.Where(x => x.brightness > 0).Select(x => x.rect));
+            _lightBrightness.AddRange(intersections.Where(x => x.brightness > 0).Select(x => x.brightness));
+
+            _lights.AddRange(existingRects.Select(x => x.rect));
+            _lightBrightness.AddRange(existingRects.Select(x => x.brightness));
+
+            //carved down chunk. 
+            if (action == Action.TurnOn || action == Action.Toggle)
+            {
+                Queue<Rectangle> queue = new();
+                queue.Enqueue(flipReq);
+                List<Rectangle> newRects = [];
+                while (queue.TryDequeue(out Rectangle? rect))
+                {
+                    bool isCutDown = false;
+                    foreach(Rectangle interRect in intersections.Select(x => x.rect))
+                    {
+                        if (rect.Overlap(interRect))
+                        {
+                            isCutDown = true;
+                            rect.Exclude(interRect).ForEach(queue.Enqueue);
+                            break;
+                        }
+                    }
+
+                    if(!isCutDown) newRects.Add(rect);
+                }
+
+                foreach (Rectangle rect in newRects)
+                {
+                    _lights.Add(rect);
+                    _lightBrightness.Add(action == Action.TurnOn ? 1 : 2);
+                }
+            }
         }
 
-        private void FlipLights(int x1, int y1, int x2, int y2, char action)
+        private void ToggleLights(Rectangle flipReq, Action action)
         {
-            // data is always bottom left to upper right.
+            Queue<Rectangle> queue = [];
+            queue.Enqueue(flipReq);
 
-            Point cursor = new (0,0);
-
-            for (int x = x1; x <= x2; x++)
+            while (queue.TryDequeue(out Rectangle? newReq))
             {
-                for (int y = y1; y <= y2; y++)
+                bool isOverlap = false;
+                for (int i = 0; i < _lights.Count; i++)
                 {
-                    cursor.X = x;
-                    cursor.Y = y; 
-                    if (_lightGrid.TryGetValue(cursor, out int light))
+                    if (newReq.Overlap(_lights[i]))
                     {
-                        _lightGrid[cursor] += action switch
+                        isOverlap = true;
+                        if (action == Action.Toggle)
                         {
-                            'T' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? -1 : 1 : 2,
-                            'O' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? 0 : 1 : 1,
-                            'F' => (ToggleOrBright == RuleSet.Toggle) ? (light == 1) ? -1 : 0 : -1,
-                            _ => 0
-                        };
-                        if (_lightGrid[cursor] < 0) _lightGrid[cursor] = 0;
-                    }
-                    else
-                    {
-                        if (ToggleOrBright == RuleSet.Toggle)
-                        {
-                            _lightGrid.Add(cursor, (action != 'F') ? 1 : 0) ;
+                            newReq.Exclude(_lights[i]).ForEach(queue.Enqueue);
+
+                            _lights.AddRange(_lights[i].Exclude(newReq));
+                            _lights.RemoveAt(i--);
+                            break; //We need to stop using the current shape. We might have more overlaps with the other bits we just queued.
                         }
-                        else
-                        {
-                            _lightGrid.Add(cursor, action switch { 'T' => 2, 'O' => 1, _ => 0 });
-                        }
-                        
+
+                        _lights.AddRange(_lights[i].Exclude(newReq));
+                        _lights.RemoveAt(i--);
                     }
+                }
+
+                if (action == Action.TurnOn || (action == Action.Toggle && !isOverlap))
+                {
+                    _lights.Add(newReq);
                 }
             }
         }
@@ -61,37 +112,42 @@ namespace AoC_2015_Day_6
         public void Instruction(string instruction)
         {
             int[] numbers = FindNumbers().Matches(instruction).Select(x => int.Parse(x.Value)).ToArray();
+            Rectangle newReq = new(numbers[0], numbers[1], numbers[2], numbers[3]);
+            Action action;
 
-            if (instruction.StartsWith("toggle")) Toggle(numbers[0], numbers[1], numbers[2], numbers[3]);
+            if (instruction.StartsWith("toggle"))
+                action = Action.Toggle;
+            else if (instruction.StartsWith("turn on"))
+                action = Action.TurnOn;
+            else if (instruction.StartsWith("turn off"))
+                action = Action.TurnOff;
+            else
+                throw new Exception($"Unknown instruction. {instruction}");
 
-            if (instruction.StartsWith("turn on")) TurnOn(numbers[0], numbers[1], numbers[2], numbers[3]);
-
-            if (instruction.StartsWith("turn off")) TurnOff(numbers[0], numbers[1], numbers[2], numbers[3]);
+            if (_ruleSet == Ruleset.Toggle) ToggleLights(newReq, action);
+            if (_ruleSet == Ruleset.Brighten) BrightenLights(newReq, action);
         }
 
-        public void Toggle(int x1, int y1, int x2, int y2)
+        public long NumLit() => _lights.Sum(x => x.Area);
+
+        public long Luminosity() => _lightBrightness.Select((x, i) => _lights[i].Area * x).Sum();
+
+        private enum Action
         {
-            FlipLights(x1, y1, x2, y2, 'T');
+            TurnOn,
+            TurnOff,
+            Toggle
         }
 
-        public void TurnOn(int x1, int y1, int x2, int y2)
+        public enum Ruleset
         {
-            FlipLights(x1, y1, x2, y2, 'O');
+            Toggle,
+            Brighten
         }
-
-        public void TurnOff(int x1, int y1, int x2, int y2)
-        {
-            FlipLights(x1, y1, x2, y2, 'F');
-        }
-        public int NumLit() => _lightGrid.Where(pair => pair.Value >= 0).Count();
-
-        public int Luminosity() => _lightGrid.Select(pair => pair.Value).Sum();
-
     }
     partial class XmasLightGrid
     {
         [GeneratedRegex("\\d+")]
         private static partial Regex FindNumbers();
     }
- 
 }
