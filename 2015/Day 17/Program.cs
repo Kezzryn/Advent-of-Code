@@ -1,60 +1,42 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int TARGET_EGGNOG = 150;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    List<int> puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Select(int.Parse).ToList();
 
-    int[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Select(int.Parse).ToArray();
-
-    Dictionary<int, int> containers = new();
+    Dictionary<int, int> containers = [];
     Queue<(int, int)> queue = new();
-    HashSet<int> answers = new();
+    HashSet<int> part1Answers = [];
 
-    for (int i = 0; i < puzzleInput.Length; i++)
+    for (int i = 0; i < puzzleInput.Count; i++)
     {
         containers.Add(1 << i, puzzleInput[i]);
         queue.Enqueue((1 << i, puzzleInput[i]));
     }
 
-    while (queue.Count > 0)
+    while (queue.TryDequeue(out (int key, int value) current))
     {
-        (int s, int v) = queue.Dequeue();
-
-        foreach (int key in containers.Keys)
+        foreach (int key in containers.Keys.Where(x => (x & current.key) == 0))
         {
-            if ((key & s) != 0) continue; 
+            int newValue = current.value + containers[key];
 
-            int newValue = v + containers[key];
-
-            if (newValue > TARGET_EGGNOG) continue;
             if (newValue == TARGET_EGGNOG)
-            { 
-                answers.Add(key | s);
-            }
-            else
             {
-                queue.Enqueue((key | s, newValue));
+                part1Answers.Add(key | current.key);
+            }
+            else if (newValue < TARGET_EGGNOG)
+            {
+                queue.Enqueue((key | current.key, newValue));
             }
         }
     }
 
-    Console.WriteLine($"Part 1: The maximum number of containers is {answers.Count}");
+    IEnumerable<int> part2Answers = part1Answers.Select(int.PopCount);
 
-    int BitCount(int value)
-    {
-        int returnValue = 0;
-        for (int i = 0; i < puzzleInput.Length; i++)
-        {
-            returnValue += ((1 << i & value) != 0) ? 1 : 0;
-        }
-        return returnValue;
-    }
-
-    var bitCount = answers.Select(x => BitCount(x));
-
-    Console.WriteLine($"Part 2: The fewest containers we can use is {bitCount.Min()} and there are {bitCount.OrderBy(o => o).GroupBy(g => g).First().Count()} ways to use them.");
+    Console.WriteLine($"Part 1: The maximum number of containers is {part1Answers.Count}");
+    Console.WriteLine($"Part 2: The fewest containers we can use is {part2Answers.Min()} and there are {part2Answers.OrderBy(o => o).GroupBy(g => g).First().Count()} ways to use them.");
 }
 catch (Exception e)
 {
     Console.WriteLine(e);
 }
-

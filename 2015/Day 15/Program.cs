@@ -2,15 +2,19 @@
 
 try
 {
-    const int MAX_CALORIES = 500;
+    const int CALORIE_TARGET = 500;
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    CookieMaker cookiePart1 = new(puzzleInput);
-    CookieMaker cookiePart2 = new(puzzleInput, MAX_CALORIES);
+    CookieMaker cookie = new(puzzleInput);
 
-    Console.WriteLine($"Part 1: Our best tasting cookie is rated: {cookiePart1.GetBestCookie()}.");
-    Console.WriteLine($"Part 2: Our best {MAX_CALORIES} calorie cookie is rated only: {cookiePart2.GetBestCookie()}.");
+    int part1Answer = cookie.GetBestCookie();
+
+    cookie.TargetCalories = CALORIE_TARGET;
+    int part2Answer = cookie.GetBestCookie();
+
+    Console.WriteLine($"Part 1: Our best tasting cookie is rated: {part1Answer}.");
+    Console.WriteLine($"Part 2: Our best {CALORIE_TARGET} calorie cookie is rated only: {part2Answer}.");
 }
 catch (Exception e)
 {

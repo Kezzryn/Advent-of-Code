@@ -6,15 +6,15 @@
 
 try
 {
-    const int totalTime = 2503;
+    const int TOTAL_TIME = 2503;
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     // Basic reindeer statistics. 
-    Dictionary<string, (int speed, int sprint, int rest)> reindeer = new();
+    Dictionary<string, (int speed, int sprint, int rest)> reindeer = [];
 
     // cumulative turn over turn score for Part2. 
-    Dictionary<string, int> scorePart2 = new();
+    Dictionary<string, int> part2Answer = [];
 
     foreach (string line in puzzleInput)
     {
@@ -23,26 +23,23 @@ try
         string[] puzzleData = line.Split(' ');
 
         reindeer.Add(puzzleData[0], (int.Parse(puzzleData[3]), int.Parse(puzzleData[6]), int.Parse(puzzleData[13])));
-        scorePart2.Add(puzzleData[0], 0);
+        part2Answer.Add(puzzleData[0], 0);
     }
 
-    int scorePart1 = reindeer.Select(x => TravelDistance(totalTime, x.Value.speed, x.Value.sprint, x.Value.rest)).Max();
+    int part1Answer = reindeer.Select(x => TravelDistance(TOTAL_TIME, x.Value.speed, x.Value.sprint, x.Value.rest)).Max();
 
-    for (int currentTime = 1; currentTime <= totalTime; currentTime++)
+    for (int currentTime = 1; currentTime <= TOTAL_TIME; currentTime++)
     {
-        string[] roundWinners = reindeer
-            .Select(x => (x.Key, TravelDistance(currentTime, x.Value.speed, x.Value.sprint, x.Value.rest)))
-            .OrderByDescending(ob => ob.Item2)
-            .GroupBy(item => item.Item2)
+        reindeer
+            .Select(x => (x.Key, TravelDist: TravelDistance(currentTime, x.Value.speed, x.Value.sprint, x.Value.rest)))
+            .OrderByDescending(x => x.TravelDist)
+            .GroupBy(x => x.TravelDist)
             .First()
-            .Select(x => x.Key)
-            .ToArray();
-
-        foreach(string winner in roundWinners) scorePart2[winner] += 1;
+            .ToList().ForEach(x => part2Answer[x.Key] += 1);
     }
 
-    Console.WriteLine($"The winning reindeer will travel {scorePart1}.");
-    Console.WriteLine($"The winning reindeer will have a score of {scorePart2.Select(x => x.Value).Max()}.");
+    Console.WriteLine($"The winning reindeer will travel {part1Answer}.");
+    Console.WriteLine($"The winning reindeer will have a score of {part2Answer.Max(x => x.Value)}.");
 }
 catch (Exception e)
 {

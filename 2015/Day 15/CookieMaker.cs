@@ -1,86 +1,78 @@
 ﻿namespace AoC_2015_Day_15
 {
-    enum CookieProperties
-    {
-        Capacity,
-        Durability,
-        Flavor,
-        Texture,
-        Calories
-    };
-
     internal class CookieMaker
     {
-        private readonly int _maxCalories; // -1 is no max
+        private int _targetCalories; // -1 is no target
 
         // I should generate these to fit the size of the ingredient array.
-        private readonly List<int[]> _stepKey = new()
+        private static readonly List<int[]> _stepKey =
+        [
+            [+1, -1,  0,  0],
+            [+1,  0, -1,  0],
+            [+1,  0,  0, -1],
+            [+2, -1, -1,  0],
+            [+2, -1,  0, -1],
+            [+2,  0, -1, -1],
+            [+3, -1, -1, -1],
+        ];
+
+        private static readonly Dictionary<string, int> _cookieProperties = new()
         {
-            new int[] { +1, -1,  0,  0 },
-            new int[] { +1,  0, -1,  0 },
-            new int[] { +1,  0,  0, -1 },
-            new int[] { +2, -1, -1,  0 },
-            new int[] { +2, -1,  0, -1 },
-            new int[] { +2,  0, -1, -1 },
-            new int[] { +3, -1, -1, -1 },
+            { "capacity", 1 },
+            { "durability", 2 },
+            { "flavor", 3 },
+            { "texture", 4 },
+            { "calories", 5}
         };
 
-        // I should also generate these to fit the size of the ingredient array.
-        private readonly List<int[]> _startKeys = new()
+        private readonly List<Dictionary<int, int>> _ingredients = [];
+
+        public CookieMaker(string[] puzzleInput, int targetCalories = -1)
         {
-            new int[] { 25, 25, 25, 25 },
-            new int[] { 73,  9,  9,  9 },
-            new int[] {  9, 73,  9,  9 },
-            new int[] {  9,  9, 73,  9 },
-            new int[] {  9,  9,  9, 73 },
-        };
+            _targetCalories = targetCalories;
 
-        private readonly Dictionary<int, Dictionary<CookieProperties, int>> _ingredients = new();
-
-        public CookieMaker(string[] puzzleInput, int maxCalories = -1)
-        {
-            _maxCalories = maxCalories;
-
-            for (int i = 0; i < puzzleInput.Length; i++)
+            foreach(string line in puzzleInput)
             {
-                _ingredients.Add(i, new());
+                Dictionary<int, int> newIngredient = [];
 
-                foreach (CookieProperties property in Enum.GetValues(typeof(CookieProperties)))
+                foreach ((string property, int propIndex) in _cookieProperties)
                 {
                     // Find the space after the lower case-d name of our current property
-                    int startIndex = puzzleInput[i].IndexOf(' ', puzzleInput[i].IndexOf(Enum.GetName(typeof(CookieProperties), property)!.ToLower()));
+                    int startIndex = line.IndexOf(' ', line.IndexOf(property));
 
                     // find the next comma, then test to see if we're off the end of the string. 
-                    int length = puzzleInput[i].IndexOf(',', startIndex);
-                    length = (length == -1) ? puzzleInput[i].Length - startIndex : length - startIndex;
+                    int length = line.IndexOf(',', startIndex);
+                    length = (length == -1) ? line.Length - startIndex : length - startIndex;
 
-                    _ingredients[i].Add(property, int.Parse(puzzleInput[i].Substring(startIndex, length)));
+                    newIngredient.Add(propIndex, int.Parse(line.Substring(startIndex, length)));
                 }
+                _ingredients.Add(newIngredient);
             }
         }
+
+        public int TargetCalories { get { return _targetCalories; } set {  _targetCalories = value; } }
 
         // Our maximization function.
         private int ValueFunction(int[] recipe)
         {
             int returnValue = 1;
-            foreach (CookieProperties property in Enum.GetValues(typeof(CookieProperties)))
+            foreach ((string property, int propIndex) in _cookieProperties)
             {
                 int subValue = 0;
                 for (int i = recipe.GetLowerBound(0); i <= recipe.GetUpperBound(0); i++)
                 {
-                    subValue += recipe[i] * _ingredients[i][property];
+                    subValue += recipe[i] * _ingredients[i][propIndex];
                 }
 
-                if (property != CookieProperties.Calories)
+                if (property != "calories")
                 {
                     if (subValue <= 0) return 0; // no negatives permitted, and 0s will zero out the entire calculation. 
                     returnValue *= subValue;
                 }
                 else
                 {
-                    if (_maxCalories < 0) continue;  // Skip the following if we're not counting calories.
-                    if (subValue == _maxCalories) continue; // Continue if we're on target
-                    return 0; // This one's no good to us.
+                    // Part 2 check for target calories. 
+                    if (_targetCalories > 0 && subValue != _targetCalories) return 0;
                 }
             }
             return returnValue;
@@ -91,32 +83,29 @@
 
         public int GetBestCookie()
         {
-            int loopcounter = 0;
-
             // HashSet is because I can't view the queue for duplicate entries.
             PriorityQueue<int[], int> queue = new();
-            HashSet<string> queuedSolutions = new();
-            
+            HashSet<string> queuedSolutions = [];
+
+            int[] startKey = [25, 25, 25, 25];
             int bestAnswer = int.MinValue;
 
-            // Prepopulate the search queue with some potential answers.
-            foreach (int[] keys in _startKeys)
-            {
-                queue.Enqueue(keys, -ValueFunction(keys));
-                queuedSolutions.Add(GetAnswerKey(keys));
-            }
+            // Prepopulate the search queue with a potential answer.
+            // Adding a variety of start keys does not seem to speed up the search
+            queue.Enqueue(startKey, -ValueFunction(startKey));
+            queuedSolutions.Add(GetAnswerKey(startKey));
 
-            while (queue.Count > 0)
+            int[] newAnswer = new int[_stepKey[0].Length];
+            int keyIndex;
+            int newValue;
+            while (queue.TryDequeue(out int[]? potentialAnswer, out int currentAnswer))
             {
-                loopcounter++;
-                
-                if (!queue.TryDequeue(out int[]? potentialAnswer, out int priority)) break;
-                
-                // Pull the priority off the queue, rather than re-compute it. 
-                priority *= -1; // ...and invert it, 'cause we push it to the queue as a negative. 
+                // Pull the priority off the queue, rather than re-compute it.
+                // ...and invert it, 'cause we push it to the queue as a negative. 
+                currentAnswer = -currentAnswer; 
 
                 // Do we have a better answer?
-                if (priority > bestAnswer) bestAnswer = priority;
+                if (currentAnswer > bestAnswer) bestAnswer = currentAnswer;
 
                 foreach (int[] step in _stepKey)
                 {
@@ -124,24 +113,24 @@
                     // we'll access the indexes 0123, then 1230, 2301, etc.
                     for (int i = 0; i < step.Length; i++)
                     {
-                        int[] newAnswer = new int[step.Length];
+                        Array.Clear(newAnswer);
                         for (int j = 0; j < step.Length; j++)
                         {
-                            int index = (step.Length + i + j) % step.Length;
+                            keyIndex = (step.Length + i + j) % step.Length;
 
                             // basic bounds check. This could probably be improved.
-                            newAnswer[j] = int.Max(0, int.Min(step[index] + potentialAnswer[index], 100));
+                            newAnswer[j] = int.Max(0, int.Min(step[keyIndex] + potentialAnswer[keyIndex], 100));
                         }
                         if (newAnswer.Sum() != 100) continue; // Sanity / bounds check.
 
                         if (!queuedSolutions.Contains(GetAnswerKey(newAnswer)))
                         {
-                            int newValue = ValueFunction(newAnswer);
+                            newValue = ValueFunction(newAnswer);
                             // Only Enqueue equal or 'better' solutions.
                             // If our neighbors are equal, we might be on a shoulder / flat.
-                            if (newValue >= priority) 
+                            if (newValue >= currentAnswer) 
                             {
-                                queue.Enqueue(newAnswer, -newValue);
+                                queue.Enqueue([..newAnswer], -newValue);        //copy the newAnswer array, or have ref vs. val issues.
                                 queuedSolutions.Add(GetAnswerKey(newAnswer));
                             }
                         }
