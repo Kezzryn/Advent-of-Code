@@ -22,7 +22,7 @@ namespace BKH.EnumExtentions
               (accumulator, sequence) =>
                 from accseq in accumulator
                 from item in sequence.Except(accseq)  //added Except to suppress combos of the same sequence. 
-                select accseq.Concat([ item ]));
+                select accseq.Concat([item]));
         }
 
         /// <summary>
@@ -41,6 +41,24 @@ namespace BKH.EnumExtentions
             {
                 sum += item;
                 yield return sum;
+            }
+        }
+
+        public static IEnumerable<long> Factor(this long number)
+            //where T : IBinaryInteger<long>
+        {
+            // From StackOverflow. 
+            // https://stackoverflow.com/questions/239865/best-way-to-find-all-factors-of-a-given-number
+
+            long max = (long)Math.Sqrt(number);  // Round down
+
+            for (long factor = 1; factor <= max; ++factor) // Test from 1 to the square root, or the int below it, inclusive.
+            {
+                if (number % factor == 0)
+                {
+                    if (factor != number / factor) // Don't add the square root twice!  Thanks Jon
+                        yield return number / factor;
+                }
             }
         }
     }
