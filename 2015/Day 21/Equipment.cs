@@ -2,8 +2,6 @@
 {
     internal static class Equipment
     {
-        public static bool HasArmor(int equipment) => Armor.Keys.Select(x => x & equipment).Where(x => x == 0).Count() != Armor.Count;
-        public static bool HasRings(int equipment) => Rings.Keys.Select(x => x & equipment).Where(x => x == 0).Count() != Rings.Count;
         public static (int GoldCost, int Damage, int Armor) GetEquipment(int id)
         {
             if (Rings.TryGetValue(id, out var equipment)) return equipment;
@@ -23,6 +21,7 @@
         // tag (gold, damage, armor) 
         public static Dictionary<int, (int GoldCost, int Damage, int Armor)> Armor = new()
         {
+            { 0,       (  0, 0, 0) }, // None
             { 1 << 6,  ( 13, 0, 1) }, // Leather
             { 1 << 7,  ( 31, 0, 2) }, // Chainmail
             { 1 << 8,  ( 53, 0, 3) }, // Splintmail
@@ -32,6 +31,9 @@
         // tag (gold, damage, armor) 
         public static Dictionary<int, (int GoldCost, int Damage, int Armor)> Rings = new()
         {
+            // None
+            { 0,       (  0, 0, 0) }, 
+
             // One handed
             { 1 << 11, ( 25, 1, 0) },
             { 1 << 12, ( 50, 2, 0) },

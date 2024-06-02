@@ -51,17 +51,17 @@
 
         public void AddEquipment(int equipmentID)
         {
-            (int g, int d, int a) = Equipment.GetEquipment(equipmentID);
             // Make sure we don't double equip things. 
             if ((MyEquipment & equipmentID) == 0)
             {
+                (int g, int d, int a) = Equipment.GetEquipment(equipmentID);
                 MyEquipment |= equipmentID;
                 Damage += d;
                 Armor += a;
                 GoldCost += g;
             }
         }
-        public bool FightMe(Entity opponent)
+        public bool BeatBoss(Entity opponent)
         {
             // Magic formula to round up integer division. (x + y - 1) ÷ y 
             // Return true if we win, false if we fail.
