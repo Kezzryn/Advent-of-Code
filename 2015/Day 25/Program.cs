@@ -2,40 +2,39 @@
 
 try
 {
-    const int TARGET_ROW = 0;
-    const int TARGET_COL = 1;
     const long START_CODE = 20151125;
     const long MULTIPLIER = 252533;
     const long DIVISOR = 33554393;
 
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
-    
-    int[] codeSearchTarget = Regex.Matches(puzzleInput, "\\d+").Select(x => int.Parse(x.Value)).ToArray();
 
-    static long calcCode(long value) => value * MULTIPLIER % DIVISOR;
+    var matches = Regex.Matches(puzzleInput, "\\d+").Select(x => int.Parse(x.Value));
+    (int targetRow, int targetCol) = (matches.First(), matches.Last());
 
-    int row = 1;
-    int col = 1;
+    /*
+     *   1234
+     * 1 0259
+     * 2 148
+     * 3 37
+     * 4 6
+     * 
+     * Problem: What is the index of row 2, col 3? 
+     * 
+     * This can be calculated as triangular number.
+     * https://en.wikipedia.org/wiki/Triangular_number
+     */
 
-    long code = START_CODE;
+    int triangle = ((targetRow + targetCol - 1) * (targetRow + targetCol) / 2) - targetRow;
 
-    while (!(row == codeSearchTarget[TARGET_ROW] && col == codeSearchTarget[TARGET_COL]))
+    long part1Answer = START_CODE;
+    for (int i = 0; i < triangle; i++)
     {
-        row--;
-        col++;
-
-        if (row <= 0)
-        {
-            row = col;
-            col = 1;
-        }
-
-        code = calcCode(code);
-    } 
-
-    Console.WriteLine($"Part 1: The code for the weather machine is: {code}");
-
+        part1Answer *= MULTIPLIER;
+        part1Answer %= DIVISOR;
+    }
+    
+    Console.WriteLine($"Part 1: The code for the weather machine is: {part1Answer}");   
 }
 catch (Exception e)
 {
