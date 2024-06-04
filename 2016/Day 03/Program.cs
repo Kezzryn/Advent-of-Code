@@ -4,44 +4,26 @@
     // Note that this must be true for ALL three combinations. However, this can be shortcut by summing the
     // two smallest sides and comparing the result to the remaining side.
     // From wikipedia: This can be stated as: max(a,b,c) < a + b + c - max(a,b,c)
-    
+
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    int[][] triangles = File.ReadAllLines(PUZZLE_INPUT)
-        .Select(x => x.Split(' ',StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-            .Select(int.Parse)
-            .OrderBy(x => x)
-            .ToArray())
-        .ToArray();
+    IEnumerable<IEnumerable<int>> puzzleInput = File.ReadAllLines(PUZZLE_INPUT)
+            .Select(x => x.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse));
 
-    int part1 = triangles.Sum(x => (x.Take(2).Aggregate((a, b) => a + b) > x.Last()) ? 1 : 0);
-    Console.WriteLine($"The total number of valid triangles is {part1}.");
+    //This will turn our column data into row data.
+    //Yes, it's voodoo.
+    IEnumerable<IEnumerable<int>> puzzlePart2 = puzzleInput.Chunk(3)
+        .SelectMany(chunks => Enumerable.Range(0, 3)
+            .Select(column => chunks
+                .Select(row => row.ElementAt(column))));
 
-    int part2 = 0;
+    static bool IsValidTriangle(IEnumerable<int> nums) => nums.OrderBy(x => x).Take(2).Sum() > nums.Max();
 
-    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
-
-    List<Range> columns = new()
-    {
-        new Range(2, 5),
-        new Range(7, 10),
-        new Range(12, 15)
-    };
-
-    for (int line = 0; line < puzzleInput.Length; line += 3)
-    {
-        foreach (Range col in columns)
-        {
-            List<int> triangleSet = new() {
-                int.Parse(puzzleInput[line][col].Trim()),
-                int.Parse(puzzleInput[line + 1][col].Trim()),
-                int.Parse(puzzleInput[line + 2][col].Trim())
-            };
-            triangleSet = triangleSet.OrderBy(x => x).ToList();
-            part2 += (triangleSet.Take(2).Aggregate((a, b) => a + b) > triangleSet.Last()) ? 1 : 0;
-        }
-    }
-
-    Console.WriteLine($"The total number of vertially counted triangles is {part2}.");
+    int part1Answer = puzzleInput.Count(IsValidTriangle);
+    int part2Answer = puzzlePart2.Count(IsValidTriangle);
+    
+    Console.WriteLine($"The total number of valid triangles is {part1Answer}.");
+    Console.WriteLine($"The total number of vertically ordered triangles is {part2Answer}.");
 }
 catch (Exception e)
 {
