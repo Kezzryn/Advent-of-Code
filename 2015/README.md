@@ -77,6 +77,7 @@
 ### [Day 18](Day%2018) - Like a GIF For Your Yard
 - **Problem:** Game of Life simulation.
 - **Solution:** I used a 3D array, with `x,y` as the puzzle state, with a flip flopping pointer to the third dimension as my next move. I'd read the state from `x,y,0` and write to `x,y,1`, then reverse the to/from.
+- **Update June 3, 2024:** Now uses library function.
 
 ### [Day 19](Day%2019) - Medicine for Rudolph
 - **Problem:** Part one was a straight forward string substitution. Part two turned out to be reversing the string substitution back down to a start point.
