@@ -1,12 +1,12 @@
-﻿using System.Threading;
-using System.Timers;
+﻿using System.Timers;
 
 namespace AoC_2016_Day_05
 {
     internal static class Globals
     {
         public static string part1Answer = "";
-        public static string part2Answer = "????????";
+        public static char[] part2Answer = "????????".ToCharArray();
+        public static string secretKey = "";
     }
 
     internal static class Cinematic
@@ -14,11 +14,11 @@ namespace AoC_2016_Day_05
         public static readonly bool GRAND_FINALE = true;
         private static int messagePinger = 0;
         private static readonly Random rnd = new ();
-        private static readonly HashSet<int> msgTracker = new();
+        private static readonly HashSet<int> msgTracker = [];
         private static int cursorTop = 0;
 
-        private static readonly string[] BootMessages = new[]
-        {
+        private static readonly string[] BootMessages =
+        [
             "Hackmaster 9000 loading.",
             " ",
             "Resonance Engine ... Online.",
@@ -30,10 +30,10 @@ namespace AoC_2016_Day_05
             "Discorporate Resonance Individual with Determinate Enforced Reasoning v5.71 ... ... Activated.",
             "Sequence start completed.",
             "All systems nominal."
-        };
+        ];
 
-        private static readonly string[] hackMessages = new[]
-        {
+        private static readonly string[] hackMessages =
+        [
             "Asking Wintermute.",
             "Hacking the Gibson.",
             "Looking for post-it notes.",
@@ -50,7 +50,7 @@ namespace AoC_2016_Day_05
             "\"12345?\" That's amazing!",
             "Trying \"password123.\"",
             "Trying \"password1234.\""
-        };
+        ];
 
         public static void DoBoot()
         {
@@ -63,19 +63,38 @@ namespace AoC_2016_Day_05
                     if (chunk[^1] != '.')
                     {
                         Console.Write("...");
-                        Thread.Sleep(rnd.Next(250, 500));
+                        Thread.Sleep(rnd.Next(150, 350));
                     }
                 }
                 Console.WriteLine();
-                Thread.Sleep(rnd.Next(750,1500)); 
+                Thread.Sleep(rnd.Next(500,1000)); 
             }
             Console.WriteLine();
-            Console.WriteLine("Press enter to begin.");
+            Console.WriteLine("Enter secret key to begin.");
+            Console.Write("HM9000> ");
+
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && Globals.secretKey.Length > 0)
+                {
+                    Console.Write("\b \b");
+                    Globals.secretKey = Globals.secretKey[0..^1];
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    Console.Write("*");
+                    Globals.secretKey += keyInfo.KeyChar;
+                }
+            } while (key != ConsoleKey.Enter);
+
+            Console.WriteLine();
             Console.WriteLine();
 
             cursorTop = Console.CursorTop;
-
-            Console.ReadLine();
         }
 
         public static void DoTick(Object? source, ElapsedEventArgs e)
@@ -159,6 +178,5 @@ namespace AoC_2016_Day_05
                 Console.WriteLine(".");
             }
         }
-
     }
 }

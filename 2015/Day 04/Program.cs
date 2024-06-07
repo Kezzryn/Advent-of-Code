@@ -18,7 +18,7 @@ try
         counter++;
         hashData = MD5.HashData(Encoding.UTF8.GetBytes($"{secretKey}{counter}"));
 
-        if (hashData[0] == 0 && hashData[1] == 0 && hashData[2] < 10)
+        if (hashData[0] == 0 && hashData[1] == 0 && hashData[2] < 16)
         {
             if (part1Answer == -1) part1Answer = counter;
             if (part2Answer == -1 && hashData[2] == 0) part2Answer = counter;

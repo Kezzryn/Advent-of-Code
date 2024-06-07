@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2016 Day 01", "2016 Day 01.csproj", "{77748280-4F66-4101-A131-DDF3CDDD2DFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2016 Day 01", "2016 Day 01.csproj", "{77748280-4F66-4101-A131-DDF3CDDD2DFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point2D", "..\..\Libraries\Points\Point2D\Point2D.csproj", "{46D5F624-8FD6-4E0B-A344-0206E940D681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{77748280-4F66-4101-A131-DDF3CDDD2DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77748280-4F66-4101-A131-DDF3CDDD2DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77748280-4F66-4101-A131-DDF3CDDD2DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46D5F624-8FD6-4E0B-A344-0206E940D681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D5F624-8FD6-4E0B-A344-0206E940D681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D5F624-8FD6-4E0B-A344-0206E940D681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D5F624-8FD6-4E0B-A344-0206E940D681}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

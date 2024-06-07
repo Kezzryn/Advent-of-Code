@@ -16,7 +16,7 @@ namespace BKH.AoC_Point2D
         public static readonly Point2D Empty = new();
         public static Point2D Origin { get { return new(0, 0); } }
 
-        //human readable return types
+        //human readable return types for comparison operators
         private const int LessThan = -1;
         private const int EqualTo = 0;
         private const int GreaterThan = 1;
@@ -143,8 +143,8 @@ namespace BKH.AoC_Point2D
             if (left.X < right.X && left.Y < right.Y) return LessThan;
             if (left.X > right.X && left.Y > right.Y)  return GreaterThan;
 
-            // Now we'll get the sum of our points (IE the distance from 0,0,0 and compare them to see who's "closer" 
-            // We don't want to return that 0,1,0 == 1,0,0 as true, so we'll do an priority check. 
+            // Now we'll get the sum of our points (IE the distance from 0,0 and compare them to see who's "closer" 
+            // We don't want to return that 0,1 == 1,0 as true, so we'll do an priority check. 
 
             long leftSum = left.X + left.Y;
             long rightSum = right.X + right.Y;
@@ -154,6 +154,23 @@ namespace BKH.AoC_Point2D
                 return (left.X < right.X || left.Y < right.Y) ? LessThan : GreaterThan;
             }
             return (leftSum < rightSum) ? LessThan : GreaterThan;
+        }
+
+        public readonly Point2D OrthogonalNeighbor(Direction dir)
+        {
+            return dir switch
+            {
+                Direction.Up =>      this + (0, 1),
+                Direction.Down =>    this + (0, -1),
+                Direction.Left =>    this + (-1, 0),
+                Direction.Right =>   this + (1, 0),
+                _ => throw new NotImplementedException($"Unknown direction {dir}")
+            };
+        }
+
+        public enum Direction
+        {
+            Up, Right, Down, Left
         }
     }
 }

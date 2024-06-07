@@ -2,31 +2,10 @@
 using System.Security.Cryptography;
 using System.Text;
 
-static string GetHash(HashAlgorithm hashAlgorithm, string input)
-{
-    // Copied from https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.hashalgorithm.computehash
-
-    // Convert the input string to a byte array and compute the hash.
-    byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-    // Create a new Stringbuilder to collect the bytes and create a string.
-    var sBuilder = new StringBuilder();
-
-    // Loop through each byte of the hashed data and format each one as a hexadecimal string.
-    for (int i = 0; i < data.Length; i++)
-    {
-        sBuilder.Append(data[i].ToString("x2"));
-    }
-
-    // Return the hexadecimal string.
-    return sBuilder.ToString();
-}
-
 try
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
-
-    string secretKey = File.ReadAllText(PUZZLE_INPUT);
+//    const string PUZZLE_INPUT = "PuzzleInput.txt";
+//    string secretKey = File.ReadAllText(PUZZLE_INPUT);
 
     using MD5 md5Hash = MD5.Create();
 
@@ -34,7 +13,8 @@ try
     bool isDoneP2 = false;
 
     long counter = 0;
-    string hash = "";
+    byte[] hashData = [];
+    string hashString = "";
 
     Cinematic.DoBoot();
 
@@ -45,29 +25,24 @@ try
     while (!(isDoneP1 && isDoneP2))
     {
         counter++;
-        hash = GetHash(md5Hash, $"{secretKey}{counter}");
+        hashData = MD5.HashData(Encoding.UTF8.GetBytes($"{Globals.secretKey}{counter}"));
 
-        if (hash.StartsWith("00000"))
+        if (hashData[0] == 0 && hashData[1] == 0 && hashData[2] < 16) //first five characters start with 0.
         {
-            if(!isDoneP1)
+            hashString = String.Join("", hashData.Select(x => x.ToString("x2")));
+            if (!isDoneP1)
             {
-                Globals.part1Answer += hash[5];
+                Globals.part1Answer += hashString[5];
                 isDoneP1 = Globals.part1Answer.Length >= 8;
             }
 
-            if (!isDoneP2)
+            if (!isDoneP2 && hashString[5] >= '0' && hashString[5] <= '7')
             {
-                if (hash[5] >= '0' && hash[5] <= '7')
-                {
-                    int pos = int.Parse(hash[5].ToString());
-                    if (Globals.part2Answer[pos] != '?') continue;
+                int pos = hashString[5] - 48;
+                if (Globals.part2Answer[pos] != '?') continue;
+                Globals.part2Answer[pos] = hashString[6];
 
-                    StringBuilder tempString = new(Globals.part2Answer);
-                    tempString[pos] = hash[6];
-                    Globals.part2Answer = tempString.ToString();
-
-                    isDoneP2 = !Globals.part2Answer.Contains('?');
-                }
+                isDoneP2 = !Globals.part2Answer.Contains('?');
             }
         }
     }
