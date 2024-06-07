@@ -14,6 +14,7 @@ namespace BKH.AoC_Point2D
         IComparisonOperators<Point2D, Point2D, bool>
     {
         public static readonly Point2D Empty = new();
+        public static Point2D Origin { get { return new(0, 0); } }
 
         //human readable return types for comparison operators
         private const int LessThan = -1;
@@ -77,7 +78,16 @@ namespace BKH.AoC_Point2D
             }
         }
 
-        public static Point2D Origin { get { return new(0,0); } }
+        public readonly IEnumerable<Point2D> GetAllNeighbors()
+        {
+            foreach((int x, int y) in from y in Enumerable.Range(-1, 3)
+                                      from x in Enumerable.Range(-1, 3)
+                                      where(!(x == 0 && y == 0))
+                                      select(x, y))
+            {
+                yield return new Point2D(x + X, y + Y);
+            }
+        }
 
         public override readonly string ToString() => $"{{X={X},Y={Y}}}";
 

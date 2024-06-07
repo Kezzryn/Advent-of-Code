@@ -3,26 +3,18 @@
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
-
-    Dictionary<string, Node> nodes = [];
-
-    //Load the nodes. 
-    foreach (string line in puzzleInput)
-    {
-        string[] temp = line.Split("->",StringSplitOptions.TrimEntries);
-        nodes.Add(temp.Last(), new Node(temp.First()));
-    }
+    Dictionary<string, Node> puzzleInput = File.ReadAllLines(PUZZLE_INPUT)
+        .Select(x => x.Split(" -> "))
+            .ToDictionary(x => x.Last(), x => new Node(x.First()));
 
     ushort GetValue(string nodeName)
     {
-        if (!nodes.TryGetValue(nodeName, out Node? node))
-        { 
+        if (!puzzleInput.TryGetValue(nodeName, out Node? node))
+        {
             // this captures where we have a value in one of the "source" fields. 
             if (ushort.TryParse(nodeName, out ushort value)) return value;
 
-            Console.WriteLine($"Unable to load node {nodeName}");
-            return 0;
+            throw new Exception($"Unable to find {nodeName}");
         }
 
         //cache the operation results, or forever circle the tree. 
@@ -43,18 +35,19 @@ try
     }
 
     ushort part1Answer = GetValue("a");
-    Console.WriteLine($"Part 1: The signal on wire 'a' is {part1Answer}");
 
     // Reset for part 2 
-    nodes["b"].Value = part1Answer;
-    nodes["a"].Value = null;
+    puzzleInput["b"].Value = part1Answer;
+    puzzleInput["a"].Value = null;
     
-    foreach (Node node in nodes.Values)
+    foreach (Node node in puzzleInput.Values.Where(x => x.Op != Node.Ops.Wire))
     {
-        if (node.Op != Node.Ops.Wire) node.Value = null;
+        node.Value = null;
     }
 
     ushort part2Answer = GetValue("a");
+    
+    Console.WriteLine($"Part 1: The signal on wire 'a' is {part1Answer}");
     Console.WriteLine($"Part 2: When overriding the signal on wire 'b' with {part1Answer}, 'a' returns {part2Answer}.");
 }
 catch (Exception e)

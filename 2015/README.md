@@ -89,6 +89,7 @@
 ### [Day 21](Day%2021) - RPG Simulator 20XX
 - **Problem:** Part one is a minimization problem, part two is the maximization to the same problem. 
 - **Solution:** Once again, the techniques from [2022 Day 16](../2022/Day%2016/) came to our rescue. The trickier part for part two was figuring out exactly what to test (and where) to break our loop early. Part two also exposed a bug where we were able to equip the same equipment multiple times, so that didn't help when trying to find a maximum.
+- **Update June 2, 2024:** Radically simplified the solution. The framework was in place to simply build out all the combinations of weapon, rings, and armor,then test them in a simple. `Where().Min()` type statement.
 
 ### [Day 22](Day%2022) - Wizard Simulator 20XX
 - **Problem:** A minimization problem, where the solution took the form of a breadth first search.

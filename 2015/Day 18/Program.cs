@@ -2,22 +2,22 @@
 
 try
 {
-    const bool STUCK_LIGHTS = true;
+    const bool DO_STUCK_LIGHTS = true;
     const string PUZZLE_INPUT = "PuzzleInput.txt";
 
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
     
-    GameOfLife gamePart1 = new(puzzleInput);
-    GameOfLife gamePart2 = new(puzzleInput);
+    ElfLights part1Answer = new(puzzleInput);
+    ElfLights part2Answer = new(puzzleInput);
 
     for (int i = 1; i <= 100; i++)
     {
-        gamePart1.Step();
-        gamePart2.Step(STUCK_LIGHTS);
+        part1Answer.Step();
+        part2Answer.Step(DO_STUCK_LIGHTS);
     }
 
-    Console.WriteLine($"Part 1: Our light grid has {gamePart1.CountLights()} lights on after 100 steps.");
-    Console.WriteLine($"Part 2: After getting some lights stuck on, we now have {gamePart2.CountLights()} lights after 100 steps.");
+    Console.WriteLine($"Part 1: Our light grid has {part1Answer.CountCells} lights on after 100 steps.");
+    Console.WriteLine($"Part 2: After getting some lights stuck on, we now have {part2Answer.CountCells} lights after 100 steps.");
 }
 catch (Exception e)
 {
