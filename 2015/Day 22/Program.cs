@@ -62,12 +62,11 @@ try
 
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    int part1 = ArenaBattle(new Wizard(START_HP, START_MANA), new Boss(puzzleInput));
-    //int part1 = ArenaBattle(new Wizard(10, 250), new Boss(new[] { "Hit Points: 14", "Damage: 8" }));
-    Console.WriteLine($"Part 1: The least amount of mana we can spend is: {part1}");
+    int part1Answer = ArenaBattle(new Wizard(START_HP, START_MANA), new Boss(puzzleInput));
+    Console.WriteLine($"Part 1: The least amount of mana we can spend is: {part1Answer}");
 
-    int part2 = ArenaBattle(new Wizard(START_HP, START_MANA), new Boss(puzzleInput), HARD_MODE);
-    Console.WriteLine($"Part 2: For hard mode, the least amount of mana we can spend is: {part2}");
+    int part2Answer = ArenaBattle(new Wizard(START_HP, START_MANA), new Boss(puzzleInput), HARD_MODE);
+    Console.WriteLine($"Part 2: For hard mode, the least amount of mana we can spend is: {part2Answer}");
 }
 catch (Exception e)
 {

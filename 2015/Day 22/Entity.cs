@@ -4,7 +4,7 @@
     {
         protected int _hp;
         protected int _armor;
-        public readonly Dictionary<SpellNames, Effect> Effects = new();
+        public readonly Dictionary<SpellNames, Effect> Effects = [ ];
         public Entity(int hp, int armor)
         {
             _hp = hp;
@@ -19,7 +19,7 @@
         public void GainEffect(Effect effect) => Effects.Add(effect.SpellName, effect);
         public void DoEffects() 
         {
-            List<SpellNames> expiredEffects = new();
+            List<SpellNames> expiredEffects = [];
             foreach ((SpellNames spellName, Effect effect) in Effects)
             {
                 int numberTurnsRemaing = effect.DoUpkeep(this);
@@ -70,7 +70,7 @@
         private int _mana = 0;
         public int ManaSpent = 0;
 
-        public readonly List<string> actionList = new();
+        public readonly List<string> actionList = [];
 
         private static readonly Dictionary<SpellNames, Spell> _spellBook = new()
         {
