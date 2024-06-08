@@ -105,6 +105,7 @@
 - **Problem:** This looks like a knapsack problem, which it is, but.. 
 - **Solution:** After bashing at a couple of ways to search (and watching my ram and CPU usage explode), I realized that what I really needed was to stop at the first depth I found a valid entry, then test the remaining subset of unused items to ensure they could also generate a solution. If both of those are true, then it's just a matter of `Sum()` and `Min()`. I implemented this, and ... it still ate ALL the processor time, but this time on the secondary check. I did a manual check, and then disabled the secondary check to get my answers.
 - Uses a `CartesianProduct()` function from [Eric Lippert](https://ericlippert.com/)
+- **Update July 6, 2024:** Rewrote the search to use bitmasks and a priority queue, reducing on both weight and number of presents. Reduced runtime from 90 seconds to 1.
 
 ### [Day 25](Day%2025) - Let It Snow
 - **Problem:** Figure out a missing code based on a formula.
