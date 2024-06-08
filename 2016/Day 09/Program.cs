@@ -6,7 +6,6 @@
 
     while (cursor < compressed.Length)
     {
-
         nextIndex = compressed.IndexOf('(', cursor);
         if (nextIndex == -1) // end of markers check. 
         {
@@ -22,14 +21,14 @@
         // assumption, we have a ) after a ( 
         nextIndex = compressed.IndexOf(')', cursor) + 1; // move after the match. 
 
-        // Get marker instructions (axb) where a length of the section and b is the number of repeats. 
-        var s = compressed[cursor..nextIndex].Trim("()".ToCharArray()).Split('x').Select(int.Parse);
-        cursor = s.First() + nextIndex;
+        // Get marker instructions (axb) where a length of the section and b is the number of repeats. Strip the () from the marker instruction.  
+         IEnumerable<int> marker = compressed[(cursor + 1)..(nextIndex - 1)].Split('x').Select(int.Parse);
+        cursor =  marker.First() + nextIndex;
 
         returnValue += version switch
         {
-            1 => s.Aggregate((x, y) => x * y),
-            2 => s.Last() * GetDecompressionLength(compressed[nextIndex..cursor], version),
+            1 => marker.Aggregate((x, y) => x * y),
+            2 => marker.Last() * GetDecompressionLength(compressed[nextIndex..cursor], version),
             _ => throw new NotImplementedException()
         };
     }
@@ -39,14 +38,11 @@
 
 try
 {
-    const int VERSION_1 = 1;
-    const int VERSION_2 = 2;
-
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
 
-    long part1Answer = GetDecompressionLength(puzzleInput, VERSION_1);
-    long part2Answer = GetDecompressionLength(puzzleInput, VERSION_2);
+    long part1Answer = GetDecompressionLength(puzzleInput, 1);
+    long part2Answer = GetDecompressionLength(puzzleInput, 2);
 
     Console.WriteLine($"Part 1: The uncompressed size using V1 decoding is: {part1Answer}.");
     Console.WriteLine($"Part 2: The uncompressed size using V2 decoding is: {part2Answer}.");
