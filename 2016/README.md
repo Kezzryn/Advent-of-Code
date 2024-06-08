@@ -32,7 +32,6 @@
 ### [Day 7](Day%2007) - Internet Protocol Version 7
 - **Problem:** String parsing and comparison.
 - **Solution:** I really feel like I'm abusing LINQ. But if it works it's correct, right?
-- **Future Fun:** Re-implement with `Regex`.
 
 ### [Day 8](Day%2008) - Two-Factor Authentication
 - **Problem:** We have another visualization to do.

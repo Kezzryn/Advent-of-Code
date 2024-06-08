@@ -1,18 +1,20 @@
-﻿bool HasABBA(string s)
+﻿static bool HasABBA(string s)
 {
-    for (int i = 0;i <= s.Length-4;i++)
+    for (int i = 0; i <= s.Length - 4; i++)
     {
         if (s[i] == s[i + 3] && s[i + 1] == s[i + 2] && s[i] != s[i + 1]) return true;
     }
     return false;
 }
 
-List<string> GetBAB(string s)
+static List<string> GetBAB(string s)
 {
-    List<string> list = new ();
+    List<string> list = [];
     for (int i = 0; i <= s.Length - 3; i++)
     {
-        if (s[i] == s[i + 2] && s[i] != s[i + 1]) list.Add($"{s[i + 1]}{s[i]}{s[i + 1]}");
+        //if ABA, add BAB 
+        if (s[i] == s[i + 2] && s[i] != s[i + 1])
+            list.Add($"{s[i + 1]}{s[i]}{s[i + 1]}");
     }
     return list;
 }
@@ -27,27 +29,17 @@ try
 
     foreach (string line in puzzleInput)
     {
-        int zeroOrOne = 1;
         string[] split = line.Split("[]".ToCharArray());
-        List<string> supernet = new();
-        List<string> hypernet = new();
 
-        foreach (string word in split)
-        {
-            zeroOrOne = (zeroOrOne + 1) % 2; // flip it
-            if (zeroOrOne == 0) supernet.Add(word); else hypernet.Add(word);
-        }
+        List<string> supernet = split.Where((_, i) => int.IsEvenInteger(i)).ToList();
+        List<string> hypernet = split.Where((_, i) => int.IsOddInteger(i)).ToList();
 
-        part1Answer += 
-            supernet.Select(HasABBA).Where(x => x == true).Any() && 
-            !hypernet.Select(HasABBA).Where(x => x == true).Any() 
-            ? 1 : 0;
-
-        part2Answer += hypernet.Select(x => supernet.SelectMany(GetBAB).ToList().Any(x.Contains)).Any(y => y == true) ? 1 : 0;
+        if (supernet.Any(HasABBA) && !hypernet.Any(HasABBA)) part1Answer++;
+        if (hypernet.Any(x => supernet.SelectMany(GetBAB).Any(x.Contains))) part2Answer++;
     }
 
-    Console.WriteLine($"Part 1: {part1Answer} of IPs that support TLS.");
-    Console.WriteLine($"Part 2: {part2Answer} of IPs that support SSL.");
+    Console.WriteLine($"Part 1: {part1Answer} of the IPs support TLS.");
+    Console.WriteLine($"Part 2: {part2Answer} of the IPs support SSL.");
 }
 catch (Exception e)
 {
