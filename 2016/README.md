@@ -27,6 +27,7 @@
 ### [Day 6](Day%2006) - Signals and Noise
 - **Problem:** Reading columns of strings to perform operations on them. 
 - **Solution:** A quick loop with a `List<StringBuilder>` to reformat the input, then borrowed the LINQ from [Day 4](Day%2004) to count characters.
+- **Update June 8, 2024:** No loops, only LINQ.
 
 ### [Day 7](Day%2007) - Internet Protocol Version 7
 - **Problem:** String parsing and comparison.
