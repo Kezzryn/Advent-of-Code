@@ -55,6 +55,7 @@
 ### [Day 13](Day%2013) - Knights of the Dinner Table
 - **Problem:** Traveling Salesmen of a circular list.
 - **Solution:** This was brute forced with a simple depth first search. An improvement would be to introduce bounds checking or other heuristic.
+- **Update June 7, 2024:** Cleaned up the search, removing extra calls to the costing function.
 
 ### [Day 14](Day%2014) - Reindeer Olympics
 - **Problem:** Interval processing. The `TravelDistance` function does the heavy lifting. Working out first the overall interval, then determining how far the reindeer has travelled in the current interval.
