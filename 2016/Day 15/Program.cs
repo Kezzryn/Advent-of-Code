@@ -5,52 +5,35 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    List<(int id, int start, int numpos)> discs = new();
+    List<(int start, int numPos)> discs = [];
 
     for (int i = 0; i < puzzleInput.Length; i++ )
     {
         //Disc #1 has 5 positions; at time=0, it is at position 4.
 
-        var match = Regex.Matches(puzzleInput[i], @"\d+");
+        MatchCollection match = Regex.Matches(puzzleInput[i], @"\d+");
         discs.Add(
-            (int.Parse(match[0].Value),  //ID
-            int.Parse(match[3].Value),   //start
+            (int.Parse(match[0].Value) + int.Parse(match[3].Value),   //ID + start
             int.Parse(match[1].Value))); //numpos
     }
 
-    bool isValid = false;
-    int part1Answer = -1;
-    int part2Answer = -1;
-    int time = 0;
-    while (!isValid)
+    static int FindAlignment(List<(int start, int numPos)> discs)
     {
-        time++;
-        isValid = true;
-        foreach (var (id, start, numpos) in discs)
+        for (int time = 0; time < int.MaxValue; time++)
         {
-            isValid = isValid && 0 == (start + id + time) % numpos;
-            if (!isValid) break;
+            if (discs.All(x => 0 == (x.start + time) % x.numPos)) 
+                return time;
         }
-
-        if (isValid)
-        {
-            if (part1Answer == -1) // reset for part 2
-            {
-                part1Answer = time;
-                discs.Add((7, 0, 11));
-                time = 0;
-                isValid = false;
-            } 
-            else if (part2Answer == -1) 
-            {
-                part2Answer = time;
-            }
-        }
+        return -1;
     }
+
+    int part1Answer = FindAlignment(discs);
+    
+    discs.Add((7, 11));
+    int part2Answer = FindAlignment(discs);
 
     Console.WriteLine($"Part 1: The first opportunity for a prize is waiting for {part1Answer} seconds. ({TimeSpan.FromSeconds(part1Answer):hh\\:mm\\:ss})");
     Console.WriteLine($"Part 2: The second opportunity for a prize is waiting for {part2Answer} seconds.({TimeSpan.FromSeconds(part2Answer):dd\\:hh\\:mm\\:ss})");
-
 }
 catch (Exception e)
 {
