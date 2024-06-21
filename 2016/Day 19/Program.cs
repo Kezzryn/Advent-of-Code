@@ -13,12 +13,12 @@
 
     /* 
      *  Part Two: 
-     *  The only elves that we need visiblity to are at the midpoint and start/end.
-     *  This can be simulated with a pair of queues and two rules. 
-     *  1) If the queues are of equal length, or off by one, (even or odd) 
-     *      then discard the head of the highQueue and dequeue out of lowQueue into highQueue 
-     *  2) if the queues are out by more than two, dequeue out of highQueue into lowQueue
-     *  Finish when only one item remains in both queues.
+        The only elves that we need visiblity to are at the midpoint and start/end.
+         This can be simulated with a pair of queues and two rules. 
+        1) If the queues are of equal length, or off by one, (even or odd) 
+            then discard the head of the highQueue and dequeue out of lowQueue into highQueue 
+        2) if the queues are out by more than two, dequeue out of highQueue into lowQueue
+        Finish when only one item remains in both queues.
         Example 12 elves. 
         123456  <= low queue (head of queue is to the left)
         BA0987  <= high queue (head of queue is to the right) 
