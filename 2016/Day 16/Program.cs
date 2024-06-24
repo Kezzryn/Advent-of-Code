@@ -1,4 +1,4 @@
-﻿using AoC_2016_Day_16;
+﻿using BKH.EnumExtentions;
 using System.Collections;
 using System.Text;
 
@@ -8,19 +8,12 @@ try
     const int DISK_SIZE_PART_1 = 272;
     const int DISK_SIZE_PART_2 = 35651584;
 
-    string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
+    BitArray puzzleInput = new(File.ReadAllText(PUZZLE_INPUT).Select(x => x == '1' ? 1 : 0).ToArray());
 
-    string CalcCheckSum(int diskSize)
+    static string CalcCheckSum(int diskSize, BitArray bitPuzzle)
     {
-        BitArray ZERO_INSERT = new(new[] { false });
-        BitArray bitPuzzle = new(puzzleInput.Length, false);
-
-        // load initial from string puzzle input. 
-        for (int i = 0; i < puzzleInput.Length; i++)
-        {
-            bitPuzzle.Set(i, puzzleInput[i] == '1');
-        }
-
+        BitArray ZERO_INSERT = new([false]);
+  
         // create the dragon fractal thingy.
         while (bitPuzzle.Length < diskSize)
         {
@@ -32,7 +25,7 @@ try
         BitArray checkSum = new(bitPuzzle);
 
         // calculate the checksum
-        while ((checkSum.Length % 2) == 0)
+        while (int.IsEvenInteger(checkSum.Length))
         {
             bool[] newSum = new bool[checkSum.Length / 2];
 
@@ -53,8 +46,8 @@ try
         return stringSum.ToString();
     }
 
-    string part1Answer = CalcCheckSum(DISK_SIZE_PART_1);
-    string part2Answer = CalcCheckSum(DISK_SIZE_PART_2);
+    string part1Answer = CalcCheckSum(DISK_SIZE_PART_1, puzzleInput);
+    string part2Answer = CalcCheckSum(DISK_SIZE_PART_2, puzzleInput);
 
     Console.WriteLine($"Part 1: The checksum is: {part1Answer}");
     Console.WriteLine($"Part 2: The checksum is: {part2Answer}");
