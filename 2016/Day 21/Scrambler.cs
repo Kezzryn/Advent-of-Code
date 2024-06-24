@@ -1,135 +1,123 @@
-﻿using System.Text;
-
-namespace AoC_2016_Day_21
+﻿namespace AoC_2016_Day_21
 {
-    enum Ops
-    {
-        Move,
-        Rev,
-        RotL,
-        RotPos,
-        RotR,
-        SwapPos,
-        SwapLet
-    };
-
     internal class Scrambler
     {
-        private string _scrambleText;
-        private readonly bool _doReversed;
-
-        public Scrambler(string text, bool doReversed = false)
+        private enum Ops
         {
-            _scrambleText = text;
-            _doReversed = doReversed;
+            Move,
+            Rev,
+            RotL,
+            RotPos,
+            RotPosRev,
+            RotR,
+            SwapPos,
+            SwapLet
+        };
+
+        private readonly List<(Ops, int, int)> _instructionSet = [];
+        private List<int> _scrambleText = [];
+
+        public Scrambler(string[] instructions, bool doReversed = false)
+        {
+            IEnumerable<string> loadInstructions = doReversed ? instructions.Reverse() : instructions;
+
+            foreach (string instruction in loadInstructions)
+            {
+                _instructionSet.Add(ParseInstruction(instruction, doReversed));
+            }
         }
 
-        public override string ToString() => _scrambleText;
+        public override string ToString() => new string(_scrambleText.Select(x => (char)x).ToArray()) ?? "";
 
-        private void SwapPos(int posA, int posB)
-        {
-            char[] temp = _scrambleText.ToCharArray();
-            (temp[posB], temp[posA]) = (temp[posA], temp[posB]); // Yay intellisense
-            _scrambleText = new(temp);
-        }
+        private void SwapPos(int posA, int posB) => (_scrambleText[posB], _scrambleText[posA]) = (_scrambleText[posA], _scrambleText[posB]);
 
-        private void SwapLet(int posA, int posB)
-        {
-            SwapPos(_scrambleText.IndexOf((char)posA), _scrambleText.IndexOf((char)posB));
-        }
+        private void SwapLet(int posA, int posB) => SwapPos(_scrambleText.IndexOf(posA), _scrambleText.IndexOf(posB));
 
         private void Move(int indexFrom, int indexTo)
         {
-            StringBuilder sb = new(_scrambleText);
-            sb.Remove(indexFrom, 1);
-            sb.Insert(indexTo, _scrambleText[indexFrom]);
-            _scrambleText = new(sb.ToString());
+            int temp = _scrambleText[indexFrom];
 
+            _scrambleText.RemoveAt(indexFrom);
+            _scrambleText.Insert(indexTo, temp);
         }
 
-        private void Rev(int indexFrom, int indexTo)
-        {
-            char[] temp = _scrambleText.ToCharArray();
-            Array.Reverse(temp, indexFrom, (indexTo - indexFrom) + 1);
-            _scrambleText = new(temp);
-        }
+        private void Rev(int indexFrom, int indexTo) => _scrambleText.Reverse(indexFrom, (indexTo - indexFrom) + 1);
 
         private void RotLR(int numPos)
         {
-            int offset = Math.Abs(numPos) % _scrambleText.Length;
-
-            string temp;
+            int offset = Math.Abs(numPos) % _scrambleText.Count;
             if (numPos > 0)
             {
                 //Rotate Left by an amount...
-                temp = _scrambleText[offset..] + _scrambleText[..offset];
+                _scrambleText = [.. _scrambleText[offset..], .. _scrambleText[..offset]];
             }
             else
             {
                 //Rotate Right by an amount...
-                temp = _scrambleText[^offset..] + _scrambleText[..^offset];
+                _scrambleText = [.. _scrambleText[^offset..], .. _scrambleText[..^offset]];
             }
-
-            _scrambleText = temp;
         }
 
-        private void RotPos(int posA)
+        private void RotPos(int posA, bool doReversed = false)
         {
-            int index = _scrambleText.IndexOf((char)posA);
-            int totalRot;
-            if (_doReversed)
+            int index = _scrambleText.IndexOf(posA);
+            int totalRot = doReversed switch
             {
                 //even NB: zero special case, 'cause it just would not work in a formula.
-                totalRot = (index == 0)
+                true => (index == 0)
                                 ? -7
-                                : ((index % 2) == 1)
+                                : (int.IsOddInteger(index))
                                     ? ((index + 1) / 2)      //odd 
-                                    : ((index + 4) / 2) - 5; //even
-            }
-            else
-            {
-                totalRot = -(1 + index + (index >= 4 ? 1 : 0));
-            }
+                                    : ((index + 4) / 2) - 5, //even
+                false => -(1 + index + (index >= 4 ? 1 : 0))
+            };
 
             RotLR(totalRot);
         }
 
-        public void Step(string instruction)
+        public void ScrambleText(string toScramble)
         {
-            ParseInstruction(instruction, out Ops inst, out int argA, out int argB);
-            switch (inst)
+            _scrambleText = toScramble.Select(x => (int)x).ToList();
+
+            foreach ((Ops inst, int argA, int argB) in _instructionSet)
             {
-                case Ops.Move:
-                    Move(argA, argB);
-                    break;
-                case Ops.Rev:
-                    Rev(argA, argB);
-                    break;
-                case Ops.SwapLet:
-                    SwapLet(argA, argB);
-                    break;
-                case Ops.SwapPos:
-                    SwapPos(argA, argB);
-                    break;
-                case Ops.RotR:
-                    RotLR(-argA);
-                    break;
-                case Ops.RotL:
-                    RotLR(argA);
-                    break;
-                case Ops.RotPos:
-                    RotPos((char)argA);
-                    break;
-                default:
-                    throw new NotImplementedException(instruction);
+                switch (inst)
+                {
+                    case Ops.Move:
+                        Move(argA, argB);
+                        break;
+                    case Ops.Rev:
+                        Rev(argA, argB);
+                        break;
+                    case Ops.SwapLet:
+                        SwapLet(argA, argB);
+                        break;
+                    case Ops.SwapPos:
+                        SwapPos(argA, argB);
+                        break;
+                    case Ops.RotR:
+                        RotLR(-argA);
+                        break;
+                    case Ops.RotL:
+                        RotLR(argA);
+                        break;
+                    case Ops.RotPos:
+                        RotPos(argA);
+                        break;
+                    case Ops.RotPosRev:
+                        RotPos(argA, true);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
         }
 
-        private void ParseInstruction(string instruction, out Ops inst, out int argA, out int argB)
+        private static (Ops inst, int argA, int argB) ParseInstruction(string instruction, bool doReversed = false)
         {
-            inst = 0;
-            argA = -1;
-            argB = -1;
+            Ops inst;
+            int argA;
+            int argB = -1;
 
             string[] s = instruction.Split(' ');
 
@@ -140,7 +128,7 @@ namespace AoC_2016_Day_21
                     inst = Ops.Move;
                     argA = int.Parse(s[2]);
                     argB = int.Parse(s[5]);
-                    if (_doReversed) (argB, argA) = (argA, argB);
+                    if (doReversed) (argB, argA) = (argA, argB);
 
                     break;
                 case "reverse":
@@ -154,14 +142,14 @@ namespace AoC_2016_Day_21
                     //rotate based on position of letter a
                     if (s[1] == "based")
                     {
-                        inst = Ops.RotPos;
+                        inst = doReversed ? Ops.RotPosRev : Ops.RotPos;
                         argA = s[6][0];
                         //reversal has to happen in RotPos
                     }
                     else
                     {
                         inst = s[1] == "left" ? Ops.RotL : Ops.RotR;
-                        if (_doReversed) inst = s[1] == "left" ? Ops.RotR : Ops.RotL;
+                        if (doReversed) inst = s[1] == "left" ? Ops.RotR : Ops.RotL;
                         argA = int.Parse(s[2]);
                     }
                     break;
@@ -184,7 +172,7 @@ namespace AoC_2016_Day_21
                 default:
                     throw new NotImplementedException(s[0]);
             }
+            return (inst, argA, argB);
         }
-
     }
 }
