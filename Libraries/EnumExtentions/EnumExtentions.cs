@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
 
 namespace BKH.EnumExtentions
 {
@@ -44,6 +45,11 @@ namespace BKH.EnumExtentions
             }
         }
 
+        /// <summary>
+        /// Finds the prime factors of a number.
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>IEnumerable<long> prime factors.</returns>
         public static IEnumerable<long> Factor(this long number)
             //where T : IBinaryInteger<long>
         {
@@ -61,5 +67,51 @@ namespace BKH.EnumExtentions
                 }
             }
         }
+
+        /// <summary>
+        /// Prepends one BitArray to another.
+        /// </summary>
+        /// <param name="baseArray">The base BitArray.</param>
+        /// <param name="prepend">The BitArray to prepend.</param>
+        /// <returns>new BitArray</returns>
+        public static BitArray Prepend(this BitArray baseArray, BitArray prepend)
+        {
+            bool[] bools = new bool[baseArray.Count + prepend.Count];
+            prepend.CopyTo(bools, 0);
+            baseArray.CopyTo(bools, prepend.Count);
+            return new BitArray(bools);
+        }
+
+        /// <summary>
+        /// Append one BitArray to another.
+        /// </summary>
+        /// <param name="baseArray">The base BitArray</param>
+        /// <param name="after">The BitArray to append.</param>
+        /// <returns></returns>
+        public static BitArray Append(this BitArray baseArray, BitArray after)
+        {
+            var bools = new bool[baseArray.Count + after.Count];
+            baseArray.CopyTo(bools, 0);
+            after.CopyTo(bools, baseArray.Count);
+            return new BitArray(bools);
+        }
+
+        /// <summary>
+        /// Reverses the order of the elements in a BitArray.
+        /// </summary>
+        /// <param name="current"></param>
+        /// <returns>a new BitArray</returns>
+        public static BitArray Reverse(this BitArray current)
+        {
+            var bools = new bool[current.Count];
+
+            for (var i = 0; i < current.Count; i++)
+            {
+                bools[i] = current.Get(current.Count - 1 - i);
+            }
+
+            return new BitArray(bools);
+        }
+
     }
 }
