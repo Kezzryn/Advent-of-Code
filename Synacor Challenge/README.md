@@ -5,7 +5,7 @@
 ### Introduction
 In the December of 2022 I learned about the [Advent of Code](https://adventofcode.com/). Advent of Code is a yearly series coding puzzles by Eric Wastl. These puzzles are a joy to work on and have doubled as a way to modernize my skill set. I'm currently focused on C# as it aligns with my professional goals.
 
-During my brief time with the Advent of Code (AoC) community I learned of the Synacor Challenge, another puzzle created by Eric Wastl. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
+During my brief time with the Advent of Code community I learned of the Synacor Challenge, another puzzle created by Eric Wastl. Having finished a block of AoC puzzles, I decided to take a break and spend some time seeing what I could do with the Synacor Challenge.
 
 In the words of the former website: 
 
@@ -26,7 +26,7 @@ One final note. All the challenge codes sown below are hashed with MD5. If you t
 Here we go! 
 
 ### Code 1 - RTFM!
-There are two files provided, `challenge.bin` and `arch-spec`. Leaving the bin file alone, I opened up `arch-spec` and read it over. It provided definitions for the memory, how math works, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was a comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunately this was total non-issue.
+There are two files provided, [challenge.bin](Challenge%20Resources\challenge.bin) and [arch-spec](Challenge%20Resources\arch-spec). Leaving the bin file alone, I opened up `arch-spec` and read it over. It provided definitions for the memory, how math works, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was a comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunately this was total non-issue.
 
 Creating a new C# console project, I read through the specification again, then started laying out some basics as I felt out what I would need to implement the program.
 
@@ -378,7 +378,7 @@ Are they though?  I took a look around to see what I could find.
 
 > You are in a twisty alike of little passages, all maze.
 
-I ran some tests and found that the text wasn't random. Methodically exploring and tracking which "twisty maze of alike passages, all little" I arrived in, I was able to come up with this [map](Extras/CaveMap.jpeg).
+I ran some tests and found that the text wasn't random. Methodically exploring and tracking which "twisty maze of alike passages, all little" I arrived in, I was able to come up with this [map](Puzzle%20Notes/CaveMap.jpeg).
 
 All that exploration awarded me another code. 
 ```
@@ -402,7 +402,7 @@ _ + _ * _^2 + _^3 - _ = 399
 
 The puzzle is to fit the correct coins in the correct slots. For this puzzle I used a spreadsheet.
 
-[Five minutes later](Extras/CoinPuzzle.png).
+[Five minutes later.](Puzzle%20Notes/CoinPuzzle.png)
 
 The north door opened up and I continued with the adventure. Finding a teleporter, I used it and was whisked away.
 
@@ -424,7 +424,7 @@ The text details the next puzzle. In order to leave, the teleporter needs to be 
 That made my next task clear. I needed to write a debugger. This triggered the next big refactor of my code.
 
 What is useful in a debugger? I made a feature list of things I thought I might need. 
-- Set memory values, including `instPtr`.
+- Get and set specific memory or register values, including `instPtr`.
 - Step through the code.
 - Breakpoints.
 - Dump the current state to a file and / or disassemble a binary.
@@ -913,7 +913,7 @@ I thoroughly enjoyed this challenge.
 
 I might not have the cleanest solution or the "best" by any metric, but I'm proud of what I accomplished.
 
-I've learned a lot about how low level instructions work and how a program can be made with them. Mixed in are a few lessons about C# which I look forward to apply to future problems.
+I've learned a lot about how low level instructions work and how a program can be made with them. Mixed in are a few lessons about C# which I look forward to applying to future problems.
 
 My personal, heart-felt, thanks to Eric for making these puzzles, and re-igniting my joy of programming.
 
