@@ -1,100 +1,114 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Concurrent;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-static string GetHash(HashAlgorithm hashAlgorithm, string input)
+ConcurrentDictionary<byte, byte[]> encodedHexBytes = [];
+foreach(byte b in Enumerable.Range(0, byte.MaxValue + 1).Select(x => (byte)x)) // +1 to extend the range to the full 255, or it stops at 254, 'cause zero bound.
 {
-    // Copied from https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.hashalgorithm.computehash
-
-    // Convert the input string to a byte array and compute the hash.
-    byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-    // Create a new Stringbuilder to collect the bytes and create a string.
-    var sBuilder = new StringBuilder();
-
-    // Loop through each byte of the hashed data and format each one as a hexadecimal string.
-    for (int i = 0; i < data.Length; i++)
-    {
-        sBuilder.Append(data[i].ToString("x2"));
-    }
-
-    // Return the hexadecimal string.
-    return sBuilder.ToString();
+    encodedHexBytes.TryAdd(b, Encoding.UTF8.GetBytes(b.ToString("x2")));
 }
 
-try
+string GetHashFunc(string key, int stretch)
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
-    const int PART2_KEY_STRETCH = 2016;
+    byte[] hashData = [];
+    byte[] hashBytes = new byte[32];
 
-    string secretKey = File.ReadAllText(PUZZLE_INPUT);
+    hashData = MD5.HashData(Encoding.UTF8.GetBytes(key));
 
-    using MD5 md5Hash = MD5.Create();
-
-    long CountKeys(int NUM_HASHES = -1)
+    for (int i = 0; i < stretch; i++)
     {
-        Dictionary<char, List<long>> potentialKeys = new();
-
-        string hash = "";
-        char key;
-        bool isDone = false;
-        long counter = 0;
-        long numKeysFound = 0;
-        long answer = 0;
-
-        while (!isDone)
+        //Dictionary copy to array elements is faster than String.Join or Stringbuilder conversion. 
+        for (int j = 0; j < hashData.GetUpperBound(0); j++)
         {
-            counter++;
-            hash = GetHash(md5Hash, $"{secretKey}{counter}");
+            if (!encodedHexBytes.TryGetValue(hashData[j], out byte[]? t)) throw new KeyNotFoundException($"Unable to find key {hashData[j]}");
+            hashBytes[j * 2] = t[0];
+            hashBytes[(j * 2) + 1] = t[1];
+        }
 
-            for (int i = 0; i < NUM_HASHES; i++)
-            {
-                hash = GetHash(md5Hash, hash);
-            }
+        hashData = MD5.HashData(hashBytes);
+    }
 
-            var matchFive = Regex.Match(hash, @"(.)\1{4}");
-            var matchThree = Regex.Match(hash, @"(.)\1{2}");
+    return String.Join("", hashData.Select(x => x.ToString("x2")));
+}
 
+int CountKeys(string secret, int NUM_HASHES = -1)
+{
+    const int RANGE_SKIP = 5000;
+    Dictionary<char, List<int>> potentialKeys = [];
+
+    int counter = 0;
+    int numKeysFound = 0;
+
+    byte[] hashData = [];
+    byte[] hashBytes = new byte[32];
+
+    while (numKeysFound < 64)
+    {
+        //Fetch RANGE_SKIP number of hashes to process. AsParrallel() makes it twice as fast, and heats your room.
+        List<(int, string)> hashes = Enumerable.Range(counter, RANGE_SKIP).AsParallel().Select(x => (x, GetHashFunc($"{secret}{x}", NUM_HASHES))).ToList();
+
+        counter += RANGE_SKIP;
+
+        foreach ((int hashIndex, string hash) in hashes)
+        {
+            Match matchFive = MatchFive().Match(hash);
+            Match matchThree = MatchThree().Match(hash);
 
             if (matchFive.Success)
             {
-                key = matchFive.Groups[0].Value.First();
-                if (potentialKeys.TryGetValue(key, out List<long>? value))
+                char key = matchFive.Groups[0].Value.First();
+                if (potentialKeys.TryGetValue(key, out List<int>? potentialHashIndexes))
                 {
-                    var res = value.Where(x => (counter - x) <= 1000).OrderBy(x => x);
-
-                    foreach (var item in res)
+                    foreach (int potentialHashIndex in potentialHashIndexes.Where(x => (hashIndex - x) <= 1000).OrderBy(x => x))
                     {
                         numKeysFound++;
-                        answer = item;
-                        value.Remove(item);
+                        potentialHashIndexes.Remove(potentialHashIndex);
 
-                        if (numKeysFound >= 64) return answer;
+                        if (numKeysFound >= 64) return potentialHashIndex;
                     }
                 }
             }
 
             if (matchThree.Success)
             {
-                key = matchThree.Groups[0].Value.First();
-                if (!potentialKeys.TryAdd(key, new() { counter }))
+                char key = matchThree.Groups[0].Value.First();
+                if (!potentialKeys.TryAdd(key, [hashIndex]))
                 {
-                    potentialKeys[key].Add(counter);
+                    potentialKeys[key].Add(hashIndex);
                 }
             }
-
-            if (numKeysFound >= 64) isDone = true;
         }
-        return answer;
     }
+    return -1;
+}
 
-    long part1Answer = CountKeys();
+try
+{
+    const int PART2_KEY_STRETCH = 2016;
+
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    string secretKey = File.ReadAllText(PUZZLE_INPUT);
+        
+    int part1Answer = CountKeys(secretKey);
+    int part2Answer = CountKeys(secretKey, PART2_KEY_STRETCH);
+
     Console.WriteLine($"Part 1: The index that produces the 64th key is: {part1Answer}.");
-
-    long part2Answer = CountKeys(PART2_KEY_STRETCH);
     Console.WriteLine($"Part 2: After implementing key stretching, the index that produces the 64th key is: {part2Answer}");
 }
 catch (Exception e)
 {
     Console.WriteLine(e);
+}
+
+partial class Program
+{
+    [GeneratedRegex(@"(.)\1{4}")]
+    private static partial Regex MatchFive();
+}
+
+partial class Program
+{
+    [GeneratedRegex(@"(.)\1{2}")]
+    private static partial Regex MatchThree();
 }
