@@ -1,71 +1,52 @@
-﻿using System.Text;
+﻿using BKH.AoC_AssemBunny;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    static string assembunnyVM(string[] instructionSet, int a)
+    AssemBunny asmBny = new(puzzleInput);
+    int part1Answer = -1;
+    bool isDone = false;
+    const int TARGET_MATCHES = 32;
+    do
     {
-        Dictionary<string, int> registers = new()
-        {
-            { "a", a },
-            { "b", 0 },
-            { "c", 0 },
-            { "d", 0 }
-        };
-        StringBuilder sb = new();
+        part1Answer++;
+        asmBny.Reset();
+        asmBny.SetRegister('a', part1Answer);
 
-        int instPtr = 0;
-        bool isDone = false;
-        int outCount = 0;
-        while (!isDone)
-        {
-            string[] inst = instructionSet[instPtr].Split(' ').ToArray();
-            instPtr++;
+        int lastOutput = -1;
+        int numMatches = 0;
+        State state;
 
-            switch (inst[0])
+        do
+        {
+            state = asmBny.Run();
+            if (state == State.Paused_For_Output)
             {
-                case "cpy":
-                    if (registers.ContainsKey(inst[2]))
+                int output = asmBny.OutputQueue.Dequeue();
+                if (lastOutput == -1)
+                {
+                    lastOutput = output;
+                } 
+                else if ((lastOutput == 1 || lastOutput == 0) && lastOutput != output)
+                {
+                    lastOutput = output;
+                    if (++numMatches >= TARGET_MATCHES)
                     {
-                        registers[inst[2]] = int.TryParse(inst[1], out int cpy_result) ? cpy_result : registers[inst[1]];
+                        isDone = true;
+                        state = State.Halted;
                     }
-                    break;
-                case "inc":
-                    registers[inst[1]]++;
-                    break;
-                case "dec":
-                    registers[inst[1]]--;
-                    break;
-                case "jnz":
-                    if ((int.TryParse(inst[1], out int jnz_test_value) ? jnz_test_value : registers[inst[1]]) == 0) break;
-
-                    int jnz_offset = int.TryParse(inst[2], out int jnz_amount) ? jnz_amount : registers[inst[2]];
-                    instPtr--;
-                    instPtr += jnz_offset;
-                    break;
-                case "out":
-                    outCount++;
-                    sb.Append($"{registers[inst[1]]}");
-                    break;
-                default:
-                    throw new NotImplementedException();
+                }
+                else
+                {
+                    state = State.Halted;
+                }
             }
+        } while (state != State.Halted);
+    } while (!isDone);
 
-            if (instPtr >= instructionSet.Length || outCount > 24) isDone = true;
-        }
-        return sb.ToString();
-    }
-
-    for (int i = 0; i < 256;  i++)
-    {
-        string temp = assembunnyVM(puzzleInput, i);
-        if (temp.StartsWith("10101010") || temp.StartsWith("01010101"))
-        {
-            Console.WriteLine($"A possible signal has been found: {i} => {temp}");
-        }
-    }
+    Console.WriteLine($"Part 1: A signal has been found at index {part1Answer}");
 }
 catch (Exception e)
 {
