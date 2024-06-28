@@ -3,7 +3,7 @@
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Dictionary<(int x, int y), (int Used, int Avail)> mapData = new();
+    Dictionary<(int x, int y), (int Used, int Avail)> mapData = [];
     
     foreach(string line in puzzleInput.Skip(2))
     {
