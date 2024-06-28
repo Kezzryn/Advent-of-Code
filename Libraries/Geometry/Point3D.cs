@@ -1,8 +1,7 @@
-﻿namespace BKH.Geometry.Point3D;
+﻿namespace BKH.Geometry;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using BKH.Geometry.Point2D;
 
 internal struct Point3D :
     IComparable<Point3D>,

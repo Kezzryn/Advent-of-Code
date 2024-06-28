@@ -1,4 +1,4 @@
-﻿namespace BKH.Geometry.Cuboid;
+﻿namespace BKH.Geometry;
 public class Cuboid(int[] low, int[] high)
 {
     //Lower, forward and left. Should always be same or less than the 2nd point.

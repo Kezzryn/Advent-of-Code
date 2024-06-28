@@ -1,5 +1,5 @@
-﻿namespace BKH.Geometry.Rectangle;
-using BKH.Geometry.Point2D;
+﻿namespace BKH.Geometry;
+
 public class Rectangle(int x1, int y1, int x2, int y2)
 {
     public int X1 { get; private set; } = x1;

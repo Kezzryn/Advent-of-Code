@@ -1,4 +1,4 @@
-﻿namespace BKH.Geometry.Point2D;
+﻿namespace BKH.Geometry;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
