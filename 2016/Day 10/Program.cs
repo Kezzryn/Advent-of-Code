@@ -7,24 +7,25 @@ try
     const int CHIP_ID_2 = 61;
 
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
+    IEnumerable<string> puzzleInput = File.ReadAllLines(PUZZLE_INPUT).OrderBy(x => x);
 
-    Dictionary<int, List<int>> output = new();
-    Dictionary<int, ChipBot> bots = new();
+    Dictionary<int, int> output = [];
+    Dictionary<int, ChipBot> bots = [];
 
-    // Skip error checking as the bot lists are unique. 
-    // sort them to add bots before values, so we have bots to add values to
-    foreach (string line in puzzleInput.Where(x => x.StartsWith("bot")).ToList())
+    //// Skip error checking as the bot lists are unique. 
+    //// sort them to add bots before values, so we have bots to add values to
+    foreach (string line in puzzleInput)
     {
-        var numbers = Regex.Matches(line, @"\d+").Select(x => int.Parse(x.Value)).ToList();
-
-        bots.Add(numbers[0], new ChipBot(numbers[2], line.Contains("high to output"), numbers[1], line.Contains("low to output")));
-
-    }
-    foreach (string line in puzzleInput.Where(x => x.StartsWith("value")).ToList())
-    {
-        var numbers = Regex.Matches(line, @"\d+").Select(x => int.Parse(x.Value)).ToList();
-        bots[numbers[1]].Chips.Add(numbers[0]);
+        if (line.StartsWith("bot"))
+        {
+            List<int> numbers = GetNumbers().Matches(line).Select(x => int.Parse(x.Value)).ToList();
+            bots.Add(numbers[0], new ChipBot(numbers[2], line.Contains("high to output"), numbers[1], line.Contains("low to output")));
+        }
+        else
+        {
+            var numbers = GetNumbers().Matches(line).Select(x => int.Parse(x.Value)).ToList();
+            bots[numbers[1]].Chips.Add(numbers[0]);
+        }
     }
 
     bool isDone = false;
@@ -34,9 +35,9 @@ try
     {
         if (isOutputTarget)
         {
-            if (!output.TryAdd(target, new() { value }))
+            if (!output.TryAdd(target, value))
             {
-                output[target].Add(value);
+                output[target] = value;
             }
         }
         else
@@ -58,26 +59,26 @@ try
                 if (bot.Chips.Contains(CHIP_ID_1) && bot.Chips.Contains(CHIP_ID_2)) part1Answer = botID;
 
                 shuffleChips(bot.GiveHighTo, bot.Chips.Max(), bot.HighIsOutput);
-                bot.Chips.Remove(bot.Chips.Max());
-
                 shuffleChips(bot.GiveLowTo, bot.Chips.Min(), bot.LowIsOutput);
+
+                bot.Chips.Remove(bot.Chips.Max());
                 bot.Chips.Remove(bot.Chips.Min());
             }
         }
     }
 
-    int part2Answer = 
-          output[0].FirstOrDefault(1)
-        * output[1].FirstOrDefault(1)
-        * output[2].FirstOrDefault(1);
+    Console.WriteLine($"Part 1: The bot that was responsible for {CHIP_ID_1} and {CHIP_ID_2} chips was: {part1Answer}  73");
 
-    Console.WriteLine($"Part 1: The bot that was reponsable for {CHIP_ID_1} and {CHIP_ID_2} chips was: {part1Answer}");
-
-    Console.WriteLine($"Part 2: The product of the first three bins is: {part2Answer}");
-
-
+    int part2Answer = output.Where(x => x.Key <= 2).Select(x => x.Value).Aggregate((x, y) => x * y);
+    Console.WriteLine($"Part 2: The product of the chips in bins 0, 1, and 2, is: {part2Answer} 3965");
 }
 catch (Exception e)
 {
     Console.WriteLine(e);
+}
+
+partial class Program
+{
+    [GeneratedRegex(@"\d+")]
+    private static partial Regex GetNumbers();
 }

@@ -6,23 +6,16 @@
         public bool HighIsOutput { get; } = false;
         public int GiveLowTo { get; } = 0;
         public bool LowIsOutput { get; } = false;
-        public List<int> Chips { get; set; }
+        public List<int> Chips { get; set; } = [];
 
-        public ChipBot()
-        {
-            Chips = new();
-        }
+        public ChipBot() { }
+
         public ChipBot(int chip)
         {
-            Chips = new()
-            {
-                chip
-            };
+            Chips = [chip];
         }
         public ChipBot(int givehigh, bool isHighOutput, int givelow, bool isLowOutput)
         {
-            Chips = new();
-
             GiveHighTo = givehigh;
             HighIsOutput = isHighOutput;
 
