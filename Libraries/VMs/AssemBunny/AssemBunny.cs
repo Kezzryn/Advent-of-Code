@@ -4,7 +4,7 @@ namespace BKH.AoC_AssemBunny
 {
     internal enum OpCode
     {
-        CPY, INC, DEC, JNZ, TGL, HALT
+        CPY, INC, DEC, JNZ, TGL, OUT, HALT
     }
 
     internal class InstructionNode()
@@ -14,45 +14,19 @@ namespace BKH.AoC_AssemBunny
         public bool ParamAIsReg = false;
         public int ParamB = 0;
         public bool ParamBIsReg = false;
-        public override string ToString()
-        {
-            string rv = "";
-            rv += $"{Op} ".ToLower();
-            if (ParamAIsReg)
-            {
-                rv += (char)ParamA;
-            }
-            else
-            {
-                rv += ParamA;
-            }
-            
-            if (ParamB != 0)
-            {
-                rv += " ";
-                if (ParamBIsReg)
-                {
-                    rv += (char)ParamB;
-                }
-                else
-                {
-                    rv += ParamB;
-                }
-            }
+    }
 
-            return rv;
-        }
-    } 
+    public enum State
+    {
+        Running,
+        Halted,
+        Paused_For_Input,
+        Paused_For_Output
+    };
 
     public class AssemBunny
     {
-        public enum State
-        {
-            Running,
-            Halted,
-            Paused_For_Input
-        };
-        
+       
         private readonly Dictionary<int, int> _registers = new()
         {
             { 'a', 0 },
@@ -63,6 +37,8 @@ namespace BKH.AoC_AssemBunny
 
         private readonly List<InstructionNode> _instructionSet = [];
         private int _instPtr = 0;
+
+        public readonly Queue<int> OutputQueue = new();
 
         public AssemBunny(string[] program)
         {
@@ -78,6 +54,7 @@ namespace BKH.AoC_AssemBunny
                     "dec" => OpCode.DEC,
                     "jnz" => OpCode.JNZ,
                     "tgl" => OpCode.TGL,
+                    "out" => OpCode.OUT,
                     _ => throw new NotImplementedException(instr[0])
                 };
                 node.ParamAIsReg = !int.TryParse(instr[1], out int paramA);
@@ -115,6 +92,17 @@ namespace BKH.AoC_AssemBunny
             } while (currentState == State.Running);
 
             return currentState;
+        }
+
+        public void Reset()
+        {
+            if (_instructionSet.Any(x => x.Op == OpCode.TGL)) throw new Exception("Unable to reset self modify code.");
+
+            _instPtr = 0;
+            _registers['a'] = 0;
+            _registers['b'] = 0;
+            _registers['c'] = 0;
+            _registers['d'] = 0;
         }
 
         private State Dispatcher(InstructionNode currentNode)
@@ -159,8 +147,10 @@ namespace BKH.AoC_AssemBunny
                         OpCode.CPY => OpCode.JNZ,
                         _ => throw new NotImplementedException(),
                     };
-
                     break;
+                case OpCode.OUT:
+                    OutputQueue.Enqueue(_registers[currentNode.ParamA]);
+                    return State.Paused_For_Output;
                 default:
                     throw new NotImplementedException();
             }
