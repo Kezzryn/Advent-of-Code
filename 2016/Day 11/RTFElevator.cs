@@ -4,27 +4,28 @@ namespace AoC_2016_Day_11
 {
     internal static class RTFElevator
     {
+        public const int INDEX_ELEVATOR = 1;
+
         private const int FLOOR_BOTTOM = 1;
         private const int FLOOR_TOP = 4;
-        public const int INDEX_ELEVATOR = 1;
         private const int INDEX_STEPS = 0;
         private const int START_ITEMS = 2;
 
-        private static readonly Dictionary<string, int> testStates = new();
+        private static readonly Dictionary<string, int> testStates = [];
         private static readonly PriorityQueue<int[], int> queue = new();
 
         public static int CountTheSteps(int[] initial_state)
         {
-            int[] solution = new int[] { int.MaxValue };
+            int[] solution = new int[initial_state.Length];
+            solution[INDEX_STEPS] = int.MaxValue;
 
             EnqueueNextStep(initial_state);
-            while (queue.Count > 0)
-            {
-                int[] current = queue.Dequeue();
-
+            while (queue.TryDequeue(out int[]? current, out int _))
+            { 
                 if (IsEndState(current))
                 {
-                    if (current[INDEX_STEPS] < solution[INDEX_STEPS]) solution = (int[])current.Clone();
+                    if (current[INDEX_STEPS] < solution[INDEX_STEPS])
+                        Array.Copy(current, solution, current.Length);
                     continue;
                 }
 
@@ -39,7 +40,9 @@ namespace AoC_2016_Day_11
                     {
                         if (current[itemOne] == current[INDEX_ELEVATOR])
                         {
-                            int[] nextStepOne = (int[])current.Clone();
+                            int[] nextStepOne = new int[current.Length];
+                            Array.Copy(current, nextStepOne, current.Length);
+
                             nextStepOne[INDEX_STEPS]++;
                             nextStepOne[INDEX_ELEVATOR] += nextFloor;
                             nextStepOne[itemOne] += nextFloor;
@@ -51,9 +54,12 @@ namespace AoC_2016_Day_11
                             {
                                 if (nextStepOne[itemTwo] == current[INDEX_ELEVATOR])
                                 {
-                                    int[] nextStepTwo = (int[])nextStepOne.Clone();
+                                    int[] nextStepTwo = new int[current.Length];
+                                    Array.Copy(nextStepOne, nextStepTwo, nextStepOne.Length);
+
                                     nextStepTwo[itemTwo] += nextFloor;
-                                    if (IsValidState(nextStepTwo)) EnqueueNextStep(nextStepTwo);
+                                    if (IsValidState(nextStepTwo))
+                                        EnqueueNextStep(nextStepTwo);
                                 }
                             }
                         }
@@ -64,17 +70,7 @@ namespace AoC_2016_Day_11
             return solution[INDEX_STEPS];
         }
 
-        private static bool IsEndState(int[] state)
-        {
-            //is everything on the top floor? 
-            bool returnValue = true;
-
-            for (int itm = START_ITEMS; itm < state.Length; itm++)
-            {
-                returnValue = returnValue && state[itm] == FLOOR_TOP;
-            }
-            return returnValue;
-        }
+        private static bool IsEndState(int[] state) => state.Skip(START_ITEMS).All(x => x == FLOOR_TOP);
 
         private static string HashState(int[] state)
         {
@@ -109,9 +105,8 @@ namespace AoC_2016_Day_11
                 {
                     if (state[itm] == floor) isGen = true;
                     if (state[itm + 1] == floor && state[itm] != floor) isVulnChip = true;
+                    if (isGen && isVulnChip) return false;
                 }
-
-                if (isGen && isVulnChip) return false;
             }
 
             return true;

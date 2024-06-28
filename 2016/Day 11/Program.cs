@@ -8,12 +8,13 @@ try
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
 
     // length - 1 for items, +2 for Elevator and steps
+    
     int[] initialStatePart1 = new int[puzzleInput.Split(" a ").Length + 1];
     initialStatePart1[RTFElevator.INDEX_ELEVATOR] = 1;
 
-    Dictionary<string, int> nameIndex = new();
+    Dictionary<string, int> nameIndex = [];
 
-    //The [first|second|third|fourth] floor contains (0-x)[a <item> <type>,] and (1)[a <item> <type>].
+    //The [first|second|third|fourth] floor contains (0-x)[a [<item>-compatible|<item>] [microchip|generator],] and (1)[a [<item>-compatible|<item>] [microchip|generator]].
     foreach (string line in puzzleInput.Split(CRLF).ToList())
     {
         if (line.Contains("nothing relevant.")) continue;
@@ -27,7 +28,8 @@ try
             _ => -1
         };
 
-        string[] items = line[line.IndexOf(' ', line.IndexOf("contains"))..].Replace("-compatible","").Split(" a ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+        string[] items = line[line.IndexOf(' ', line.IndexOf("contains"))..].Replace("-compatible","").Split(" a ", StringSplitOptions.RemoveEmptyEntries);
+
         foreach (string item in items)
         {
             string[] t = item.Split(' ').Select(x => x.Trim(".,".ToCharArray())).ToArray();
@@ -40,15 +42,12 @@ try
         }
     }
 
-    // Part two adds four more items to really stress test your pruning algorithm.
+    // Part two adds two more item pairs to really stress test the pruning algorithm.
     int[] initialStatePart2 = new int[initialStatePart1.Length + 4];
-    for(int i = 0; i <  initialStatePart1.Length; i++)
+
+    for(int i = 0; i <  initialStatePart2.Length; i++)
     {
-        initialStatePart2[i] = initialStatePart1[i];
-    }
-    for (int i = initialStatePart1.Length; i < initialStatePart2.Length; i++)
-    {
-        initialStatePart2[i] = 1;
+        initialStatePart2[i] = i < initialStatePart1.Length ? initialStatePart1[i] : 1;
     }
 
     Console.WriteLine($"Part 1: The solution is: {RTFElevator.CountTheSteps(initialStatePart1)}");
