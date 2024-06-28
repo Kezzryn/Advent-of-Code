@@ -1,4 +1,4 @@
-﻿using BKH.AoC_Point2D;
+﻿using BKH.Geometry;
 
 static string KeypadSolver(List<string> input, Dictionary<Point2D, char> keypad)
 {

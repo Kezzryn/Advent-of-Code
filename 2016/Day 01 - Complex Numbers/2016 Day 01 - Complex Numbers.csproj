@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Points\Point2D\Point2D.csproj" />
+    <ProjectReference Include="..\..\Libraries\Geometry\Geometry.csproj" />
   </ItemGroup>
 
   <ItemGroup>

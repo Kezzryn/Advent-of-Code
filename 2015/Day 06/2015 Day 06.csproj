@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Geometry\Rectangle\Rectangle.csproj" />
+    <ProjectReference Include="..\..\Libraries\Geometry\Geometry.csproj" />
   </ItemGroup>
 
   <ItemGroup>

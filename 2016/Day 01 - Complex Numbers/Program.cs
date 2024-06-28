@@ -1,31 +1,31 @@
-﻿using BKH.AoC_Point2D;
-using System.Numerics;
+﻿using BKH.Geometry;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    List<(char, int)> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(',').Select(x => (x[0], int.Parse(x[1..]))).ToList();
+    List<(char, int)> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(',', StringSplitOptions.TrimEntries).Select(x => (x[0], int.Parse(x[1..]))).ToList();
 
-    Complex direction = new(0, 1);
+    Cursor cursor = new(0,0,0,1);
 
-    Point2D cursor = Point2D.Origin;
     Point2D intersection = Point2D.Origin;
     HashSet<Point2D> path = [];
 
     foreach ((char direction, int distance) in puzzleInput)
     {
-        direction *= (instruction[0] == 'L') ? -Complex.ImaginaryOne : Complex.ImaginaryOne;
+        if (direction == 'L')
+            cursor.TurnLeft();
+        else
+            cursor.TurnRight();
 
-        for (int i = 1; i <= distance) ; i++)
+        for (int i = 1; i <= distance; i++)
         {
-            cursor += new Point2D((int)direction.Real, (int)direction.Imaginary);
+            cursor.Step();
 
-            if (path.Contains(cursor) && intersection.X == 0 && intersection.Y == 0) intersection = cursor;
-            path.Add(cursor);
+            if (!path.Add(cursor.XYAsPoint2D) && intersection == Point2D.Origin) intersection = cursor.XYAsPoint2D;
         }
     }
 
-    int part1Answer = Point2D.TaxiDistance2D(Point2D.Origin, cursor);
+    int part1Answer = Point2D.TaxiDistance2D(Point2D.Origin, cursor.XYAsPoint2D);
     int part2Answer = Point2D.TaxiDistance2D(Point2D.Origin, intersection);
 
     Console.WriteLine($"Part 1: The distance to the Easter Bunny headquarters is: {part1Answer}");

@@ -1,4 +1,4 @@
-﻿using BKH.Geometry;
+﻿using BKH.Geometry.Rectangle;
 using System.Text.RegularExpressions;
 using static AoC_2015_Day_06.XmasLightGrid;
 

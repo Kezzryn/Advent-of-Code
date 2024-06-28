@@ -1,13 +1,13 @@
-﻿using BKH.AoC_Point2D;
+﻿using BKH.Geometry.Point2D;
 
 try
 {
     Dictionary<char, Point2D> directions = new()
     {
-        { '<', new Point2D(-1,  0) },
-        { '>', new Point2D( 1,  0) },
-        { 'v', new Point2D( 0, -1) },
-        { '^', new Point2D( 0,  1) }
+        { '<', Point2D.Origin.OrthogonalNeighbor(Point2D.Direction.Left)  },
+        { '>', Point2D.Origin.OrthogonalNeighbor(Point2D.Direction.Right) },
+        { 'v', Point2D.Origin.OrthogonalNeighbor(Point2D.Direction.Down)  },
+        { '^', Point2D.Origin.OrthogonalNeighbor(Point2D.Direction.Up)    }
     };
 
     const string PUZZLE_INPUT = "PuzzleInput.txt";

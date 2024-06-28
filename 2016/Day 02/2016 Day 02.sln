@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2016 Day 02", "2016 Day 02.csproj", "{CA31E934-32B5-4313-AE85-535C94DD96ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point2D", "..\..\Libraries\Points\Point2D\Point2D.csproj", "{3F003B86-8DB8-4166-82D1-1649B456D4C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geometry", "..\..\Libraries\Geometry\Geometry.csproj", "{9D01B015-E52F-4CD6-8389-78073824405C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{CA31E934-32B5-4313-AE85-535C94DD96ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA31E934-32B5-4313-AE85-535C94DD96ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA31E934-32B5-4313-AE85-535C94DD96ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F003B86-8DB8-4166-82D1-1649B456D4C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F003B86-8DB8-4166-82D1-1649B456D4C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F003B86-8DB8-4166-82D1-1649B456D4C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F003B86-8DB8-4166-82D1-1649B456D4C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D01B015-E52F-4CD6-8389-78073824405C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D01B015-E52F-4CD6-8389-78073824405C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D01B015-E52F-4CD6-8389-78073824405C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D01B015-E52F-4CD6-8389-78073824405C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

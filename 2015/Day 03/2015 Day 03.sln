@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2015 Day 03", "2015 Day 03.csproj", "{14494747-50DE-449A-836A-D8D9D4F320F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point2D", "..\..\Libraries\Points\Point2D\Point2D.csproj", "{00D8E9C5-1809-4BB4-BFDE-BB2684DCA199}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geometry", "..\..\Libraries\Geometry\Geometry.csproj", "{ED228E09-F630-41C4-B170-DC509D855820}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{14494747-50DE-449A-836A-D8D9D4F320F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14494747-50DE-449A-836A-D8D9D4F320F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14494747-50DE-449A-836A-D8D9D4F320F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00D8E9C5-1809-4BB4-BFDE-BB2684DCA199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00D8E9C5-1809-4BB4-BFDE-BB2684DCA199}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00D8E9C5-1809-4BB4-BFDE-BB2684DCA199}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00D8E9C5-1809-4BB4-BFDE-BB2684DCA199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED228E09-F630-41C4-B170-DC509D855820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED228E09-F630-41C4-B170-DC509D855820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED228E09-F630-41C4-B170-DC509D855820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED228E09-F630-41C4-B170-DC509D855820}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
