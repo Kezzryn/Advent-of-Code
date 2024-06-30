@@ -48,7 +48,7 @@
 
     Console.ResetColor();
     Console.WriteLine($"Part 1: The sum of the sector IDs of the real rooms is {part1Answer}");
-    Console.WriteLine($"Part 2: The sector ID of {part2Answer}");
+    Console.WriteLine($"Part 2: The sector ID of the target room is {part2Answer}");
     
 }
 catch (Exception e)
