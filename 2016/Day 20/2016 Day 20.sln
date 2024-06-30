@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2016 Day 20", "2016 Day 20.csproj", "{070E6E6C-012E-490C-B0F9-C1B32460D508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2016 Day 20", "2016 Day 20.csproj", "{070E6E6C-012E-490C-B0F9-C1B32460D508}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segments", "..\..\Libraries\Segments\Segments.csproj", "{3A254CB0-233D-485A-8E87-7712BE1C5302}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{070E6E6C-012E-490C-B0F9-C1B32460D508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{070E6E6C-012E-490C-B0F9-C1B32460D508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{070E6E6C-012E-490C-B0F9-C1B32460D508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A254CB0-233D-485A-8E87-7712BE1C5302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A254CB0-233D-485A-8E87-7712BE1C5302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A254CB0-233D-485A-8E87-7712BE1C5302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A254CB0-233D-485A-8E87-7712BE1C5302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

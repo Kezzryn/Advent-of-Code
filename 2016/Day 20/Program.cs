@@ -1,42 +1,35 @@
-﻿using AoC_2016_Day_20;
+﻿using BKH.Segments;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
+    List<string> puzzleInput = [.. File.ReadAllLines(PUZZLE_INPUT)];
 
-    Slice blockList = new();
-    Slice allowList = new();
+    Segments blockList = new();
+    Segments allowList = new();
 
-    foreach (string line in puzzleInput)
+    puzzleInput.Select(x => x.Split('-').Select(uint.Parse)).ToList()
+        .ForEach(x => blockList.AddRange(x.First(), x.Last()));
+
+    List<Slice> blockListSegment = [..blockList.GetSlices()];
+    
+    if (blockListSegment.First().Start != 0)
+        allowList.AddRange(0, blockListSegment.First().Start - 1);
+
+    if (blockListSegment.Last().End != uint.MaxValue)
+        allowList.AddRange(blockListSegment.Last().End + 1, uint.MaxValue);
+
+    for (int i = 0; i < blockListSegment.Count - 1; i++)
     {
-        uint[] a = line.Split('-').Select(uint.Parse).ToArray();
-
-        blockList.AddRange(a[0], a[1]);
-    }
-
-    blockList.FlattenSegments(); //merge and sort the data load.
-
-    Segment[] blockListSegment = blockList.GetSegments().OrderBy(x => x.Start).ToArray();
-
-    for (int i = 0; i < blockListSegment.GetUpperBound(0); i++)
-    {
-        //check for range before the first 
-        if (i == 0 && blockListSegment[i].Start != 0) allowList.AddRange(0, blockListSegment[i].Start - 1);
-
         allowList.AddRange(blockListSegment[i].End + 1, blockListSegment[i + 1].Start - 1);
-
-        //check for range after the last 
-        if (i == blockListSegment.GetUpperBound(0) - 1 && blockListSegment[i + 1].End != uint.MaxValue) allowList.AddRange(blockListSegment[i + 1].End, uint.MaxValue);
     }
-
-    uint part1Answer = allowList.GetSegments().Select(x => x.Start).Min();
-    long part2Answer = allowList.GetSegments().Select(x => x.Length == 0 ? 1 : (long)x.Length).Sum();
+    
+    uint part1Answer = allowList.GetSlices().Select(x => x.Start).Min();
+    long part2Answer = allowList.GetSlices().Sum(x => x.Length == 0 ? 1 : x.Length);
 
     Console.WriteLine($"Part 1: The lowest-valued IP is {part1Answer}");
     Console.WriteLine($"Part 2: There are {part2Answer} valid IPs.");
 }
-
 catch (Exception e)
 {
     Console.WriteLine(e);
