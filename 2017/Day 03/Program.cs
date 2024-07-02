@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Numerics;
+﻿using BKH.Geometry;
 
 try
 {
@@ -26,40 +25,28 @@ try
 
     int part2Answer = 0;
 
-    Dictionary<Point, int> memoryMap = new();
-    Point cursor = new(0,0);
-    Complex direction = new(1, 0);
-
-    int GetNeighborValue(Point pos)
-    {
-        var neighbours = from x in Enumerable.Range(pos.X - 1, 3)
-                         from y in Enumerable.Range(pos.Y - 1, 3)
-                         where !(x == pos.X && y == pos.Y)
-                         select new Point(x, y);
-        int rv = neighbours.Select(x => memoryMap.GetValueOrDefault(x, 0)).Sum();
-
-        return rv == 0 ? 1 : rv; // return 1 as a minimum. Otherwise we have to fiddle with priming the memoryMap
-    }
+    Dictionary<Point2D, int> memoryMap = [];
+    Cursor cursor = new(0,0,1,0);
 
     int spiralLevel = 0;    // up by 2s as per the p
     int spiralSteps = 0;    // number of steps in the current spiral. on 0, we bump out to the next level. 
     do
     {
-        int value = GetNeighborValue(cursor);
+        int value = int.Max(1, cursor.XYAsPoint2D.GetAllNeighbors().Sum(x => memoryMap.GetValueOrDefault(x, 0)));
         if (value >= puzzleInput) part2Answer = value;
-        if(!memoryMap.TryAdd(cursor, value)) break;
+        if(!memoryMap.TryAdd(cursor.XYAsPoint2D, value)) break;
 
         if (spiralSteps == 0)
         {
-            cursor += new Size((int)direction.Real, (int)direction.Imaginary);
-            direction *= Complex.ImaginaryOne;
+            cursor.Step();
+            cursor.TurnLeft();
             spiralLevel += 2;
             spiralSteps = spiralLevel * 4;
         }
         else
         {
-            if ((spiralSteps % spiralLevel) == 0) direction *= Complex.ImaginaryOne;
-            cursor += new Size((int)direction.Real, (int)direction.Imaginary);
+            if ((spiralSteps % spiralLevel) == 0) cursor.TurnLeft();
+            cursor.Step();
         }
 
         spiralSteps--;
