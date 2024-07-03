@@ -9,7 +9,7 @@ namespace AoC_2017_Day_07
         public int Weight { get; set; }
         public int SumChildren { get; set; }
 
-        public readonly HashSet<string> Children = new();
+        public readonly HashSet<string> Children = [];
 
         public Node(string id, int weight = 0)
         {
@@ -36,7 +36,7 @@ namespace AoC_2017_Day_07
 
     internal class Tree
     {
-        private readonly Dictionary<string, Node> _theTree = new();
+        private readonly Dictionary<string, Node> _theTree = [];
 
         public string RootNode { get; set; }
 
@@ -46,7 +46,7 @@ namespace AoC_2017_Day_07
             {
                 string[] supportNode = node.Split("->");
 
-                string[] parent = supportNode[0].Split(' ', StringSplitOptions.TrimEntries).ToArray();
+                string[] parent = [.. supportNode[0].Split(' ', StringSplitOptions.TrimEntries)];
 
                 AddNode(parent[0], int.Parse(parent[1].Trim("()".ToCharArray())));
 
@@ -93,7 +93,7 @@ namespace AoC_2017_Day_07
 
         public void LinkNode(string parentID, string childID)
         {
-            if(_theTree.TryGetValue(parentID, out Node? parentNode))
+            if (_theTree.TryGetValue(parentID, out Node? parentNode))
             {
                 parentNode.AddChild(childID);
             }
@@ -127,6 +127,11 @@ namespace AoC_2017_Day_07
             }
 
             return _theTree[id].SumChildren;
+        }
+
+        public HashSet<string> GetChildren(string parentid)
+        {
+            return GetNode(parentid).Children;
         }
     }
 }

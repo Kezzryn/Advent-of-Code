@@ -1,5 +1,4 @@
 ﻿using AoC_2017_Day_07;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 try
 {
@@ -8,7 +7,7 @@ try
 
     Tree theTree = new(puzzleInput);
 
-    void printTree(string node, int depthLimit, int depth = 1)
+    void PrintTree(string node, int depthLimit, int depth = 1)
     {
         string spacer = new(' ', depth);
         Node current = theTree.GetNode(node);
@@ -18,19 +17,32 @@ try
         {
             foreach (string child in current.Children)
             {
-                printTree(child, depthLimit, depth + 1);
+                PrintTree(child, depthLimit, depth + 1);
             }
         }
     }
 
-    Console.WriteLine($"Part 1: {theTree.RootNode}");
+    int FindImbalance(string node, int imbalance = 0)
+    {
+        var groupedChildren = theTree.GetChildren(node).Select(x => (Name: x, Weight: theTree.GetNode(x).SumChildren)).GroupBy(g => g.Weight).OrderBy(o => o.Count());
 
-    printTree(theTree.RootNode, 1);
-    printTree("ggxgmci", 1);
-    printTree("anygv", 1);
-    printTree("fabacam", 1);
+        if (groupedChildren.Count() == 1) return theTree.GetNode(node).Weight - imbalance;
 
-    Console.WriteLine($"Part 2: 299");
+        //First().First() is the oneoff weight.  Last().First() is the target weight
+        imbalance = groupedChildren.First().First().Weight - groupedChildren.Last().First().Weight;
+
+        return FindImbalance(groupedChildren.First().First().Name, imbalance);
+    }
+
+    Console.WriteLine($"Part 1: The bottom (root) program is {theTree.RootNode}.");
+
+    //Manual check methodoligy
+    //PrintTree(theTree.RootNode, 1);
+    //PrintTree("ggxgmci", 1);
+    //PrintTree("anygv", 1);
+    //PrintTree("fabacam", 1);
+
+    Console.WriteLine($"Part 2: The weight of the unbalanced node needs to be adjusted to be {FindImbalance(theTree.RootNode)}.");
 }
 catch (Exception e)
 {

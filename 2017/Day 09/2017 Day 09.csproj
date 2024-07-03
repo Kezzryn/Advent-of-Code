@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>_2017_Day_09</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>AoC_2017_Day_09</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

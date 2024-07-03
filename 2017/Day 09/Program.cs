@@ -55,7 +55,6 @@
         }
     }
 
-
     Console.WriteLine($"Part 1: The group score is {part1Answer}.");
     Console.WriteLine($"Part 2: The number of non-cancelled characters in the garbage is {part2Answer}.");
 }

@@ -1,53 +1,46 @@
-﻿using System.Text;
-
-try
+﻿try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     List<int> puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split('\t').Select(int.Parse).ToList();
 
-    static string hash(List<int> data)
+    static long Hash(List<int> data)
     {
-        StringBuilder sb = new();
+        //There are 16 values and the data values never exceed 15, so we can bitpack a long as a hash value.
+        long returnValue = 0;
+
         for(int i = 0; i < data.Count; i++)
         {
-            sb.Append($"{data[i]:00}");
+            returnValue |= (long)data[i] << (i * 4);
         }
-        return sb.ToString();
+
+        return returnValue;
     }
-    string hashText = hash(puzzleInput);
 
-    HashSet<string> answerSet = new()
-    {
-        hashText
-    };
-
-    List<string> answerIndex = new()
-    {
-        hashText
-    };
+    long hashValue = Hash(puzzleInput);
+    HashSet<long> uniqueHash = [ hashValue ];
+    List<long> hashHistory = [ hashValue ];
 
     do
     {
         int maxValue = puzzleInput.Max();
-        int maxIndex = puzzleInput.FindIndex(x => x == maxValue);
+        int maxIndex = puzzleInput.IndexOf(maxValue);
 
         puzzleInput[maxIndex] = 0;
-
         for(int i = 1; i <= maxValue; i++)
         {
             int index = (i + maxIndex) % puzzleInput.Count;
             puzzleInput[index]++;
         }
 
-        hashText = hash(puzzleInput);
-        answerIndex.Add(hashText);
-    } while (answerSet.Add(hashText));
+        hashValue = Hash(puzzleInput);
+        hashHistory.Add(hashValue);
+    } while (uniqueHash.Add(hashValue));
 
     // add one 'cause indexOf is zero bound
-    int part2Answer = answerIndex.Count - (answerIndex.IndexOf(hashText) + 1);
+    int part2Answer = hashHistory.Count - (hashHistory.IndexOf(hashValue) + 1);
 
-    Console.WriteLine($"Part 1: {answerSet.Count}");
-    Console.WriteLine($"Part 2: {part2Answer}");
+    Console.WriteLine($"Part 1: {uniqueHash.Count} redistribution cycles must be completed before a configuration is repeated.");
+    Console.WriteLine($"Part 2: The loop size is {part2Answer}.");
 }
 catch (Exception e)
 {

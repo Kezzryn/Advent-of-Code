@@ -9,13 +9,11 @@
         "==" => left == right,
         "!=" => left != right,
         _ => throw new NotImplementedException(op)
-        };
+    };
 }
 
 try
 {
-
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int OP_TARGET = 0;
     const int OP_INSTRUCTION = 1;
     const int OP_TARGET_VALUE = 2;
@@ -23,9 +21,10 @@ try
     const int COMP_TYPE = 5;
     const int COMP_VALUE = 6;
 
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Dictionary<string, int> registers = new();
+    Dictionary<string, int> registers = [];
     int part2Answer = 0;
 
     foreach (string line in  puzzleInput)
