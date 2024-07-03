@@ -37,11 +37,11 @@
             }
 
             return Convert.ToHexString(denseHash);
-        } 
+        }
 
         public void TieKnot(int length)
         {
-            if (length > LIST_LENGTH) return ;
+            if (length > LIST_LENGTH) return;
 
             if (_cursor + length <= LIST_LENGTH)
             {

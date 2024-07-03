@@ -19,36 +19,22 @@
 
     int x = 0; 
     int y = 0;
+
     foreach (string step in puzzleInput)
     {
-        switch (step)
+        if(step.Length == 1)
         {
-            case "n":
-                y++;
-                break;
-            case "s":
-                y--;
-                break;
-            case "nw":
-                if ((Math.Abs(x) % 2) == 1) y++;
-                x--;
-                break;
-            case "ne":
-                if ((Math.Abs(x) % 2) == 1) y++;
-                x++;
-                break;
-            case "sw":
-                if ((Math.Abs(x) % 2) == 0) y--;
-                x--;
-                break;
-            case "se":
-                if ((Math.Abs(x) % 2) == 0) y--;
-                x++;
-                break;
-            default:
-                Console.WriteLine($"missing {step}");
-                break;
+            if(step == "n") y++;
+            if(step == "s") y--;
         }
+        else
+        {
+            if (step[0] == 'n' && (Math.Abs(x) % 2) == 1) y++;
+            if (step[0] == 's' && (Math.Abs(x) % 2) == 0) y--;
+            if (step[1] == 'e') x++;
+            if (step[1] == 'w') x--;
+        }
+
         part2Answer = int.Max(HexTaxiDistance(x, y), part2Answer);
     }
 
