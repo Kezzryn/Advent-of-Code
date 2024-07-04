@@ -3,7 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-internal struct Point3D :
+public struct Point3D :
     IComparable<Point3D>,
     IEqualityComparer<Point3D>,
     IEqualityOperators<Point3D, Point3D, bool>,
@@ -16,8 +16,6 @@ internal struct Point3D :
     ISubtractionOperators<Point3D, (int x, int y), Point3D>,
     IComparisonOperators<Point3D, Point3D, bool>
 {
-
-
     public static readonly Point3D Empty = new();
 
     //human readable return types
