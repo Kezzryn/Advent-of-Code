@@ -31,6 +31,7 @@ public class BaseMap
     {
         LoadMap(puzzleInput);
     }
+    public BaseMap() { }
 
     protected virtual void LoadMap(string[] puzzleInput)
     {
@@ -85,8 +86,6 @@ public class BaseMap
 
                 cache[(start, end)] = NumSteps;
                 cache[(end, start)] = NumSteps;
-
-                Console.WriteLine($"{start} {end} {NumSteps}");
 
                 //unroll our history. 
                 FinalPath.Add(cursor);
