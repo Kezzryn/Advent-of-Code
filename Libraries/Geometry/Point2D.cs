@@ -89,6 +89,14 @@ public struct Point2D :
         }
     }
 
+    public readonly IEnumerable<Point2D> GetOrthogonalNeighbors()
+    {
+        foreach(Direction dir in Enum.GetValues(typeof(Direction)))
+        {
+            yield return OrthogonalNeighbor(dir);
+        }
+    }
+
     public override readonly string ToString() => $"{{X={X},Y={Y}}}";
 
     public static int TaxiDistance2D(Point2D s, Point2D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
