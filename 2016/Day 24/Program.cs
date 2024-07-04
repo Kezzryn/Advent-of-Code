@@ -1,6 +1,6 @@
 ﻿using AoC_2016_Day_24;
 
-int FindPath(Map theMap, bool returnToStart = false)
+static int FindPath(Map theMap, bool returnToStart = false)
 {
     PriorityQueue<string, int> queue = new();
 
@@ -9,10 +9,8 @@ int FindPath(Map theMap, bool returnToStart = false)
 
     int numSteps = int.MaxValue;
 
-    while (queue.Count > 0)
+    while (queue.TryDequeue(out string? path, out int currentSteps))
     {
-        if (!queue.TryDequeue(out string? path, out int currentSteps)) continue;
-
         if (path.Length == targetPathLength)
         {
             if (currentSteps < numSteps) numSteps = currentSteps;
@@ -23,20 +21,20 @@ int FindPath(Map theMap, bool returnToStart = false)
 
         if (returnToStart && !theMap.WayPoints.Keys.Except(path).Any())
         {
-            if (theMap.A_Star(theMap.WayPoints[path[^1]], theMap.WayPoints[path[0]], out int segment))
+            if (theMap.A_Star(theMap.WayPoints[path[^1]], theMap.WayPoints[path[0]]))
             {
                 string nextStep = path + path[0];
-                queue.Enqueue(nextStep, segment + currentSteps);
+                queue.Enqueue(nextStep, theMap.NumSteps + currentSteps);
             }
         }
         else
         {
             foreach (char wp in theMap.WayPoints.Keys.Except(path))
             {
-                if (theMap.A_Star(theMap.WayPoints[path[^1]], theMap.WayPoints[wp], out int segment))
+                if (theMap.A_Star(theMap.WayPoints[path[^1]], theMap.WayPoints[wp]))
                 {
                     string nextStep = path + wp;
-                    queue.Enqueue(nextStep, segment + currentSteps);
+                    queue.Enqueue(nextStep, theMap.NumSteps + currentSteps);
                 }
             }
         }
