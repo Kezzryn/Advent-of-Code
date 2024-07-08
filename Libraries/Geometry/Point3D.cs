@@ -109,6 +109,7 @@ public struct Point3D :
     public static int TaxiDistance2D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
 
     public readonly (int x, int y) As2D() => (X, Y);
+    public readonly Point2D AsPoint2D() => new(X, Y);
 
     // IAdditionOperators, ISubtractionOperators
     public static Point3D operator +(Point3D left, Point3D right) => new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
