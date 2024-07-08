@@ -1,41 +1,33 @@
 ﻿try
 {
-    const string PUZZLE_INPUT = "PuzzleInput.txt";
-    const int LOC = 0;
-    const int DEPTH = 1;
     const bool BREAK_EARLY = true;
-    int[][] puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Select(x => x.Split(": ", StringSplitOptions.TrimEntries).Select(int.Parse).ToArray()).ToArray();
 
-    int part1Answer = 0;
-    int part2Answer = 0;
+    const string PUZZLE_INPUT = "PuzzleInput.txt";
+    Dictionary<int, int> puzzleInput = File.ReadAllLines(PUZZLE_INPUT)
+        .Select(x => x.Split(": ", StringSplitOptions.TrimEntries).Select(int.Parse))
+            .ToDictionary(x => x.First(), x => x.Last());
 
     int Severity(int offset, bool breakEarly = false)
     {
         int rv = 0;
-        foreach (int[] puzzle in puzzleInput)
+        foreach ((int location, int depth) in puzzleInput)
         {
-            int length = (puzzle[DEPTH] - 1) * 2;
-            if (((puzzle[LOC] + offset) % length) == 0)
+            int length = (depth - 1) * 2;
+            if (((location + offset) % length) == 0)
             {
                 if (breakEarly) return -1;
-                rv += puzzle[DEPTH] * puzzle[LOC];
+                rv += depth * location;
             }
         }
         return rv;
     }
 
-    part1Answer = Severity(0);
+    int part1Answer = Severity(0);
+    int part2Answer = 0;
 
-    bool isDone = false;
-    int count = 0;
-    while (!isDone)
+    while (Severity(++part2Answer, BREAK_EARLY) != 0)
     {
-        if (Severity(count, BREAK_EARLY) == 0)
-        {
-            part2Answer = count;
-            isDone = true;
-        }
-        count++;
+        //spin the loop!
     }
 
     Console.WriteLine($"Part 1: The severity of the trip is: {part1Answer}.");

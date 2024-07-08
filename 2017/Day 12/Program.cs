@@ -4,40 +4,42 @@
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
     Dictionary<int, List<int>> theTree = new();
-    
-    int part1Answer = 0;
-    int part2Answer = 0;
-    
-    void LoadLine(int lineNum)
+      
+    // Loads an entire group at once. 
+    // the linked nodes are bi-directional, so we get the whole group/cluster with a little bit of recursion.
+    static void LoadGroup(int lineNum, string[] puzzleInput, Dictionary<int, List<int>> theTree)
     {
         string[] temp = puzzleInput[lineNum].Split("<->", StringSplitOptions.TrimEntries).ToArray();
         int key = int.Parse(temp[0]);
-        int[] children = temp[1].Split(',', StringSplitOptions.TrimEntries).Select(int.Parse).ToArray();
+        int[] linkedNodes = temp[1].Split(',', StringSplitOptions.TrimEntries).Select(int.Parse).ToArray();
 
         if (theTree.TryAdd(key, new()))
         {
-            foreach (int child in children)
+            foreach (int node in linkedNodes)
             {
-                if (!theTree[key].Contains(child))
+                if (!theTree[key].Contains(node))
                 {
-                    theTree[key].Add(child);
+                    theTree[key].Add(node);
                 }
             }
 
-            foreach (int child in children)
+            foreach (int node in linkedNodes)
             {
-                if (key != child) LoadLine(child);
+                if (key != node) LoadGroup(node, puzzleInput, theTree);
             }
         }
     }
 
-    for(int i = 0; i < puzzleInput.Length; i++)
+    LoadGroup(0, puzzleInput, theTree);
+    int part1Answer = theTree.Count;
+    int part2Answer = 1; //add in group 0
+
+    for (int i = 1; i < puzzleInput.Length; i++)
     {
         if (!theTree.ContainsKey(i))
         {
+            LoadGroup(i, puzzleInput, theTree);
             part2Answer++;
-            LoadLine(i);
-            if (i == 0) part1Answer = theTree.Count;
         }
     }
 
