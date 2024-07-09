@@ -1,6 +1,4 @@
-﻿using System;
-
-try
+﻿try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int NUM_DANCERS = 16;
@@ -11,7 +9,7 @@ try
 
     string Dance(long numDances)
     {
-        Dictionary<string, long> danceMoves = new();
+        Dictionary<string, long> danceMoves = [];
 
         int[] dancers = new int[NUM_DANCERS];
         for (int i = 'a'; i <= 'p'; i++)
@@ -48,6 +46,8 @@ try
                         throw new NotImplementedException();
                 }
             }
+
+            //Happens after 31 loops.
             if (!danceMoves.TryAdd(String.Join("", dancers.Select(x => (char)x).ToArray()), currentDance))
             {
                 break;

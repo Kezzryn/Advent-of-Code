@@ -5,7 +5,7 @@
 
     int Spinnado(int numLoops)
     {
-        List<int> buffer = new() { 0 };
+        List<int> buffer = [0];
         int cursor = 0;
 
         for (int i = 1; i <= numLoops; i++)
