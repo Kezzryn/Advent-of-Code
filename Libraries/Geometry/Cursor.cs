@@ -48,10 +48,12 @@ public class Cursor : IEquatable<Cursor>
         _pos += (_dir * num);
     }
 
-    //NOTE: THis assumes a "normal" 2d grid where Y increases as it goes "up".
+    //NOTE: This assumes a "normal" 2d grid where Y increases as it goes "up".
     public void TurnLeft() => _dir *= Complex.ImaginaryOne;
 
     public void TurnRight() => _dir *= -Complex.ImaginaryOne;
+
+    public void TurnAround() => _dir *= -1;
 
     public Cursor ReturnCloneTurnRight()
     {
