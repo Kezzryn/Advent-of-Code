@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\2017 Libs\KnotHash\KnotHash.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="PuzzleInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -1,12 +1,13 @@
-﻿using AoC_2017_Day_14;
-using System.Drawing;
+﻿using AoC_2017_KnotHash;
+using BKH.Geometry;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string secretHash = File.ReadAllText(PUZZLE_INPUT);
 
-    bool[,] diskGrid = new bool[128,128];
+    HashSet<Point2D> diskGrid = [];
+
     int part1Answer = 0;
     int part2Answer = 0;
 
@@ -14,55 +15,37 @@ try
     {
         string hash = KnotHash.HashStringToBinary($"{secretHash}-{row}");
         part1Answer += hash.Count(c => c == '1');
-        
+
         for (int col = 0; col < 128; col++)
         {
-            if (hash[col] == '1') diskGrid[col, row] = true;
+            if (hash[col] == '1') diskGrid.Add(new(col, row));
         }
     }
 
     Console.WriteLine($"Part 1: There are {part1Answer} used squares.");
 
-    
-    void ClearRegion(int col, int row)
+    Queue<Point2D> pointsToClear = new();
+    HashSet<Point2D> queueContents = [];
+
+    foreach (Point2D p in from x in Enumerable.Range(0, 128)
+                          from y in Enumerable.Range(0, 128)
+                          select new Point2D(x, y))
     {
-        Queue<Point> points = new();
-        HashSet<Point> set = new();
-
-        List<Size> neighbors = new()
+        if(diskGrid.Contains(p))
         {
-            new Size( 0,  1),
-            new Size( 0, -1),
-            new Size( 1,  0),
-            new Size(-1,  0),
-        };
+            pointsToClear.Clear();
+            queueContents.Clear();
 
-        points.Enqueue(new(col, row));
-        while (points.Count > 0)
-        {
-            Point current = points.Dequeue();
-            foreach (Size neighbor in neighbors)
+            pointsToClear.Enqueue(p);
+            while (pointsToClear.TryDequeue(out Point2D current))
             {
-                Point newPoint = current + neighbor;
-                if (newPoint.X >= 0 && newPoint.X < 128 &&
-                    newPoint.Y >= 0 && newPoint.Y < 128)
+                foreach (Point2D neighbor in current.GetOrthogonalNeighbors())
                 {
-                    if (diskGrid[newPoint.X, newPoint.Y]) points.Enqueue(newPoint);
+                    if (diskGrid.Remove(neighbor)) pointsToClear.Enqueue(neighbor);
                 }
             }
-            diskGrid[current.X, current.Y] = false;
-        }
-    }
 
-    for (int row = 0; row < 128; row++)
-    {
-        for (int col = 0; col < 128; col++)
-        {
-            if (diskGrid[col, row])
-            {
-                ClearRegion(col, row);
-                part2Answer++;
-            }
+            part2Answer++;
         }
     }
 
