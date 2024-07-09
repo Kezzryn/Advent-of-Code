@@ -107,6 +107,7 @@ public struct Point3D :
 
     public static int TaxiDistance3D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y) + Math.Abs(s.Z - e.Z);
     public static int TaxiDistance2D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
+    public static int TaxiDistance3D(Point3D s) => TaxiDistance3D(s, new Point3D(0, 0, 0));
 
     public readonly (int x, int y) As2D() => (X, Y);
     public readonly Point2D AsPoint2D() => new(X, Y);
