@@ -1,15 +1,12 @@
-﻿using System.Drawing;
-using System.Numerics;
-using System.Text;
+﻿using BKH.Geometry;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Point cursor = new (puzzleInput[0].IndexOf('|'), 0);
-    Complex direction = new(0, 1);
-    StringBuilder part1Answer = new();
+    Cursor cursor = new(puzzleInput[0].IndexOf('|'), 0, 0, 1);
+    string part1Answer = String.Empty;
 
     int part2Answer = 0;
     bool isDone = false;
@@ -21,23 +18,23 @@ try
                 //everything is normal, continue. 
                 break;
             case '+':
-                // try right turn
-                // Assumption: If we can't turn one way we CAN turn the other. 
-                // Assumption2: There is padding around the puzzle, removing the requirement for a bounds check.
-                Complex testTurn = direction * Complex.ImaginaryOne;
-                Point nextStep = cursor + new Size((int)testTurn.Real, (int)testTurn.Imaginary);
+                // try a turn
+                // Assumption 1: If we can't turn one way we CAN turn the other. 
+                // Assumption 2: There is padding around the puzzle, removing the requirement for a bounds check.
+                cursor.TurnLeft();
+                (int nextX, int nextY) = cursor.NextStep();
+                if(puzzleInput[nextY][nextX] == ' ') cursor.TurnAround();
 
-                direction *= (puzzleInput[nextStep.Y][nextStep.X] == '|' || puzzleInput[nextStep.Y][nextStep.X] == '-') ? Complex.ImaginaryOne : -Complex.ImaginaryOne; 
                 break;
             case ' ':
-                // we've stepped off the map.
+                // we've stepped off the map, and therefor should be finished.
                 isDone = true;
                 break;
             default:
-                part1Answer.Append(puzzleInput[cursor.Y][cursor.X]);
+                part1Answer += puzzleInput[cursor.Y][cursor.X];
                 break;
         }
-        cursor += new Size((int)direction.Real, (int)direction.Imaginary);
+        cursor.Step();
         if (!isDone) part2Answer++; // let's avoid off-by-one errors :) 
     }
 
