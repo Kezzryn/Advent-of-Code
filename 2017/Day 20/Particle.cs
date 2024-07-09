@@ -1,35 +1,35 @@
-﻿namespace AoC_2017_Day_20
+﻿namespace AoC_2017_Day_20;
+using BKH.Geometry;
+
+internal class Particle
 {
-    internal class Particle
+    public int ID { get; }
+
+    public Point3D Pos { get; set; } = new();
+
+    public int Dist => Point3D.TaxiDistance3D(Pos);
+
+    private Point3D _velocity = new();
+
+    private readonly Point3D _accel = new();
+
+    public Particle(string data, int id)
     {
-        public int ID { get; }
+        ID = id;
 
-        public Point3D Pos { get; set; } = new();
-        
-        private Point3D _velocity = new();
-
-        private readonly Point3D _accel = new();
-
-        public Particle(string data, int id)
+        foreach (string coord in data.Split(", "))
         {
-            ID = id;
+            int[] xyz = coord[3..^1].Split(',').Select(int.Parse).ToArray();
 
-            foreach (string coord in data.Split(", "))
-            {
-                int[] xyz = coord[3..^1].Split(',').Select(int.Parse).ToArray();
-
-                if (coord[0] == 'p') Pos = new Point3D(xyz);
-                if (coord[0] == 'v') _velocity = new Point3D(xyz);
-                if (coord[0] == 'a') _accel = new Point3D(xyz);
-            }
+            if (coord[0] == 'p') Pos = new Point3D(xyz);
+            if (coord[0] == 'v') _velocity = new Point3D(xyz);
+            if (coord[0] == 'a') _accel = new Point3D(xyz);
         }
+    }
 
-        public void Update()
-        {
-            _velocity += _accel;
-            Pos += _velocity;
-        }
-
-        public int Dist() => Point3D.TaxiDistance(Pos);
+    public void Step()
+    {
+        _velocity += _accel;
+        Pos += _velocity;
     }
 }

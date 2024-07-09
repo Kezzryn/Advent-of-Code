@@ -5,8 +5,8 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    List<Particle> part1Particles = new();
-    List<Particle> part2Particles = new();
+    List<Particle> part1Particles = [];
+    List<Particle> part2Particles = [];
 
     for (int i = 0; i < puzzleInput.Length; i++)
     {
@@ -16,14 +16,15 @@ try
 
     for(int i = 0; i < 1000; i++)
     {
-        part1Particles.ForEach(x => x.Update());
+        part1Particles.ForEach(x => x.Step());
     }
 
-    Console.WriteLine($"Part 1: The particle that stays the closest is {part1Particles.OrderBy(x => x.Dist()).First().ID}");
+    Console.WriteLine($"Part 1: The particle that stays the closest is {part1Particles.OrderBy(x => x.Dist).First().ID}.");
 
     bool isDone = false;
     int collCounter = 0;
-    List<int> idToWipe = new();
+    List<int> idToWipe = [];
+
     while (!isDone)
     {
         idToWipe.Clear();
@@ -37,7 +38,7 @@ try
 
         idToWipe.ForEach(x => part2Particles.RemoveAll(y => y.ID == x));
 
-        part2Particles.ForEach(x => x.Update());
+        part2Particles.ForEach(x => x.Step());
 
         collCounter++;
         // 11 was settled on by some experimentation after finding the answer. 
