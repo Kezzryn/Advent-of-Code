@@ -1,18 +1,18 @@
-﻿using System.Numerics;
+﻿using BKH.Geometry;
 
 static int VirusHunt(string[] mapData, int numBursts, bool isEvolved = false)
 {
     int returnValue = 0;
 
-    Dictionary<Complex, NodeState> theMap = new();
-    Dictionary<NodeState, NodeState> nextState = new();
+    Dictionary<Point2D, NodeState> theMap = [];
+    Dictionary<NodeState, NodeState> nextState = [];
 
     if (isEvolved)
     {
-        nextState.Add(NodeState.Clean, NodeState.Weakened);
+        nextState.Add(NodeState.Clean,    NodeState.Weakened);
         nextState.Add(NodeState.Weakened, NodeState.Infected);
         nextState.Add(NodeState.Infected, NodeState.Flagged);
-        nextState.Add(NodeState.Flagged, NodeState.Clean);
+        nextState.Add(NodeState.Flagged,  NodeState.Clean);
     }
     else
     {
@@ -20,40 +20,30 @@ static int VirusHunt(string[] mapData, int numBursts, bool isEvolved = false)
         nextState.Add(NodeState.Infected, NodeState.Clean);
     }
 
-    for (int row = 0; row < mapData.Length; row++)
-    {
-        for (int col = 0; col < mapData[row].Length; col++)
-        {
-            theMap.Add(new Complex(col, row),
-                mapData[row][col] == '#' ? NodeState.Infected : NodeState.Clean);
-        }
-    }
+    theMap = mapData.SelectMany(
+            (row, r) => row.Select(
+                (col, c) => (X: r, Y: c, State: mapData[r][c] == '#' ? NodeState.Infected : NodeState.Clean)))
+                .ToDictionary(key => new Point2D(key.X, key.Y), val => val.State);
 
-    Complex cursor = new(mapData[0].Length / 2, mapData.Length / 2);
-    Complex direction = new(0, 1);
+    Cursor cursor = new(mapData[0].Length / 2, mapData.Length / 2, 0, 1);
 
     foreach (int step in Enumerable.Range(0, numBursts))
     {
-        if (!theMap.TryGetValue(cursor, out NodeState state))
+        Point2D currentPosition = cursor.XYAsPoint2D;
+        if (!theMap.TryGetValue(currentPosition, out NodeState state))
         {
             state = NodeState.Clean;
-            theMap.Add(cursor, state);
+            theMap.Add(currentPosition, state);
         }
 
-        direction *= state switch
-        {
-            NodeState.Clean => Complex.ImaginaryOne,    //turn right
-            NodeState.Infected => -Complex.ImaginaryOne,//turn left
-            NodeState.Weakened => Complex.One,          //straight 
-            NodeState.Flagged => -Complex.One,          //reverse
-            _ => throw new NotImplementedException()
-        };
+        if (state == NodeState.Clean) cursor.TurnLeft();
+        if (state == NodeState.Infected) cursor.TurnRight();
+        if (state == NodeState.Flagged) cursor.TurnAround();
 
-        theMap[cursor] = nextState[theMap[cursor]];
+        theMap[currentPosition] = nextState[state];
+        if (nextState[state] == NodeState.Infected) returnValue++;
 
-        if (theMap[cursor] == NodeState.Infected) returnValue++;
-        
-        cursor += direction;
+        cursor.Step();
     }
 
     return returnValue;
@@ -67,7 +57,7 @@ try
 
     const string PUZZLE_INPUT = "PuzzleInput.txt";
 
-    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Reverse().ToArray();
+    string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Reverse().ToArray(); //flip to put 0,0 in lower left.
 
     int part1Answer = VirusHunt(puzzleInput, PART_1_NUM_BURSTS);
     int part2Answer = VirusHunt(puzzleInput, PART_2_NUM_BURSTS, IS_EVOLVED);
