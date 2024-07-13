@@ -4,7 +4,7 @@ try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
 
-    const int TWOS_MARKER = 3584;
+    const int TWOS_MARKER = 3584; //1110 0000 0000 These are the bits above 511, the largest key we otherwise make. 
     const int PART_1_ITERATIONS = 5;
     const int PART_2_ITERATIONS = 18;
     List<string[]> puzzleInput = File.ReadAllLines(PUZZLE_INPUT)
@@ -14,7 +14,7 @@ try
                         .Split(" => ").ToArray()
                 ).ToList();
 
-    Dictionary<int, bool[]> ruleBook = new();
+    Dictionary<int, bool[]> ruleBook = [];
     int[] bitToIntConverter = new int[1];
 
     int part1Answer = 0;
@@ -59,7 +59,7 @@ try
 
     foreach (string[] splitLine in puzzleInput)
     {
-        List<string> keys = new();
+        List<string> keys = [];
         char[] keyChars = splitLine[0].ToCharArray();
 
         for (int i = 0; i < 2; i++)
@@ -89,7 +89,16 @@ try
         keys.ForEach(key => ruleBook.Add(Convert.ToInt32(key, 2) | (splitLine[0].Length == 4 ? TWOS_MARKER : 0), value));
     }
 
-    bool[] boolArt = new[] { false, true, false, false, false, true, true, true, true };
+    //Art is stored in a 1D array, effectivly flattening the sub grids of the puzzle.
+    //This could be further optimized by storing sub grids, and patterns of sub grids rather than the girds.
+    
+    //Starting state:
+    bool[] boolArt =
+    [
+        false, true, false, // .#.
+        false, false, true, // ..#
+        true, true, true    // ###
+    ];
 
     for (int i = 1; i <= PART_2_ITERATIONS; i++)
     {
@@ -140,13 +149,12 @@ try
         }
         boolArt = nextBoolArt;
 
-        if (i == PART_1_ITERATIONS) part1Answer = boolArt.Select(c => c ? 1 : 0).Sum();
+        if (i == PART_1_ITERATIONS) part1Answer = boolArt.Count(c => c);
     }
 
-    part2Answer = boolArt.Select(c => c ? 1 : 0).Sum();
+    part2Answer = boolArt.Count(c => c);
 
     Console.WriteLine($"Part 1: There are {part1Answer} pixels on after {PART_1_ITERATIONS} iterations.");
-
     Console.WriteLine($"Part 2: There are {part2Answer} pixels on after {PART_2_ITERATIONS} iterations.");
 }
 catch (Exception e)
