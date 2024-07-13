@@ -1,41 +1,27 @@
-﻿using AoC_2017_Day_18; 
+﻿using AoC_2017_TabletVM;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Duet DuoZero = new(puzzleInput, 0);
-    Duet DuoOne = new(puzzleInput, 1);
+    TabletVM DuoZero = new(puzzleInput);
+    DuoZero.SetRegister('p', 0);
 
-    bool isDone = false;
+    TabletVM DuoOne = new(puzzleInput);
+    DuoOne.SetRegister('p', 1);
+
+    DuoZero.InputBuffer = DuoOne.OutputBuffer;
+    DuoOne.InputBuffer = DuoZero.OutputBuffer;
+
     do
     {
-        while (DuoZero.GetProgramOutput(out long outA)) DuoOne.SetProgramInput(outA);
-        while (DuoOne.GetProgramOutput(out long outB)) DuoZero.SetProgramInput(outB);
-
-        DuoZero.Run();
-        DuoOne.Run();
-
-        if (DuoZero.CurrentState == State.Halted && DuoOne.CurrentState == State.Halted) isDone = true;
-
-        if (DuoZero.CurrentState == State.Paused_For_Input && 
-            (DuoOne.CurrentState == State.Halted || (DuoOne.CurrentState == State.Paused_For_Input && !DuoZero.HasOutput())))
-        {
-            isDone = true;
-        }
-
-        if (DuoOne.CurrentState == State.Paused_For_Input &&
-            (DuoZero.CurrentState == State.Halted || (DuoZero.CurrentState == State.Paused_For_Input && !DuoOne.HasOutput())))
-        {
-            isDone = true;
-        }
-
-
-    } while (!isDone);
+        DuoZero.Step();
+        DuoOne.Step();
+    } while (DuoZero.CurrentState == State.Running || DuoOne.CurrentState == State.Running);
         
-    long part1Answer = DuoZero.FirstRCVValue();
-    long part2Answer = DuoOne.NumSentMessages();
+    long part1Answer = DuoZero.FirstRCVValue;
+    long part2Answer = DuoOne.NumSentMessages;
     
     Console.WriteLine($"Part 1: The first non-zero rcv value is {part1Answer}.");
     Console.WriteLine($"Part 2: Program One sent a value {part2Answer} times.");

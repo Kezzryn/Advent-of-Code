@@ -1,5 +1,6 @@
-﻿using AoC_2017_Day_23;
-static bool isPrime(int number)
+﻿using AoC_2017_TabletVM;
+
+static bool IsPrime(int number)
 {
     // From : https://stackoverflow.com/questions/15743192/check-if-number-is-prime-number
     // Code by Eric Lippert 
@@ -29,10 +30,11 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Duet part1VM = new(puzzleInput);
-
+    TabletVM part1VM = new(puzzleInput);
+ 
     part1VM.Run();
-    long part1Answer = part1VM.NumTimesMulInvoked();
+    
+    long part1Answer = part1VM.NumMultOps;
 
     int part2Answer = 0;
 
@@ -52,7 +54,7 @@ try
     // The VM code finds a count of all NON-prime numbers in a range.
     for (int i = 107900; i <= 124900; i += 17)
     {
-        if (!isPrime(i)) part2Answer++;
+        if (!IsPrime(i)) part2Answer++;
     }
 
     Console.WriteLine($"Part 1: The number of times mul is invoked is {part1Answer}.");
