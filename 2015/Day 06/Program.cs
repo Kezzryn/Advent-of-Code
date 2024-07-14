@@ -8,9 +8,6 @@ try
     XmasLightGrid part1Answer = new(XmasLightGrid.Ruleset.Toggle);
     XmasLightGrid part2Answer = new(XmasLightGrid.Ruleset.Brighten);
 
-    //[turn [on]|[off]|[toggle] 643,149 through 791,320
-    //starts empty. Not having an entry Empty is off/0. 
-
     foreach (string instruction in puzzleInput)
     {
         part1Answer.Instruction(instruction);
