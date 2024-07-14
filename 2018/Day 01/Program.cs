@@ -1,19 +1,18 @@
 ﻿try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    int[] puzzleinput = File.ReadAllLines(PUZZLE_INPUT).Select(int.Parse).ToArray();
+    List<int> puzzleInput = File.ReadAllLines(PUZZLE_INPUT).Select(int.Parse).ToList();
 
-    int part1Answer = puzzleinput.Sum();
+    int part1Answer = puzzleInput.Sum();
 
-    HashSet<int> freqChangeList = new() { 0 };
+    HashSet<int> freqChangeList = [0];
     int part2Answer = 0;
     int freqDeltaIndex = 0;
-    while (true)
+    do
     {
-        part2Answer += puzzleinput[freqDeltaIndex];
-        freqDeltaIndex = (freqDeltaIndex + 1) % puzzleinput.Length;
-        if (!freqChangeList.Add(part2Answer)) break;
-    }
+        part2Answer += puzzleInput[freqDeltaIndex++];
+        if (freqDeltaIndex >= puzzleInput.Count) freqDeltaIndex = 0;
+    } while (freqChangeList.Add(part2Answer));
 
     Console.WriteLine($"Part 1: The frequency changes by {part1Answer}.");
     Console.WriteLine($"Part 2: The first duplicated frequency is {part2Answer}.");
