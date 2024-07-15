@@ -34,16 +34,16 @@
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
-    LinkedList<int> puzzleInput = new(File.ReadAllText(PUZZLE_INPUT).Select(x => (int)x));
+    List<int> puzzleInput = [.. File.ReadAllText(PUZZLE_INPUT).Select(x => (int)x)];
 
-    int part1Answer = ReactPolymer(puzzleInput);
+    int part1Answer = ReactPolymer(new(puzzleInput));
 
     int part2Answer = int.MaxValue;
     char droppedLetter = '\0';
-    
+
     foreach (int c in Enumerable.Range('A', 26))
     {
-        LinkedList<int> temp = new(puzzleInput.Where(x => (x != c) && (x != c+32)));
+        LinkedList<int> temp = new(puzzleInput.Where(x => (x != c) && (x != c + 32)));
 
         int length = ReactPolymer(temp);
         if (length < part2Answer)
