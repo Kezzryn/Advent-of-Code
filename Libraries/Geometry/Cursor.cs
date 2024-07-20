@@ -5,6 +5,8 @@ public class Cursor : IEquatable<Cursor>
 {
     private Complex _pos;
     private Complex _dir;
+    
+    public bool DoMirrorTurns = false; // True for grids where the Y axis is 0 and increases "down".
 
     public int X { get { return (int)_pos.Real; } }
     public int Y { get { return (int)_pos.Imaginary; } }
@@ -14,7 +16,7 @@ public class Cursor : IEquatable<Cursor>
     public (int X, int Y) GetDir { get { return ((int)_dir.Real, (int)_dir.Imaginary); } }
     public bool IsMovingRight { get { return _dir.Imaginary == 0 && double.IsPositive(_dir.Real); } }
     public bool IsMovingLeft { get { return _dir.Imaginary == 0 && double.IsNegative(_dir.Real); } }
-    public bool IsMovingUp { get { return _dir.Real == 0 && double.IsNegative(_dir.Imaginary); } } // remember map inversion.
+    public bool IsMovingUp { get { return _dir.Real == 0 && double.IsNegative(_dir.Imaginary); } } 
     public bool IsMovingDown { get { return _dir.Real == 0 && double.IsPositive(_dir.Imaginary); } }
     public bool IsHorizontal { get { return IsMovingRight || IsMovingLeft; } }
     public bool IsVertical { get { return IsMovingUp || IsMovingDown; } }
@@ -34,6 +36,7 @@ public class Cursor : IEquatable<Cursor>
     {
         _pos = new(other._pos.Real, other._pos.Imaginary);
         _dir = new(other._dir.Real, other._dir.Imaginary);
+        DoMirrorTurns = other.DoMirrorTurns;
     }
 
     public (int X, int Y) NextStep()
@@ -47,11 +50,24 @@ public class Cursor : IEquatable<Cursor>
         if (num <= 0) return;
         _pos += (_dir * num);
     }
-
+    
     //NOTE: This assumes a "normal" 2d grid where Y increases as it goes "up".
-    public void TurnLeft() => _dir *= Complex.ImaginaryOne;
+    //MirrorTurns is for Y increases "down" 
+    public void TurnLeft()
+    {
+        if(DoMirrorTurns)
+            _dir *= -Complex.ImaginaryOne;
+        else
+            _dir *= Complex.ImaginaryOne;
+    }
 
-    public void TurnRight() => _dir *= -Complex.ImaginaryOne;
+    public void TurnRight()
+    {
+        if(DoMirrorTurns)
+             _dir *= Complex.ImaginaryOne;
+        else
+            _dir *= -Complex.ImaginaryOne;
+    }
 
     public void TurnAround() => _dir *= -1;
 
