@@ -5,7 +5,7 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     int[] puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(' ').Select(int.Parse).ToArray();
 
-    Dictionary<int, Node> dataTree = new();
+    Dictionary<int, Node> dataTree = [];
 
     int LoadTree(int cursor = 0)
     {
@@ -28,16 +28,16 @@ try
 
         if (dataTree[ID].Children.Count == 0)
         {
-            dataTree[ID].Value = dataTree[ID].MetaData.Sum();
+            dataTree[ID].NodeValue = dataTree[ID].MetaData.Sum();
         }
         else
         {
-            dataTree[ID].Value = 0;
+            dataTree[ID].NodeValue = 0;
             foreach (int child in dataTree[ID].MetaData)
             {
                 if (child > dataTree[ID].Children.Count) continue;
                 int childID = dataTree[ID].Children[child - 1]; //zero bound adjustment 
-                dataTree[ID].Value += dataTree[childID].Value;
+                dataTree[ID].NodeValue += dataTree[childID].NodeValue;
             }
         }
 
@@ -47,7 +47,7 @@ try
     LoadTree();
 
     int part1Answer = dataTree.Select(x => x.Value.MetaData.Sum()).Sum();
-    int part2Answer = dataTree[0].Value;
+    int part2Answer = dataTree[0].NodeValue;
 
     Console.WriteLine($"Part 1: The sum of the meta data is {part1Answer}.");
     Console.WriteLine($"Part 2: The value of the root node is {part2Answer}.");

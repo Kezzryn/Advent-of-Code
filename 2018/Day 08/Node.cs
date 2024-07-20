@@ -1,14 +1,9 @@
 ﻿namespace AoC_2018_Day_08
 {
-    internal class Node
+    internal record Node()
     {
-        public int Value { get; set; }
-        public List<int> Children = new();
-        public List<int> MetaData = new();
-
-        public Node()
-        {
-            Value = -1;
-        }
+        public int NodeValue { get; set; }
+        public readonly List<int> Children = [];
+        public readonly List<int> MetaData = [];
     }
 }
