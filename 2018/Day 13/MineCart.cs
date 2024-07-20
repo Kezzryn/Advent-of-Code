@@ -1,94 +1,108 @@
-﻿using System.Numerics;
+﻿namespace AoC_2018_Day_13;
+using BKH.Geometry;
 
-namespace AoC_2018_Day_13
+public enum MapSymbols
 {
-    enum MapSymbols
+    Straight,
+    Curve_A,   // '/' 
+    Curve_B,   // '\'
+    Intersection,
+    Out_Of_Bounds
+}
+
+internal class MineCart
+{
+    private readonly Cursor _cursor;
+    public Point2D Position => _cursor.XYAsPoint2D;
+
+    public bool IsCrashed { get; set; } = false;
+
+    private int _turnDirection = 1; // start with left.  % 3 => 1, 2, 0  Left, Straight, Right. 
+
+    public MineCart(int x, int y, char initDirection)
     {
-        Straight,
-        Curve_A,   // '/' 
-        Curve_B,   // '\'
-        Intersection,
-        Out_Of_Bounds
+        _cursor = initDirection switch
+        {
+            '>' => new(x, y, 1, 0),
+            '<' => new(x, y, -1, 0),
+            '^' => new(x, y, 0, -1),
+            'v' => new(x, y, 0, 1),
+            _ => throw new NotImplementedException()
+        };
+
+        _cursor.DoMirrorTurns = true;
     }
 
-    internal class MineCart
+    public MineCart(MineCart clone)
     {
-        public Complex Position { get; set; }
+        _cursor = new(clone._cursor);
+        _turnDirection = clone._turnDirection;
+    }
 
-        public Complex Direction { get; set; }
+    public Point2D TryStep(MapSymbols currentSymbol)
+    {
+        MineCart cloneCart = new(this);
+        cloneCart.Step(currentSymbol);
+        return cloneCart.Position;
+    }
 
-        public int ID { get; }
-
-        public bool IsCrashed { get; set; } = false;
-
-        private int _turnDirection = 1; // start with left.  % 3 => 1, 2, 0  Left, Straight, Right. 
-
-        public MineCart(int x, int y, char initDirection, int id)
+    public void Step(MapSymbols currentSymbol)
+    {
+        //Remember, the map has Y=0 at the top left, but the Cursor assumes 0 at the bottom left, so the direction changes need to reflect that.
+        //In practice this means the left/right turns are reversed.
+        switch (currentSymbol)
         {
-            ID = id;
-            Position = new Complex(x, y);
-            Direction = initDirection switch
-            {
-                '>' => new Complex(1,  0),
-                '<' => new Complex(-1, 0),
-                '^' => new Complex(0, -1),
-                'v' => new Complex(0,  1),
-                _ => throw new NotImplementedException()
-            };
+            case MapSymbols.Straight:
+                _cursor.Step();
+                break;
+            case MapSymbols.Curve_A:    //  /
+                if (_cursor.IsHorizontal)
+                    _cursor.TurnLeft();
+                else
+                    _cursor.TurnRight();
+
+                _cursor.Step();
+                break;
+
+            case MapSymbols.Curve_B:    //  \
+                if (_cursor.IsHorizontal)
+                    _cursor.TurnRight();
+                else
+                    _cursor.TurnLeft();
+                
+                _cursor.Step();
+                break;
+            case MapSymbols.Intersection:
+                switch (_turnDirection)
+                {
+                    case 0:
+                        _cursor.TurnRight();
+                        break;
+                    case 1:
+                        _cursor.TurnLeft();
+                        break;
+                    case 2:
+                         //no turn, we're going straight through.
+                    default:
+                        break;
+                };
+                _turnDirection = (1 + _turnDirection) % 3;
+                _cursor.Step();
+                break;
+            default:
+                throw new NotImplementedException($"Unknown symbol: {currentSymbol}");
         }
-
-        public void Step() => Position += Direction;
-
-        private void TurnLeft() => Direction *= -Complex.ImaginaryOne;
-        
-        private void TurnRight() => Direction *= Complex.ImaginaryOne;
-
-        public void Intersection()
+    } 
+    public char Direction
+    { 
+        get
         {
-            switch (_turnDirection) 
-            {
-                case 0:
-                    TurnRight();
-                    break;
-                case 1:
-                    TurnLeft();
-                    break;
-                case 2:
-                    // go straight
-                default:
-                    break;
-            };
+            if (_cursor.IsMovingDown) return 'v';
+            if (_cursor.IsMovingUp) return '^';
+            if (_cursor.IsMovingLeft) return '<';
+            if (_cursor.IsMovingRight) return '>';
 
-            _turnDirection = (_turnDirection + 1) % 3;
-        }
-
-        public void FollowCurve(MapSymbols curveType)
-        {
-            switch (curveType)
-            {
-                case MapSymbols.Curve_A: // '/'
-                    if (Direction.Real == 0)
-                    {
-                        TurnRight();
-                    }
-                    else if (Direction.Imaginary == 0)
-                    {
-                        TurnLeft();
-                    }
-                    break;
-                case MapSymbols.Curve_B: // '\'
-                    if (Direction.Real == 0)
-                    {
-                        TurnLeft();
-                    }
-                    else if(Direction.Imaginary == 0)
-                    {
-                        TurnRight();
-                    }
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+            return '\0';
         }
     }
 }
