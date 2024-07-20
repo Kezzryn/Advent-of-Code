@@ -135,8 +135,10 @@ public struct Point2D :
     public readonly int CompareTo(Point2D other) => Compare(this, other);
 
     // Hash Codes
-    public readonly override int GetHashCode() => unchecked(_x ^ _y);
-    public readonly int GetHashCode([DisallowNull] Point2D obj) => GetHashCode();
+    //public readonly override int GetHashCode() => unchecked(_x ^ _y);
+    //public readonly int GetHashCode([DisallowNull] Point2D obj) => GetHashCode();
+    public override readonly int GetHashCode() => Tuple.Create(X, Y).GetHashCode();
+    readonly int IEqualityComparer<Point2D>.GetHashCode(Point2D obj) => Tuple.Create(obj.X, obj.Y).GetHashCode();
 
     // Custom comparison function. 
     private static int Compare(Point2D left, Point2D right)
