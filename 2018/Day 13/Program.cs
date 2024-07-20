@@ -64,8 +64,8 @@ try
     } while (mineCarts.Count(w => !w.IsCrashed) >= 2);
 
 
-    Console.WriteLine($"Part 1: The first crash occurs at: {part1Answer} 79,128");
-    Console.WriteLine($"Part 2: The last working cart is at: {part2Answer}  3,42");
+    Console.WriteLine($"Part 1: The first crash occurs at: {part1Answer}");
+    Console.WriteLine($"Part 2: The last working cart is at: {part2Answer}");
 }
 catch (Exception e)
 {
