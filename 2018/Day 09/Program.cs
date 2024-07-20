@@ -13,14 +13,14 @@
 
         long[] playerScore = new long[numPlayers];
 
-        for (int i = 1; i <= numMarbles; i++)
+        for (int marbleNumber = 1; marbleNumber <= numMarbles; marbleNumber++)
         {
-            if ((i % 23) == 0)
+            if ((marbleNumber % 23) == 0)
             {
-                int currentPlayer = i % numPlayers;
-                playerScore[currentPlayer] += i;
+                int currentPlayer = marbleNumber % numPlayers;
+                playerScore[currentPlayer] += marbleNumber;
 
-                for (int z = 0; z < 7; z++)
+                for (int backSeven = 0; backSeven < 7; backSeven++)
                 {
                     cursor = cursor.Previous ?? marbles.Last!;
                 }
@@ -31,7 +31,7 @@
             }
             else
             {
-                cursor = marbles.AddAfter(cursor.Next ?? marbles.First!, i);
+                cursor = marbles.AddAfter(cursor.Next ?? marbles.First!, marbleNumber);
             }
         }
 

@@ -10,37 +10,26 @@ static int BoolAryToInt(bool[] boolAry)
 
 static int ScoreLine(List<bool> row, int baseIndex)
 {
-    int returnValue = 0;
-    for (int i = 0; i < row.Count; i++)
-    {
-        returnValue += row[i] ? i + baseIndex : 0;
-    }
-    return returnValue;
+    return row.Select((x, i) => x ? i + baseIndex : 0).Sum();
 }
 
 static bool RowCompare(List<bool> row1, List<bool> row2)
 {
-    const bool FLOWER = true;
+    int indexFlowerRow1 = row1.IndexOf(true); //First index of values might be down the array.
+    int indexFlowerRow2 = row2.IndexOf(true);
+    int lengthRow1 = row1.Count - indexFlowerRow1;
+    int lengthRow2 = row2.Count - indexFlowerRow2;
 
-    int indexFlowerRow1 = row1.IndexOf(FLOWER);
-    int indexFlowerRow2 = row2.IndexOf(FLOWER);
-    int length = row1.Count - indexFlowerRow1;
-
-    if (length != row2.Count - indexFlowerRow2) return false;
+    if (lengthRow1 != lengthRow2) return false;
     
-    for (int i = 0;i < length;i++)
-    {
-        if (row1[indexFlowerRow1 + i] != row2[indexFlowerRow2 + i]) return false;
-    }
-    
-    return true;
+    return Enumerable.Range(0, lengthRow1).All(x => row1[indexFlowerRow1 + x] == row2[indexFlowerRow2 + x]);
 }
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
 
-    const int MAX_GENERATIONS = 100;
+    const int MAX_GENERATIONS = 100; // Pattern repeats on the 99th iteration.
     const int PART_1_GENERATION = 20;
     const long PART_2_GENERATION = 50_000_000_000;
 
@@ -48,83 +37,76 @@ try
     const string CRLF = "\r\n";
 
     string[] puzzleInput = File.ReadAllText(PUZZLE_INPUT).Split(CRLF + CRLF);
-    string initialState = puzzleInput[0].Split(' ').Last();
-    string[][] puzzleKeys = puzzleInput[1].Split(CRLF).Select(x => x.Split(" => ").ToArray()).ToArray();
 
-    Dictionary<int, bool> flowerGrowth = new();
+    List<bool>[] flowers = [[], []];
+    flowers[0] = [.. puzzleInput[0].Split(' ').Last().Select(c => c == FLOWER)];
+
+    Dictionary<int, bool> flowerGrowth = 
+        puzzleInput[1].Split(CRLF).Select(x => x.Split(" => "))
+            .ToDictionary(
+                    x => BoolAryToInt(x.First().Select(c => c == FLOWER).ToArray()),
+                    x => x.Last().First() == FLOWER);
+
     bool[] keyArray = new bool[5];
 
     int part1Answer = 0;
     long part2Answer = 0;
 
-    foreach (string[] s in puzzleKeys)
-    {
-        keyArray = s[0].Select(c => c == FLOWER).ToArray();
-        flowerGrowth.Add(BoolAryToInt(keyArray), s[1][0] == FLOWER);
-    }
-
-    List<bool>[] flowers = new List<bool>[2];
-    flowers[0] = new List<bool>();
-    flowers[1] = new List<bool>();
-
-    foreach (char c in initialState)
-    {
-        flowers[0].Add(c == FLOWER);
-    }
-    
     int baseIndex = 0;
+
+    int indexNewFlowers = 0;
+    int indexCurrentFlowers = 1; 
 
     for (int generationNum = 1; generationNum <= MAX_GENERATIONS; generationNum++)
     {
-        int indexNewFlowers = generationNum % 2;
-        int indexPrevFlowers = (generationNum - 1) % 2;
+        (indexNewFlowers, indexCurrentFlowers) = (indexCurrentFlowers, indexNewFlowers);
 
-        int cursorPrevFlowers = 0;
+        int cursorCurrentFlowers = 0;
 
         flowers[indexNewFlowers].Clear();
 
-        while (cursorPrevFlowers < flowers[indexPrevFlowers].Count)
+        while (cursorCurrentFlowers < flowers[indexCurrentFlowers].Count)
         {
-            Array.Clear(keyArray); // reset to false 
-            if (cursorPrevFlowers == 0)
+            if (cursorCurrentFlowers == 0)
             {
                 // check one spot before the list. 
-                flowers[indexPrevFlowers].CopyTo(0, keyArray, 3, 2);
+                Array.Clear(keyArray); // reset to false 
+                flowers[indexCurrentFlowers].CopyTo(0, keyArray, 3, 2);
                 if (flowerGrowth[BoolAryToInt(keyArray)])
                 {
                     // examing the puzzle rules shows that only a single rule creates a new node before the start.
                     flowers[indexNewFlowers].Add(true);
                     baseIndex--;
                 }
-                Array.Clear(keyArray); // reset to false 
             }
 
-            int windowMin = int.Max(cursorPrevFlowers - 2, 0);
-            int windowMax = int.Min(cursorPrevFlowers + 2, flowers[indexPrevFlowers].Count - 1);
+            int windowMin = int.Max(cursorCurrentFlowers - 2, 0);
+            int windowMax = int.Min(cursorCurrentFlowers + 2, flowers[indexCurrentFlowers].Count - 1);
             int windowSize = windowMax - windowMin + 1;
-            int startIndex = int.Max(2 - (cursorPrevFlowers - windowMin), 0);
+            int startIndex = int.Max(2 - (cursorCurrentFlowers - windowMin), 0);
 
-            flowers[indexPrevFlowers].CopyTo(windowMin, keyArray, startIndex, windowSize);
+            Array.Clear(keyArray); // reset to false 
+            flowers[indexCurrentFlowers].CopyTo(windowMin, keyArray, startIndex, windowSize);
             flowers[indexNewFlowers].Add(flowerGrowth[BoolAryToInt(keyArray)]);
 
-            if (cursorPrevFlowers == flowers[indexPrevFlowers].Count - 1)
+            if (cursorCurrentFlowers == flowers[indexCurrentFlowers].Count - 1)
             {
                 // examing the puzzle rules shows that a new node is only added immediatly to the end.
                 Array.Clear(keyArray); // reset to false 
-                flowers[indexPrevFlowers].CopyTo(cursorPrevFlowers - 1, keyArray, 0, 2);
+                flowers[indexCurrentFlowers].CopyTo(cursorCurrentFlowers - 1, keyArray, 0, 2);
                 if (flowerGrowth[BoolAryToInt(keyArray)])
                 {
                     flowers[indexNewFlowers].Add(true);
                 }
             }
-            cursorPrevFlowers++;
+            cursorCurrentFlowers++;
         }
 
         if (generationNum == PART_1_GENERATION) part1Answer = ScoreLine(flowers[indexNewFlowers], baseIndex);
 
-        if (RowCompare(flowers[indexNewFlowers], flowers[indexPrevFlowers]))
+        if (RowCompare(flowers[indexNewFlowers], flowers[indexCurrentFlowers]))
         {
-            int prevAnswer = ScoreLine(flowers[indexPrevFlowers], baseIndex);
+            int prevAnswer = ScoreLine(flowers[indexCurrentFlowers], baseIndex);
             int rowAnswer = ScoreLine(flowers[indexNewFlowers], baseIndex);
 
             part2Answer = ((PART_2_GENERATION - generationNum) * (rowAnswer - prevAnswer)) + rowAnswer;

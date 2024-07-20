@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using AoC_2018_Day_11;
+﻿using BKH.Geometry;
 
 try
 {
@@ -10,11 +9,12 @@ try
     int gridSerialNumber = int.Parse(File.ReadAllText(PUZZLE_INPUT));
 
     int[,] fuelCells = new int[MAX_XY + 1, MAX_XY + 1]; // add one to shift to 1 based indexing.
-    Dictionary<Point3D, int> powerCells = new();
+    Dictionary<Point3D, int> powerCells = [];   // a powercell is the upper left corner of a grid of fuel cells.
+                                                // the z axis represents the size of the grid.
 
-    foreach (Point p in from a in Enumerable.Range(MIN_XY, MAX_XY)
-                        from b in Enumerable.Range(MIN_XY, MAX_XY)
-                        select new Point(b, a))
+    foreach (Point2D p in from a in Enumerable.Range(MIN_XY, MAX_XY)
+                          from b in Enumerable.Range(MIN_XY, MAX_XY)
+                          select new Point2D(a, b))
     {
         int rackID = p.X + 10;
         int powerLevel = (rackID * p.Y) + gridSerialNumber;
@@ -24,34 +24,50 @@ try
         powerCells.Add(new(p, 1), powerLevel);
     }
 
-    for (int z = MIN_XY + 1; z <= MAX_XY; z++)
+    for (int cellSize = MIN_XY + 1; cellSize <= MAX_XY; cellSize++)
     {
-        int maxZPower = 0;
-        foreach (Point p in from a in Enumerable.Range(MIN_XY, MAX_XY - z)
-                            from b in Enumerable.Range(MIN_XY, MAX_XY - z)
-                            select new Point(a, b))
+        int maxPower = 0;
+        foreach (Point2D p in from a in Enumerable.Range(MIN_XY, MAX_XY - cellSize) // stop short of the edge.
+                            from b in Enumerable.Range(MIN_XY, MAX_XY - cellSize)
+                            select new Point2D(a, b))
         {
-            int powerValue = fuelCells[p.X + (z - 1), p.Y + (z - 1)];
+            int nextX = p.X + (cellSize - 1);
+            int nextY = p.Y + (cellSize - 1);
 
-            for(int x = p.X; x < p.X + z; x++)
+            /*
+             EG: cell size 3
+             p points to cell A 
+             fuelCells grid: 
+             ABC
+             DEF
+             GHI
+            */
+
+            //pV = I
+            int powerValue = fuelCells[nextX, nextY];
+
+            //pV += G + H
+            for (int x = p.X; x < p.X + cellSize; x++)
             {
-                powerValue += fuelCells[x, p.Y + (z - 1)];
+                powerValue += fuelCells[x, nextY];
             }
 
-            for (int y = p.Y; y < p.Y + z; y++)
+            //pV += C + F
+            for (int y = p.Y; y < p.Y + cellSize; y++)
             {
-                powerValue += fuelCells[p.X + (z - 1), y];
+                powerValue += fuelCells[nextX, y];
             }
 
-            powerValue += powerCells[new(p.X, p.Y, z - 1)];
+            //pv += ABDE as calculatd from the previous layer
+            powerValue += powerCells[new(p.X, p.Y, cellSize - 1)];
 
-            if (powerValue > maxZPower) maxZPower = powerValue;
+            if (powerValue > maxPower) maxPower = powerValue;
 
-            powerCells.Add(new(p, z), powerValue);
+            powerCells.Add(new(p, cellSize), powerValue);
         }
-        // There isn't quite a smooth up then down, but once it hits zero, it never recovers.
-        // curious that it never goes negative. 
-        if (maxZPower == 0) break;
+        // Testing shows that there isn't quite a smooth up then down, but once it hits zero, it never recovers.
+        // It never goes negative, but the test remains. 
+        if (maxPower <= 0) break;
     }
 
     Point3D part1Answer = powerCells.Where(x => x.Key.Z == 3).OrderByDescending(x => x.Value).First().Key;

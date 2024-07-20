@@ -1,21 +1,21 @@
-﻿using System.Drawing;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using BKH.Geometry;
 
 try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     string[] puzzleInput = File.ReadAllLines(PUZZLE_INPUT);
 
-    Dictionary<int, Point> starLocation = new();
-    Dictionary<int, Size> starVelocity = new();
+    Dictionary<int, Point2D> starLocation = [];
+    Dictionary<int, Point2D> starVelocity = [];
 
     for (int i = 0; i < puzzleInput.Length; i++)
     {
         int[] matches = Regex.Matches(puzzleInput[i], @"[-]?\d+")
             .Select(x => int.Parse(x.Value)).ToArray();
 
-        starLocation.Add(i, new Point(matches[0], matches[1]));
-        starVelocity.Add(i, new Size(matches[2], matches[3]));
+        starLocation.Add(i, new Point2D(matches[0], matches[1]));
+        starVelocity.Add(i, new Point2D(matches[2], matches[3]));
     }
     
     bool doStepping = false;
@@ -39,17 +39,20 @@ try
             }
         }
 
-        Point min = new(starLocation.Min(x => x.Value.X), starLocation.Min(x => x.Value.Y));
-        Point max = new(starLocation.Max(x => x.Value.X), starLocation.Max(x => x.Value.Y));
+        Point2D min = new(starLocation.Min(x => x.Value.X), starLocation.Min(x => x.Value.Y));
+        Point2D max = new(starLocation.Max(x => x.Value.X), starLocation.Max(x => x.Value.Y));
+
+        long area = (long)(max.X - min.X) * (long)(max.Y - min.Y);  //explicit cast to avoid overflow issues.
 
         // Switch to manual inspection once the cloud starts to come together.
-        if (max.Y - min.Y <= 50) doStepping = true;
+        if (area < 5000) doStepping = true;
 
         if (doStepping)
         {
+            //translate to screen coordinates. 
             bool[,] starmap = new bool[(max.X - min.X) + 1, (max.Y - min.Y) + 1];
-
-            foreach (Point point in starLocation.Values)
+        
+            foreach (Point2D point in starLocation.Values)
             {
                 starmap[point.X - min.X, point.Y - min.Y] = true;
             }
@@ -59,7 +62,7 @@ try
             {
                 for (int x = 0; x <= starmap.GetUpperBound(0); x++)
                 {
-                    Console.Write(starmap[x, y] ? '#' : '.');
+                    Console.Write(starmap[x, y] ? '#' : ' ');
                 }
                 Console.WriteLine();
             }
@@ -75,8 +78,8 @@ try
                     isDone = true;
                     break;
                 case ConsoleKey.LeftArrow:
-                        doReverse = true;
-                        break;
+                    doReverse = true;
+                    break;
                 case ConsoleKey.RightArrow:
                 default:
                     doReverse = false;
