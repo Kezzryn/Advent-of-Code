@@ -1,10 +1,11 @@
 ﻿namespace BKH.Geometry;
 
-using System.Diagnostics.CodeAnalysis;
+using System;
 using System.Numerics;
 
 public struct Point3D :
     IComparable<Point3D>,
+    IEquatable<Point3D>,
     IEqualityComparer<Point3D>,
     IEqualityOperators<Point3D, Point3D, bool>,
     IEqualityOperators<Point3D, Point2D, bool>,
@@ -103,33 +104,32 @@ public struct Point3D :
         }
     }
 
-    public override readonly string ToString() => $"{{X={X},Y={Y},Z={Z}}}";
-
-    public static int TaxiDistance3D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y) + Math.Abs(s.Z - e.Z);
-    public static int TaxiDistance2D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
-    public static int TaxiDistance3D(Point3D s) => TaxiDistance3D(s, new Point3D(0, 0, 0));
-
     public readonly (int x, int y) As2D() => (X, Y);
     public readonly Point2D AsPoint2D() => new(X, Y);
+    public static int TaxiDistance3D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y) + Math.Abs(s.Z - e.Z);
+    public static int TaxiDistance3D(Point3D s) => TaxiDistance3D(s, new Point3D(0, 0, 0));
+    public static int TaxiDistance2D(Point3D s, Point3D e) => Math.Abs(s.X - e.X) + Math.Abs(s.Y - e.Y);
+    public override readonly string ToString() => $"{{X={X},Y={Y},Z={Z}}}";
 
-    // IAdditionOperators, ISubtractionOperators
+    //IAdditionOperators
     public static Point3D operator +(Point3D left, Point3D right) => new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
-    public static Point3D operator -(Point3D left, Point3D right) => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
     public static Point3D operator +(Point3D left, Point2D right) => new(left.X + right.X, left.Y + right.Y, left.Z);
-    public static Point3D operator -(Point3D left, Point2D right) => new(left.X - right.X, left.Y - right.Y, left.Z);
     public static Point3D operator +(Point3D left, (int x, int y) right) => new(left.X + right.x, left.Y + right.y, left.Z);
-    public static Point3D operator -(Point3D left, (int x, int y) right) => new(left.X - right.x, left.Y - right.y, left.Z);
 
+    //ISubtractionOperators
+    public static Point3D operator -(Point3D left, Point3D right) => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z); 
+    public static Point3D operator -(Point3D left, Point2D right) => new(left.X - right.X, left.Y - right.Y, left.Z);
+    public static Point3D operator -(Point3D left, (int x, int y) right) => new(left.X - right.x, left.Y - right.y, left.Z);
 
     // IEqualityOperators<Point3D, Point3D, bool>
     public static bool operator ==(Point3D left, Point3D right) => left.X == right.X && left.Y == right.Y && left.Z == right.Z;
     public static bool operator !=(Point3D left, Point3D right) => !(left.X == right.X && left.Y == right.Y && left.Z == right.Z);
 
     // IEqualityOperators<Point3D, Point, bool>
-    public static bool operator ==(Point3D left, Point2D right) => left.X == right.X && left.Y == right.Y && left.Z == 0;
-    public static bool operator !=(Point3D left, Point2D right) => !(left.X == right.X && left.Y == right.Y && left.Z == 0);
+    public static bool operator ==(Point3D left, Point2D right) => left.X == right.X && left.Y == right.Y;
+    public static bool operator !=(Point3D left, Point2D right) => !(left.X == right.X && left.Y == right.Y);
 
-    ////IEqualityComparer
+    //IEqualityComparer
     public readonly bool Equals(Point3D x, Point3D y) => x == y;
     public override readonly bool Equals(object? obj)
     {
@@ -141,6 +141,9 @@ public struct Point3D :
             throw new ArgumentException("Object is not a Point3D");
     }
 
+    //IComparor
+    public bool Equals(Point3D other) => this == other;
+
     // IComparisonOperators<Point3D, Point3D, bool>
     public static bool operator >(Point3D left, Point3D right) => Compare(left, right) == GreaterThan;
     public static bool operator <(Point3D left, Point3D right) => Compare(left, right) == LessThan;
@@ -151,9 +154,9 @@ public struct Point3D :
     public readonly int CompareTo(Point3D other) => Compare(this, other);
 
     // Hash Codes
-    public override readonly int GetHashCode() => unchecked(_x ^ _y ^ _z);
-    public readonly int GetHashCode([DisallowNull] Point3D obj) => GetHashCode();
-
+    public override readonly int GetHashCode() => Tuple.Create(X, Y, Z).GetHashCode();
+    readonly int IEqualityComparer<Point3D>.GetHashCode(Point3D obj) => Tuple.Create(obj.X, obj.Y, obj.Z).GetHashCode();
+   
     // Custom comparison function. 
     private static int Compare(Point3D left, Point3D right)
     {
