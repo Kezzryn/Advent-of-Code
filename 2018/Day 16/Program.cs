@@ -5,6 +5,7 @@ try
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     const string CRLF = "\r\n";
 
+    //Array indexes.
     const int PUZZLE_PART1 = 0;
     const int PUZZLE_PART2 = 1;
     const int PART1_BEFORE = 0;
@@ -34,11 +35,7 @@ try
 
     ChronalVM vm = new();
 
-    Dictionary<int, HashSet<int>> potentialOpCodes = new();
-    for (int i = 0; i < 16; i++)
-    {
-        potentialOpCodes.Add(i, new());
-    }
+    Dictionary<int, HashSet<int>> potentialOpCodes = Enumerable.Range(0, 16).ToDictionary(x => x, x => new HashSet<int>());
 
     foreach (int[][] opCodeTest in puzzlePart1)
     {

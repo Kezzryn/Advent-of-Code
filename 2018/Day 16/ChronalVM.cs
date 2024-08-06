@@ -39,11 +39,7 @@
         public bool CompareToRegisters(int[] a)
         {
             if (a.Length != _registers.Length) return false;
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (a[i] != _registers[i]) return false;
-            }
-            return true;
+            return _registers.Select((x, i) => x == a[i]).All(x => x);
         }
 
         public int GetRegisterValue(int regNum) => _registers[regNum];
