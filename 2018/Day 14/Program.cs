@@ -1,32 +1,23 @@
-﻿using System.Text;
-
-try
+﻿try
 {
     const string PUZZLE_INPUT = "PuzzleInput.txt";
     const int PART_1_NEXT_X = 10;
 
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
-    int[] puzzleDigits = puzzleInput.ToCharArray().Select(x => int.Parse(x.ToString())).ToArray();
+    List<int> puzzleDigits = puzzleInput.Select(x => x - '0').ToList();
 
     int numDigits = puzzleInput.Length;
     int part1NumRecipes = int.Parse(puzzleInput);
 
-    List<int> recipes = new()
-    {
-        3,
-        7
-    };
+    List<int> recipes = [3,7];
 
     int elfOne = 0;
     int elfTwo = 1;
+    
+    string part1Answer = String.Empty;
+    int part2Answer = -1;
 
-    bool part1Done = false;
-    bool part2Done = false;
-
-    StringBuilder part1Answer = new();
-    int part2Answer = 0;
     Queue<int> recipeQueue = new();
-
     do
     {
         int newValue = recipes[elfOne] + recipes[elfTwo];
@@ -36,43 +27,27 @@ try
         {
             recipes.Add(currentRecipe);
 
-            if (!part1Done && recipes.Count == part1NumRecipes + PART_1_NEXT_X)
+            if (part1Answer == String.Empty 
+                && recipes.Count == part1NumRecipes + PART_1_NEXT_X)
             {
-                foreach (int i in recipes.TakeLast(PART_1_NEXT_X))
-                {
-                    part1Answer.Append(i);
-                }
-                part1Done = true;
+                part1Answer = String.Join("", recipes.TakeLast(PART_1_NEXT_X));
             }
 
-            if (!part2Done && recipes.Count > numDigits && currentRecipe == puzzleDigits[numDigits - 1])
+            if (part2Answer == -1
+                && recipes.Count > numDigits 
+                && currentRecipe == puzzleDigits[numDigits - 1] 
+                && puzzleDigits.Select((x, i) => recipes[recipes.Count - numDigits + i] == x).All(x => x == true)) 
             {
-                bool isMatch = true;
-
-                for(int i = 0; i < numDigits; i++)
-                {
-                    if (recipes[recipes.Count - numDigits + i] != puzzleDigits[i])
-                    {
-                        isMatch = false;
-                        break;
-                    }
-                }
-
-                if (isMatch)
-                {
-                    part2Answer = recipes.Count - numDigits;
-                    part2Done = true;
-                }
+                part2Answer = recipes.Count - numDigits;
             }
         }
 
         elfOne = (elfOne + recipes[elfOne] + 1) % recipes.Count;
         elfTwo = (elfTwo + recipes[elfTwo] + 1) % recipes.Count;
 
-    } while (!(part1Done && part2Done));
+    } while (part1Answer == String.Empty || part2Answer == -1);
 
     Console.WriteLine($"Part 1: The scores of the next 10 recipies are: {part1Answer}");
-
     Console.WriteLine($"Part 2: The number of recipies that appear before the target score is: {part2Answer}");
 }
 catch (Exception e)
