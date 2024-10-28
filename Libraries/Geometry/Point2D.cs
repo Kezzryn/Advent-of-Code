@@ -1,6 +1,5 @@
 ﻿namespace BKH.Geometry;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 public struct Point2D :
@@ -13,7 +12,6 @@ public struct Point2D :
         ISubtractionOperators<Point2D, (int x, int y), Point2D>,
         IComparisonOperators<Point2D, Point2D, bool>
 {
-    public static readonly Point2D Empty = new();
     public static Point2D Origin { get { return new(0, 0); } }
 
     //human readable return types for comparison operators
@@ -24,26 +22,32 @@ public struct Point2D :
     private int _x;
     private int _y;
 
+    private readonly int _hashCode; 
+
     public Point2D(int x, int y)
     {
         _x = x;
         _y = y;
+        _hashCode = Tuple.Create(X, Y).GetHashCode();
     }
 
     public Point2D(int[] xy)
     {
         _x = xy[0];
         _y = xy[1];
+        _hashCode = Tuple.Create(X, Y).GetHashCode();
     }
 
     public Point2D()
     {
+        _hashCode = Tuple.Create(X, Y).GetHashCode();
     }
 
     public Point2D((int x, int y) xy)
     {
         _x = xy.x;
         _y = xy.y;
+        _hashCode = Tuple.Create(X, Y).GetHashCode();
     }
 
     public readonly bool IsEmpty
@@ -137,8 +141,8 @@ public struct Point2D :
     // Hash Codes
     //public readonly override int GetHashCode() => unchecked(_x ^ _y);
     //public readonly int GetHashCode([DisallowNull] Point2D obj) => GetHashCode();
-    public override readonly int GetHashCode() => Tuple.Create(X, Y).GetHashCode();
-    readonly int IEqualityComparer<Point2D>.GetHashCode(Point2D obj) => Tuple.Create(obj.X, obj.Y).GetHashCode();
+    public override readonly int GetHashCode() => _hashCode;
+    readonly int IEqualityComparer<Point2D>.GetHashCode(Point2D obj) => _hashCode;
 
     // Custom comparison function. 
     private static int Compare(Point2D left, Point2D right)
