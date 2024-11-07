@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using AoC_2018_Day_20;
+﻿using BKH.Geometry;
 
 static int FindMatchingBrace(string input, int startPos)
 {
@@ -16,13 +14,13 @@ static int FindMatchingBrace(string input, int startPos)
     return -1;
 }
 
-static void PrintMap(Dictionary<Point, HashSet<Point>> theMap)
+static void PrintMap(Dictionary<Point2D, HashSet<Point2D>> theMap)
 {
-    Point max = new(theMap.Keys.Max(x => x.X), theMap.Keys.Max(x => x.Y));
-    Point min = new(theMap.Keys.Min(x => x.X), theMap.Keys.Min(x => x.Y));
+    Point2D max = new(theMap.Keys.Max(x => x.X), theMap.Keys.Max(x => x.Y));
+    Point2D min = new(theMap.Keys.Min(x => x.X), theMap.Keys.Min(x => x.Y));
 
     char[,] printMap = new char[((max.X - min.X + 1) * 2) + 1, ((max.Y - min.Y + 1) * 2) + 1];
-    Size offset = new(printMap.GetUpperBound(0) - ((max.X + 1) * 2) -1, printMap.GetUpperBound(1) - ((max.Y + 1) * 2) - 1);
+    Point2D offset = new(printMap.GetUpperBound(0) - ((max.X + 1) * 2) -1, printMap.GetUpperBound(1) - ((max.Y + 1) * 2) - 1);
 
     //Console.WriteLine($"{printMap.GetUpperBound(0)} {printMap.GetUpperBound(1)}");
     foreach((int x, int y) in from a in Enumerable.Range(0, printMap.GetLength(0))
@@ -32,17 +30,17 @@ static void PrintMap(Dictionary<Point, HashSet<Point>> theMap)
         printMap[x, y] = '#';
     }
      
-    foreach(Point p in theMap.Keys)
+    foreach(Point2D p in theMap.Keys)
     {
-        Point target = new((p.X + 1) * 2, (p.Y + 1) * 2);
+        Point2D target = new((p.X + 1) * 2, (p.Y + 1) * 2);
         target += offset;
 
         //Console.WriteLine(target);
         printMap[target.X, target.Y] = (p.X == 0 && p.Y == 0) ? 'X' : '.';
 
-        foreach (Point p2 in theMap[p])
+        foreach (Point2D p2 in theMap[p])
         {
-            Point door = target - (Size)(p - (Size)p2);
+            Point2D door = target - (p - p2);
             //Console.WriteLine($"{p} -> {target} + {offset} -> {door}");
             printMap[door.X, door.Y] = door.X == target.X ? '-' : '|';
         }
@@ -66,20 +64,20 @@ try
 
     string puzzleInput = File.ReadAllText(PUZZLE_INPUT);
     
-    Dictionary<Point, HashSet<Point>> theMap = new();
-    Dictionary<Point, int> theMapDist = new();
+    Dictionary<Point2D, HashSet<Point2D>> theMap = new();
+    Dictionary<Point2D, int> theMapDist = new();
     
-    int LoadMap(string map, Point cursor, int dist = 0)
+    int LoadMap(string map, Point2D cursor, int dist = 0)
     {
-        Dictionary<char, Size> direction = new()
+        Dictionary<char, Point2D> direction = new()
         {
-            { 'N', new Size( 0, 1) },
-            { 'S', new Size( 0,-1) },
-            { 'E', new Size( 1, 0) },
-            { 'W', new Size(-1, 0) }
+            { 'N', new Point2D( 0, 1) },
+            { 'S', new Point2D( 0,-1) },
+            { 'E', new Point2D( 1, 0) },
+            { 'W', new Point2D(-1, 0) }
         };
 
-        Point startPoint = cursor;
+        Point2D startPoint = cursor;
         int startDist = dist;
          
         for(int i = 0; i < map.Length; i++)
@@ -87,9 +85,9 @@ try
             switch (map[i])
             {
                 case 'N' or 'S' or 'E' or 'W':
-                    Point nextStep = cursor + direction[map[i]];
+                    Point2D nextStep = cursor + direction[map[i]];
                     dist++;
-                    theMap.TryAdd(nextStep, new());
+                    theMap.TryAdd(nextStep, []);
                     theMapDist.TryAdd(nextStep, dist);
 
                     theMap[cursor].Add(nextStep);
@@ -105,7 +103,7 @@ try
                     i += LoadMap(map[(i + 1)..], startPoint, startDist);
                     break;
                 case '^':
-                    theMap.TryAdd(cursor, new());
+                    theMap.TryAdd(cursor, []);
                     theMapDist.TryAdd(cursor, dist);
                     break;
                 case '$' or ')':
@@ -118,39 +116,17 @@ try
         return map.Length;
     }
      
-    int part1Answer = 0;
-    int part2Answer = 0;
+    //int part1Answer = 0;
+    //int part2Answer = 0;
 
-    Point farthest = new();
+    Point2D farthest = new();
 
-    Stopwatch sw = Stopwatch.StartNew();
     LoadMap(puzzleInput, new(0, 0));
-    PrintMap(theMap);
+    //PrintMap(theMap);
 
-    Console.WriteLine($"Fast answer part 1: {theMapDist.Max(x => x.Value)}");
-    Console.WriteLine($"Fast answer part 2: {theMapDist.Where(x => x.Value >= PART_TWO_THRESHOLD).Count()}");
-
-    Console.WriteLine($"Map load and search took {sw.ElapsedMilliseconds} ms.");
-    sw.Stop();
-
-    sw.Restart();
-    foreach (Point dest in theMap.Keys)
-    {
-        AStar.A_Star(new(0, 0), dest, theMap, out int numSteps, out _);
-
-        if (numSteps >= part1Answer)
-        {
-            part1Answer = numSteps;
-            farthest = dest;
-        }
-        if (numSteps >= PART_TWO_THRESHOLD) part2Answer++;
-    }
-    sw.Stop();
-
-    Console.WriteLine();
-    Console.WriteLine($"A* took {sw.ElapsedMilliseconds} ms to search {theMap.Count} points.");
-    Console.WriteLine($"Part 1: The room at {farthest} is {part1Answer} doors away.");
-    Console.WriteLine($"Part 2: There are {part2Answer} rooms that are {PART_TWO_THRESHOLD} doors away or more.");
+    //Loading the map and counting steps as it's loaded is mangatudes of times faster than doing A* searches across the map.
+    Console.WriteLine($"Part 1: {theMapDist.Max(x => x.Value)}");
+    Console.WriteLine($"Part 2: {theMapDist.Where(x => x.Value >= PART_TWO_THRESHOLD).Count()}");
 }
 catch (Exception e)
 {
