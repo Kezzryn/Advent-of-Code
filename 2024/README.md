@@ -5,13 +5,13 @@
 - **Problem:** List comparison.
 - **Solution:** LINQ, LINQ, wonderful LINQ. 
 
-### [Day 2](Day%2002) - 
+### [Day 2](Day%2002) - Red-Nosed Reports
 - **Problem:** Checking the sort and spread of a sequence. 
 - **Solution:** Part one involved some simple logic to process the rules. Part two didn't present with an elegant way to remove elements so it got brute forced.
 
-### [Day 3](Day%2003) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 3](Day%2003) - Mull It Over
+- **Problem:** String parsing. 
+- **Solution:** A simple regex, and undestanding the puzzle data. The biggest gotcha of this puzzle was correctly understanding how to deal with newline characters. The answer is ... `don't()`. 
 
 ### [Day 4](Day%2004) - 
 - **Problem:**  
