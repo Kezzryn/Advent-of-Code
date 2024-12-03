@@ -6,8 +6,8 @@
 - **Solution:** LINQ, LINQ, wonderful LINQ. 
 
 ### [Day 2](Day%2002) - 
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Checking the sort and spread of a sequence. 
+- **Solution:** Part one involved some simple logic to process the rules. Part two didn't present with an elegant way to remove elements so it got brute forced.
 
 ### [Day 3](Day%2003) - 
 - **Problem:** 
