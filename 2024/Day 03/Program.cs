@@ -9,15 +9,16 @@ try
             .Sum(x => int.Parse(x.Groups[1].Value) * int.Parse(x.Groups[2].Value));
 
     int part1Answer = CalcMul(puzzleInput);
-    int part2Answer = 0;
+    int part2Answer = puzzleInput.Split("do()").Sum(x => CalcMul(x.Split("don't()").First()));
     
-    string[] part2Parsed = puzzleInput.Split("do()");
-    foreach(string chunk in part2Parsed)
-    {
-        int indexEnd = chunk.IndexOf("don't()");
-        if (indexEnd == -1) indexEnd = chunk.Length - 1;
-        part2Answer += CalcMul(chunk[..indexEnd]);
-    }
+    //Thanks Matt for the LINQ inspiration!
+    //string[] part2Parsed = puzzleInput.Split("do()");
+    //foreach(string chunk in part2Parsed)
+    //{
+    //    int indexEnd = chunk.IndexOf("don't()");
+    //    if (indexEnd == -1) indexEnd = chunk.Length - 1;
+    //    part2Answer += CalcMul(chunk[..indexEnd]);
+    //}
 
     Console.WriteLine($"Part 1: The sum of all the mul() operations is: {part1Answer}.");
     Console.WriteLine($"Part 2: When accounting for the do/don't operations, the sum is: {part2Answer}.");
