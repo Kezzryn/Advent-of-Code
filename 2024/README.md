@@ -13,9 +13,9 @@
 - **Problem:** String parsing. 
 - **Solution:** A simple regex, and undestanding the puzzle data. The biggest gotcha of this puzzle was correctly understanding how to deal with newline characters. The answer is ... `don't()`. 
 
-### [Day 4](Day%2004) - 
-- **Problem:**  
-- **Solution:** 
+### [Day 4](Day%2004) - Ceres Search
+- **Problem:** Word search!
+- **Solution:** I thought I could flatten the input to avoid a bunch of bound checks, only to find out that I require a bunch more bound checks.
 
 ### [Day 5](Day%2005) - 
 - **Problem:** 
