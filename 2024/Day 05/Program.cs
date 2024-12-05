@@ -11,7 +11,7 @@
     {
         int[] ruleNums = line.Split('|').Select(int.Parse).ToArray();
 
-        if (!rules.TryAdd(ruleNums[0], [ruleNums[0]]))
+        if (!rules.TryAdd(ruleNums[0], [ruleNums[1]]))
         {
             rules[ruleNums[0]].Add(ruleNums[1]);
         };
@@ -28,7 +28,7 @@
     {
         bool isValid = Enumerable.Range(1, pages.Count - 1).All(x => CheckRule(pages[x - 1], pages[x]));
 
-        int midPoint = (pages.Count - 1) / 2;
+        int midPoint = pages.Count / 2;
         if (isValid)
         { 
             part1Answer += pages[midPoint];
