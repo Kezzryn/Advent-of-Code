@@ -17,9 +17,9 @@
 - **Problem:** Word search!
 - **Solution:** I thought I could flatten the input to avoid a bunch of bound checks, only to find out that I require a bunch more bound checks.
 
-### [Day 5](Day%2005) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 5](Day%2005) - Print Queue
+- **Problem:** Sorting lists of numbers.
+- **Solution:** Today I learned you can put a function in `Sort()` and not have to write a bubble sort. (Totally wrote a bubble sort, pre-cleanup.)
 
 ### [Day 6](Day%2006) 
 - **Problem:** 
