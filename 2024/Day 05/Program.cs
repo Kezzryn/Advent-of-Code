@@ -26,6 +26,8 @@
 
     foreach (List<int> pages in safteyManual)
     {
+        // Experimentation shows we can get away with only checking adjacent pairs.
+        // A more robust solution would involve checking all pair combos.
         bool isValid = Enumerable.Range(1, pages.Count - 1).All(x => CheckRule(pages[x - 1], pages[x]));
 
         int midPoint = pages.Count / 2;
@@ -36,7 +38,7 @@
         else
         {
             // so apparently you can define the sort rules in Sort()
-            pages.Sort((a, b) => rules.TryGetValue(a, out HashSet<int>? results) && results.Contains(b) ? -1 : 1);
+            pages.Sort((a, b) => CheckRule(a, b) ? -1 : 1);
             part2Answer += pages[midPoint];
         }
     }
