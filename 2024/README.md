@@ -21,9 +21,9 @@
 - **Problem:** Sorting lists of numbers.
 - **Solution:** Today I learned you can put a function in `Sort()` and not have to write a bubble sort. (Totally wrote a bubble sort, pre-cleanup.)
 
-### [Day 6](Day%2006) 
-- **Problem:** 
-- **Solution:** 
+### [Day 6](Day%2006) - Guard Gallivant
+- **Problem:** Basic Pathfinding simulation.
+- **Solution:** Brute force with `Cursor()`. There's probably better ways to do this, but my solution was good enough. 
 
 ### [Day 7](Day%2007) - 
 - **Problem:** 
