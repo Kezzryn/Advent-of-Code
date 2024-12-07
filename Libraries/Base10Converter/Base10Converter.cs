@@ -1,4 +1,6 @@
-﻿namespace BKH.Base10Converter
+﻿using System.Text;
+
+namespace BKH.Base10Converter
 {
     public static class Base10Converter
     {
@@ -29,19 +31,19 @@
         /// <returns>Converted value</returns>
         public static string FromBase10(long inputValue, TranslationMap currMap)
         {
-            string returnValue = "";
-
+            //string returnValue = "";
+            StringBuilder sb = new();
             do
             {
                 int digit = (int)(inputValue % currMap.Base);
-                returnValue = $"{currMap.GetChar(digit)}{returnValue}";
+                sb.Insert(0, currMap.GetChar(digit));
 
                 inputValue /= currMap.Base;
                 if (currMap.ZeroOffset > 0) inputValue += (digit - currMap.ZeroOffset > 0) ? 1 : 0; //carry check. 
 
             } while (inputValue > 0);
 
-            return returnValue;
+            return sb.ToString();
         }
     }
 }
