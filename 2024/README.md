@@ -29,9 +29,9 @@
 - **Problem:** Trinary Counting!
 - **Solution:** Part one was initially done by using the bits of an integer as the pattern for the solution. Part two blew that out of the water and required it to be reimplemented. I pulled from my `Base10Converter()` library function to do the translation.
 
-### [Day 8](Day%2008) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 8](Day%2008) - Resonant Collinearity
+- **Problem:** Lines on a map.
+- **Solution:** The solution is straight forward. Find the delta between the two points, and follow it up/down the line. The implmentation ran into a brick wall when I tried to use my Point2D in a way it wasn't truly intended to be used. While there are `<` and `>` operators built into `Point2D()`, they don't work as expected in the quadrents where the delta signs are not the same between the X and Y values. A small change to the `InRange()` function fixed that.
 
 ### [Day 9](Day%2009) - 
 - **Problem:** 
