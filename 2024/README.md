@@ -25,9 +25,9 @@
 - **Problem:** Basic Pathfinding simulation.
 - **Solution:** Brute force with `Cursor()`. There's probably better ways to do this, but my solution was good enough. 
 
-### [Day 7](Day%2007) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 7](Day%2007) - Bridge Repair
+- **Problem:** Trinary Counting!
+- **Solution:** Part one was initially done by using the bits of an integer as the pattern for the solution. Part two blew that out of the water and required it to be reimplemented. I pulled from my `Base10Converter()` library function to do the translation.
 
 ### [Day 8](Day%2008) - 
 - **Problem:** 
