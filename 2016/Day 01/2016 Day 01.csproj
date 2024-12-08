@@ -10,13 +10,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Geometry\Geometry.csproj" />
-    <ProjectReference Include="..\..\Libraries\Points\Point2D\Point2D.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="PuzzleInput.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="PuzzleInput.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
