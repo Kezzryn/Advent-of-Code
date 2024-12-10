@@ -37,9 +37,9 @@
 - **Problem:** Defragmentation
 - **Solution:** The hardest part was understanding the setup. The second hardest part was making the linked lists work.
 
-### [Day 10](Day%2010) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 10](Day%2010) - Hoof It
+- **Problem:** Iterative pathfinding
+- **Solution:** This boiled down to a simple recursive function for both parts.
 
 ### [Day 11](Day%2011) - 
 - **Problem:** 
