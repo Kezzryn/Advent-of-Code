@@ -33,9 +33,9 @@
 - **Problem:** Lines on a map.
 - **Solution:** The solution is straight forward. Find the delta between the two points, and follow it up/down the line. The implmentation ran into a brick wall when I tried to use my Point2D in a way it wasn't truly intended to be used. While there are `<` and `>` operators built into `Point2D()`, they don't work as expected in the quadrents where the delta signs are not the same between the X and Y values. A small change to the `InRange()` function fixed that.
 
-### [Day 9](Day%2009) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 9](Day%2009) - Disk Fragmenter
+- **Problem:** Defragmentation
+- **Solution:** The hardest part was understanding the setup. The second hardest part was making the linked lists work.
 
 ### [Day 10](Day%2010) - 
 - **Problem:** 
