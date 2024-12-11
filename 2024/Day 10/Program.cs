@@ -17,8 +17,9 @@ try
                 .SelectMany(x => WalkTrailHead(x, theMap));
     }
 
-    IEnumerable<IEnumerable<Point2D>> trailheads = puzzleInput.Where(x => x.Value == 0)
-        .Select(x => WalkTrailHead(x.Key, puzzleInput));
+    IEnumerable<IEnumerable<Point2D>> trailheads = puzzleInput
+        .Where(x => x.Value == 0)
+            .Select(x => WalkTrailHead(x.Key, puzzleInput));
 
     int part1Answer = trailheads.Sum(x => x.Distinct().Count());
     int part2Answer = trailheads.Sum(x => x.Count());
