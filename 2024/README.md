@@ -41,9 +41,9 @@
 - **Problem:** Iterative pathfinding
 - **Solution:** This boiled down to a simple recursive function for both parts.
 
-### [Day 11](Day%2011) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 11](Day%2011) - Plutonian Pebbles
+- **Problem:** Fractal expansion.
+- **Solution:** Part one was small enough to do the naive solution. Part two exploded and forced me to rework the solution to collapse duplicate work.
 
 ### [Day 12](Day%2012) - 
 - **Problem:** 
