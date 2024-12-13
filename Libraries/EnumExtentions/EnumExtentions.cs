@@ -1,5 +1,6 @@
 ﻿namespace BKH.EnumExtentions;
 
+using System;
 using System.Collections;
 using System.Numerics;
 
@@ -67,6 +68,42 @@ public static class EnumExtentions
             }
         }
     }
+
+    /// <summary>
+    /// Takes a IEnumerable list and returns a IEnumerable of IEnumerable's 
+    /// </summary>
+    /// <param name="list">The list to be grouped</param>
+    /// <returns>List of grouped lists.</returns>
+    /// <exception cref="ArgumentException">Throws an argument exception for an unsorted list.</exception>
+    public static IEnumerable<IEnumerable<int>> GroupConsecutive(this IEnumerable<int> list)
+    {
+        //https://stackoverflow.com/questions/48387544/split-a-listint-into-groups-of-consecutive-numbers
+        if (list.Any())
+        {
+            var count = 1;
+            var startNumber = list.First();
+            int last = startNumber;
+
+            foreach (var i in list.Skip(1))
+            {
+                if (i < last)
+                {
+                    throw new ArgumentException($"List is not sorted.", nameof(list));
+                }
+                if (i - last == 1)
+                    count += 1;
+                else
+                {
+                    yield return Enumerable.Range(startNumber, count);
+                    startNumber = i;
+                    count = 1;
+                }
+                last = i;
+            }
+            yield return Enumerable.Range(startNumber, count);
+        }
+    }
+    
 
     /// <summary>
     /// Prepends one BitArray to another.
