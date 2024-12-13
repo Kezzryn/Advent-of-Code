@@ -45,9 +45,9 @@
 - **Problem:** Fractal expansion.
 - **Solution:** Part one was small enough to do the naive solution. Part two exploded and forced me to rework the solution to collapse duplicate work.
 
-### [Day 12](Day%2012) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 12](Day%2012) - Garden Groups
+- **Problem:** Area and perimeter of an irregular shape.
+- **Solution:** Part one was straight forward. Part two took a lot to noodle, and pulled down a new EnumExtension from Stackoverflow to group consecuative numbers.
 
 ### [Day 13](Day%2013) - 
 - **Problem:** 

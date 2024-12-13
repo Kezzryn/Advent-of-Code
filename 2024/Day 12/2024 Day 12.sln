@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2024 Day 12", "2024 Day 12.csproj", "{52B902D8-1CB0-4620-A78F-750962E585F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry", "..\..\Libraries\Geometry\Geometry.csproj", "{F3CEEC94-3337-48FE-A87D-1717CB47D9C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BKH.EnumExtentions", "..\..\Libraries\EnumExtentions\BKH.EnumExtentions.csproj", "{040B1612-646A-40C7-BBD6-73A24C67B311}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52B902D8-1CB0-4620-A78F-750962E585F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52B902D8-1CB0-4620-A78F-750962E585F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52B902D8-1CB0-4620-A78F-750962E585F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52B902D8-1CB0-4620-A78F-750962E585F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3CEEC94-3337-48FE-A87D-1717CB47D9C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3CEEC94-3337-48FE-A87D-1717CB47D9C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3CEEC94-3337-48FE-A87D-1717CB47D9C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3CEEC94-3337-48FE-A87D-1717CB47D9C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040B1612-646A-40C7-BBD6-73A24C67B311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040B1612-646A-40C7-BBD6-73A24C67B311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040B1612-646A-40C7-BBD6-73A24C67B311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040B1612-646A-40C7-BBD6-73A24C67B311}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
