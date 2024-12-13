@@ -11,7 +11,7 @@
 
 ### [Day 3](Day%2003) - Mull It Over
 - **Problem:** String parsing. 
-- **Solution:** A simple regex, and undestanding the puzzle data. The biggest gotcha of this puzzle was correctly understanding how to deal with newline characters. The answer is ... `don't()`. 
+- **Solution:** A simple regex, and understanding the puzzle data. The biggest gotcha of this puzzle was correctly understanding how to deal with newline characters. The answer is ... `don't()`. 
 
 ### [Day 4](Day%2004) - Ceres Search
 - **Problem:** Word search!
@@ -31,7 +31,7 @@
 
 ### [Day 8](Day%2008) - Resonant Collinearity
 - **Problem:** Lines on a map.
-- **Solution:** The solution is straight forward. Find the delta between the two points, and follow it up/down the line. The implmentation ran into a brick wall when I tried to use my Point2D in a way it wasn't truly intended to be used. While there are `<` and `>` operators built into `Point2D()`, they don't work as expected in the quadrents where the delta signs are not the same between the X and Y values. A small change to the `InRange()` function fixed that.
+- **Solution:** The solution is straight forward. Find the delta between the two points, and follow it up/down the line. The implementation ran into a brick wall when I tried to use my Point2D in a way it wasn't truly intended to be used. While there are `<` and `>` operators built into `Point2D()`, they don't work as expected in the quadrants where the delta signs are not the same between the X and Y values. A small change to the `InRange()` function fixed that.
 
 ### [Day 9](Day%2009) - Disk Fragmenter
 - **Problem:** Defragmentation
@@ -47,11 +47,11 @@
 
 ### [Day 12](Day%2012) - Garden Groups
 - **Problem:** Area and perimeter of an irregular shape.
-- **Solution:** Part one was straight forward. Part two took a lot to noodle, and pulled down a new EnumExtension from Stackoverflow to group consecuative numbers.
+- **Solution:** Part one was straight forward. Part two took a lot to noodle, and pulled down a new EnumExtension from Stackoverflow to group consecutive numbers.
 
-### [Day 13](Day%2013) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 13](Day%2013) - Claw Contraption
+- **Problem:** Linear algebra.
+- **Solution:** I vaguly know how to solve this, but had to look up the specifics. [This post](https://www.reddit.com/r/adventofcode/comments/1hd7irq/2024_day_13_an_explanation_of_the_mathematics/) helped me out. Implemented [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule#Explicit_formulas_for_small_systems) as my solution. 
 
 ### [Day 14](Day%2014) - 
 - **Problem:** 
