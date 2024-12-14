@@ -10,6 +10,7 @@ public struct Point2D :
         ISubtractionOperators<Point2D, Point2D, Point2D>,
         IAdditionOperators<Point2D, (int x, int y), Point2D>,
         ISubtractionOperators<Point2D, (int x, int y), Point2D>,
+        IMultiplyOperators<Point2D, int, Point2D>,
         IComparisonOperators<Point2D, Point2D, bool>
 {
     public static Point2D Origin { get { return new(0, 0); } }
@@ -112,6 +113,8 @@ public struct Point2D :
     public static Point2D operator +(Point2D left, (int x, int y) right) => new(left.X + right.x, left.Y + right.y);
     public static Point2D operator -(Point2D left, (int x, int y) right) => new(left.X - right.x, left.Y - right.y);
 
+    //IMultiplyOperators
+    public static Point2D operator *(Point2D left, int right) => new(left.X * right, left.Y * right);
 
     // IEqualityOperators<Point3D, Point3D, bool>
     public static bool operator ==(Point2D left, Point2D right) => left.X == right.X && left.Y == right.Y;
@@ -144,7 +147,6 @@ public struct Point2D :
     public override readonly int GetHashCode() => _hashCode;
     readonly int IEqualityComparer<Point2D>.GetHashCode(Point2D obj) => _hashCode;
 
-    // Custom comparison function. 
     private static int Compare(Point2D left, Point2D right)
     {
         // This is imperfect, but good enough. We shouldn't collide with things like comparing 0,1 and 1,0
@@ -182,9 +184,32 @@ public struct Point2D :
         };
     }
 
+    /// <summary>
+    /// Up/Down Left/Right assumes Positive Y is "up" and Positive X is "right"
+    /// </summary>
+    /// <param name="other">The Point2D to compare against</param>
+    /// <param name="quadrent">The area to test occupancy with.</param>
+    /// <returns>If the other point is in the given quadrenet in relation to this point. Returns false for all numbers on the same X/Y line as the existing point.</returns>
+    public readonly bool QuadrentTest(Point2D other, Quadrent quadrent)
+    {
+        return quadrent switch
+        {
+            Quadrent.UpperRight => X < other.X && Y < other.Y, //+ + 
+            Quadrent.UpperLeft => X > other.X && Y < other.Y, //- + 
+            Quadrent.LowerLeft => X > other.X && Y > other.Y, // - - 
+            Quadrent.LowerRight => X < other.X && Y > other.Y, //+ -
+            _ => throw new NotImplementedException()
+        };
+    }
+
     public enum Direction
     {
         Up, Right, Down, Left
+    }
+
+    public enum Quadrent
+    {
+        UpperRight, UpperLeft, LowerRight, LowerLeft
     }
 }
 
