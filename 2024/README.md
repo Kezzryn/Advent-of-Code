@@ -53,9 +53,9 @@
 - **Problem:** Linear algebra.
 - **Solution:** I vaguly know how to solve this, but had to look up the specifics. [This post](https://www.reddit.com/r/adventofcode/comments/1hd7irq/2024_day_13_an_explanation_of_the_mathematics/) helped me out. Implemented [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule#Explicit_formulas_for_small_systems) as my solution. 
 
-### [Day 14](Day%2014) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 14](Day%2014) - Restroom Redoubt 
+- **Problem:** Pathfinding and image detection.
+- **Solution:** Part one is easy to simulate. Part two needed two realizations, one the solution would be where the most robots are clustered together, and not all robots would form the tree.
 
 ### [Day 15](Day%2015) - 
 - **Problem:** 
