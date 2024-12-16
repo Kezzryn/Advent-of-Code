@@ -57,9 +57,9 @@
 - **Problem:** Pathfinding and image detection.
 - **Solution:** Part one is easy to simulate. Part two needed two realizations, one the solution would be where the most robots are clustered together, and not all robots would form the tree.
 
-### [Day 15](Day%2015) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 15](Day%2015) - Warehouse Woes
+- **Problem:** Collision detection
+- **Solution:** Part one was a straight forward implementation. Part two required a rethink of the problem, and a lot more bounds checking.
 
 ### [Day 16](Day%2016) - 
 - **Problem:** 
