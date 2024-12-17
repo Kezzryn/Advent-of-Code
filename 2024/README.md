@@ -61,9 +61,9 @@
 - **Problem:** Collision detection
 - **Solution:** Part one was a straight forward implementation. Part two required a rethink of the problem, and a lot more bounds checking.
 
-### [Day 16](Day%2016) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 16](Day%2016) - Reindeer Maze
+- **Problem:** Pathfinding!
+- **Solution:** A* to the rescue!
 
 ### [Day 17](Day%2017) - 
 - **Problem:** 
