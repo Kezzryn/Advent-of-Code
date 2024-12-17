@@ -20,6 +20,7 @@ public class Cursor : IEquatable<Cursor>
     public bool IsMovingDown { get { return _dir.Real == 0 && double.IsPositive(_dir.Imaginary); } }
     public bool IsHorizontal { get { return IsMovingRight || IsMovingLeft; } }
     public bool IsVertical { get { return IsMovingUp || IsMovingDown; } }
+
     public Cursor(Complex position, Complex direction)
     {
         _pos = position;
@@ -82,6 +83,13 @@ public class Cursor : IEquatable<Cursor>
     {
         Cursor temp = new(this);
         temp.TurnLeft();
+        return temp;
+    }
+
+    public Cursor ReturnCloneNextStep()
+    {
+        Cursor temp = new(this);
+        temp.Step();
         return temp;
     }
 
