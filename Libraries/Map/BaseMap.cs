@@ -25,7 +25,7 @@ public class BaseMap
 
     protected Dictionary<Point2D, (int gScore, int fScore, Point2D? parent)> stepCounter = [];
 
-    private readonly Dictionary<(Point2D, Point2D), int> cache = [];
+    protected readonly Dictionary<(Point2D, Point2D), int> cache = [];
 
     public BaseMap(string[] puzzleInput)
     {
@@ -134,33 +134,34 @@ public class BaseMap
 
     public void DisplayMap(List<Point2D> drawPath)
     {
-        Point2D cursor = new();
+        HashSet<Point2D> hs = new(drawPath);
 
-        for (int y = MapMax.Y; y >= MapMin.Y; y--)
+        for (int y = MapMin.Y; y <= MapMax.Y; y++)
         {
             for (int x = MapMin.X; x <= MapMax.X; x++)
             {
-                cursor.X = x;
-                cursor.Y = y;
+                Point2D cursor = new(x,y);
 
                 if (_theMap.TryGetValue(cursor, out int value))
                 {
-                    if (drawPath.Contains(cursor)) Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    if (hs.Contains(cursor)) Console.ForegroundColor = ConsoleColor.Red;
+
                     if (cursor == StartPosition) Console.ForegroundColor = ConsoleColor.Green;
                     if (cursor == EndPosition) Console.ForegroundColor = ConsoleColor.Blue;
 
-                    Console.Write((char)(value + 96));
-
-                    if (Console.ForegroundColor != ConsoleColor.Gray) Console.ForegroundColor = ConsoleColor.Gray;
+                    if (value == 1) Console.Write('#');
+                    if (value == 0) Console.Write('.');
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("?");
-                    Console.ForegroundColor = ConsoleColor.Gray;
+                    
                 }
+                Console.ResetColor();
             }
-            Console.WriteLine(" ");
+            Console.WriteLine();
         }
+        Console.WriteLine();
     }
 }
