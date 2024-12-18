@@ -69,9 +69,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 18](Day%2018) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 18](Day%2018) - RAM Run
+- **Problem:** More pathfinding! 
+- **Solution:** A*, once again, to the rescue.
 
 ### [Day 19](Day%2019) - 
 - **Problem:** 
