@@ -63,11 +63,11 @@
 
 ### [Day 16](Day%2016) - Reindeer Maze
 - **Problem:** Pathfinding!
-- **Solution:** A* to the rescue!
+- **Solution:** A* to the rescue! An expansion was made to the Map class to use `Cursor()`.
 
-### [Day 17](Day%2017) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 17](Day%2017) - Chronospatial Computer
+- **Problem:** Virtual Machine.
+- **Solution:** Borrowed some old Asmbunny code for the main shell. Part two needed some noodling on how to reverse the process.
 
 ### [Day 18](Day%2018) - RAM Run
 - **Problem:** More pathfinding! 
