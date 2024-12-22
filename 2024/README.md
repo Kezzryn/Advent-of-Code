@@ -85,9 +85,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 22](Day%2022) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 22](Day%2022) - Monkey Market
+- **Problem:** Number hashing, followed by pattern matching.
+- **Solution:** These were very straight forward implementations of the puzzle text.
 
 ### [Day 23](Day%2023) - 
 - **Problem:** 
