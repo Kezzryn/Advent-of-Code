@@ -190,16 +190,21 @@ public struct Point2D :
     /// <param name="other">The Point2D to compare against</param>
     /// <param name="quadrent">The area to test occupancy with.</param>
     /// <returns>If the other point is in the given quadrenet in relation to this point. Returns false for all numbers on the same X/Y line as the existing point.</returns>
-    public readonly bool QuadrentTest(Point2D other, Quadrent quadrent)
+    public readonly bool IsInQuadrant(Point2D other, Quadrant quadrent)
     {
-        return quadrent switch
-        {
-            Quadrent.UpperRight => X < other.X && Y < other.Y, //+ + 
-            Quadrent.UpperLeft => X > other.X && Y < other.Y, //- + 
-            Quadrent.LowerLeft => X > other.X && Y > other.Y, // - - 
-            Quadrent.LowerRight => X < other.X && Y > other.Y, //+ -
-            _ => throw new NotImplementedException()
-        };
+        var result = RelativeQuadrent(other);
+        if (result == Quadrant.OnGridLine) return false;
+        return result == quadrent;
+    }
+
+    public readonly Quadrant RelativeQuadrent(Point2D other)
+    {
+        if (X < other.X && Y < other.Y) return Quadrant.UpperRight; //+ + 
+        if (X > other.X && Y < other.Y) return Quadrant.UpperLeft; //- + 
+        if (X > other.X && Y > other.Y) return Quadrant.LowerLeft; // - - 
+        if (X < other.X && Y > other.Y) return Quadrant.LowerRight; //+ -
+        return Quadrant.OnGridLine;
+        //throw new NotImplementedException($"On the same X or Y line as the source point.{this} {other}");
     }
 
     public enum Direction
@@ -207,9 +212,9 @@ public struct Point2D :
         Up, Right, Down, Left
     }
 
-    public enum Quadrent
+    public enum Quadrant
     {
-        UpperRight, UpperLeft, LowerRight, LowerLeft
+        UpperRight, UpperLeft, LowerRight, LowerLeft, OnGridLine
     }
 }
 

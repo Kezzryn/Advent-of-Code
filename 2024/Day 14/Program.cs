@@ -1,5 +1,6 @@
 ﻿using AoC_2024_Day_14;
 using BKH.Geometry;
+using static BKH.Geometry.Point2D;
 
 try
 {
@@ -13,9 +14,9 @@ try
     static int SafetyFactor(List<Roomba> puzzleInput, Point2D midPoint)
     {
         int returnValue = 1;
-        foreach (Point2D.Quadrent quadrent in Enum.GetValues<Point2D.Quadrent>())
+        foreach (Quadrant quadrent in Enum.GetValues<Quadrant>().Where(x => x != Quadrant.OnGridLine))
         {
-            returnValue *= puzzleInput.Count(x => midPoint.QuadrentTest(x.Position, quadrent));
+            returnValue *= puzzleInput.Count(x => midPoint.IsInQuadrant(x.Position, quadrent));
         }
         return returnValue;
     }
