@@ -73,15 +73,15 @@
 - **Problem:** More pathfinding! 
 - **Solution:** A*, once again, to the rescue.
 
-### [Day 19](Day%2019) - 
+### [Day 19](Day%2019) - Linen Layout
+- **Problem:** Combinations. 
+- **Solution:** Previous years have demonstrated how to properly cache this sort of problem in order to bring down the search space.
+
+### [Day 20](Day%2020) - Race Condition
 - **Problem:** 
 - **Solution:** 
 
-### [Day 20](Day%2020) - 
-- **Problem:** 
-- **Solution:** 
-
-### [Day 21](Day%2021) - 
+### [Day 21](Day%2021) - Keypad Conundrum
 - **Problem:** 
 - **Solution:** 
 
@@ -89,7 +89,7 @@
 - **Problem:** Number hashing, followed by pattern matching.
 - **Solution:** These were very straight forward implementations of the puzzle text.
 
-### [Day 23](Day%2023) - 
+### [Day 23](Day%2023) - LAN Party
 - **Problem:** 
 - **Solution:** 
 
