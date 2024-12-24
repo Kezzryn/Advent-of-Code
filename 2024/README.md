@@ -93,9 +93,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 24](Day%2024) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 24](Day%2024) - Crossed Wires
+- **Problem:** Half-Adder
+- **Solution:** Copy [2015 Day 07](../2015/Day%2007/)'s homework, then use graphvis to visualize the system to manually find the errors.
 
 ### [Day 25](Day%2025) - 
 - **Problem:** 
