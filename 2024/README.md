@@ -97,6 +97,6 @@
 - **Problem:** Half-Adder
 - **Solution:** Copy [2015 Day 07](../2015/Day%2007/)'s homework, then use graphvis to visualize the system to manually find the errors.
 
-### [Day 25](Day%2025) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 25](Day%2025) - Code Chronicle
+- **Problem:** Pattern matching.
+- **Solution:** The puzzle tells you how to do it. It collapes to a line of LINQ. It was harder to parse the data.
