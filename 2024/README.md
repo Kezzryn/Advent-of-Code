@@ -90,8 +90,8 @@
 - **Solution:** These were very straight forward implementations of the puzzle text.
 
 ### [Day 23](Day%2023) - LAN Party
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Chopping up graphs.
+- **Solution:** Oddly enough, brute force.
 
 ### [Day 24](Day%2024) - Crossed Wires
 - **Problem:** Half-Adder
