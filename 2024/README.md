@@ -82,8 +82,8 @@
 - **Solution:** 
 
 ### [Day 21](Day%2021) - Keypad Conundrum
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Recursive button pressing.
+- **Solution:** Part one was simulated. Part two required a rewrite, a cache, and the debugging of my optimization function, which had a reversal that oddly worked for part one, and failed for part two.
 
 ### [Day 22](Day%2022) - Monkey Market
 - **Problem:** Number hashing, followed by pattern matching.
