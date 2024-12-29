@@ -6,23 +6,23 @@ internal class Robot
     public const int NumericKeypad = 0;
     public const int ArrowKeys = 1;
 
-    private readonly Dictionary<int, Point2D> _numKeypad = new()
+    private readonly Dictionary<KeySymbols, Point2D> _numKeypad = new()
     {
-        { '7', new(0,3) },        { '8', new(1,3) },        { '9', new(2,3) },
-        { '4', new(0,2) },        { '5', new(1,2) },        { '6', new(2,2) },
-        { '1', new(0,1) },        { '2', new(1,1) },        { '3', new(2,1) },
-                                  { '0', new(1,0) },        { 'A', new(2,0) }
+        { KeySymbols.Seven, new(0,3) },  { KeySymbols.Eight, new(1,3) },  { KeySymbols.Nine, new(2,3) },
+        { KeySymbols.Four, new(0,2) },   { KeySymbols.Five, new(1,2) },   { KeySymbols.Six, new(2,2) },
+        { KeySymbols.One, new(0,1) },    { KeySymbols.Two, new(1,1) },    { KeySymbols.Three, new(2,1) },
+                                         { KeySymbols.Zero, new(1,0) },   { KeySymbols.Push, new(2,0) }
     };
 
-    private readonly Dictionary<int, Point2D> _keypad = new()
+    private readonly Dictionary<KeySymbols, Point2D> _keypad = new()
     {
-                                                    { (int)Robot.Direction.Up, new(1,1) },      { (int)Robot.Direction.Push, new(2,1) },
-        { (int)Robot.Direction.Left, new(0,0) },    { (int)Robot.Direction.Down, new(1,0) },    { (int)Robot.Direction.Right, new(2,0) }
+                                        { KeySymbols.Up, new(1,1) },    { KeySymbols.Push, new(2,1) },
+        { KeySymbols.Left, new(0,0) },  { KeySymbols.Down, new(1,0) },  { KeySymbols.Right, new(2,0) }
     };
 
     private readonly Point2D _emptySpace;
     
-    private readonly Dictionary<(Direction, Direction), long> _moveCache = [];
+    private readonly Dictionary<(KeySymbols, KeySymbols), long> _moveCache = [];
 
     private readonly Robot? NextRobot = null;
 
@@ -30,7 +30,7 @@ internal class Robot
     {
         if (keypadType == NumericKeypad) _keypad = _numKeypad;
 
-        _emptySpace = (_keypad.ContainsKey('A') ? _keypad['A'] : _keypad[(int)Direction.Push]) + new Point2D(-2, 0);
+        _emptySpace = _keypad[KeySymbols.Push] + new Point2D(-2, 0);
 
         if (maxDepth > 0)   
         {
@@ -40,13 +40,18 @@ internal class Robot
 
     public long ProcessDoorCode(string doorCode)
     {
-        doorCode = "A" + doorCode;
-
         long returnValue = 0;
 
-        for(int a = 1; a < doorCode.Length; a++)
+        for(int a = 0; a < doorCode.Length; a++)
         {
-            returnValue += MoveToValue((Direction)doorCode[a-1], (Direction)doorCode[a]);
+            if(a == 0 )
+            {
+                returnValue += MoveToValue(KeySymbols.Push, (KeySymbols)doorCode[a]);
+            }
+            else 
+            {
+                returnValue += MoveToValue((KeySymbols)doorCode[a - 1], (KeySymbols)doorCode[a]); 
+            }
         }
 
         return returnValue;
@@ -67,23 +72,23 @@ internal class Robot
         return int.IsPositive(diff.X); // prefer horiz only if moving left. 
     }
 
-    public long MoveToValue(Direction fromPos, Direction toPos)
+    public long MoveToValue(KeySymbols fromPos, KeySymbols toPos)
     {
         if(_moveCache.TryGetValue((fromPos, toPos), out long cacheValue)) return cacheValue;
 
-        List<Direction> currentMoves = [];
+        List<KeySymbols> currentMoves = [];
         if (fromPos != toPos)
         {
-            Point2D start = _keypad[(int)fromPos];
-            Point2D end = _keypad[(int)toPos];
+            Point2D start = _keypad[fromPos];
+            Point2D end = _keypad[toPos];
             Point2D diff = start - end;
 
-            IEnumerable<Direction> updown = Enumerable.Repeat(
-                    int.IsPositive(diff.Y) ? Direction.Down : Direction.Up,
+            IEnumerable<KeySymbols> updown = Enumerable.Repeat(
+                    int.IsPositive(diff.Y) ? KeySymbols.Down : KeySymbols.Up,
                     Math.Abs(diff.Y));
 
-            IEnumerable<Direction> leftright = Enumerable.Repeat(
-                    int.IsPositive(diff.X) ? Direction.Left : Direction.Right,
+            IEnumerable<KeySymbols> leftright = Enumerable.Repeat(
+                    int.IsPositive(diff.X) ? KeySymbols.Left : KeySymbols.Right,
                     Math.Abs(diff.X));
 
             if (DoHorizFirst(start, end, diff))
@@ -97,7 +102,7 @@ internal class Robot
                 currentMoves.AddRange(leftright);
             }
         }
-        currentMoves.Add(Direction.Push);
+        currentMoves.Add(KeySymbols.Push);
 
         long rv = 0; 
 
@@ -110,9 +115,13 @@ internal class Robot
             for (int i = 0; i < currentMoves.Count; i++)
             {
                 if(i == 0)
-                    rv += NextRobot.MoveToValue(Direction.Push, currentMoves[i]);
+                { 
+                    rv += NextRobot.MoveToValue(KeySymbols.Push, currentMoves[i]);
+                }
                 else 
+                {
                     rv += NextRobot.MoveToValue(currentMoves[i - 1], currentMoves[i]);
+                }
             }
         }
 
@@ -120,8 +129,22 @@ internal class Robot
         return rv;
     }
 
-    public enum Direction
+    public enum KeySymbols
     {
-        Up, Right, Down, Left, Push
+        Up, 
+        Right, 
+        Down, 
+        Left, 
+        Push = 'A',
+        One = '1',
+        Two = '2',
+        Three = '3',
+        Four = '4',
+        Five = '5',
+        Six = '6',
+        Seven = '7',
+        Eight = '8',
+        Nine = '9',
+        Zero = '0'
     }
 }
