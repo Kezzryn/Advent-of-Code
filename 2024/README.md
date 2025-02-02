@@ -78,8 +78,8 @@
 - **Solution:** Previous years have demonstrated how to properly cache this sort of problem in order to bring down the search space.
 
 ### [Day 20](Day%2020) - Race Condition
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Pathfinding, when you can go off the path.
+- **Solution:** Run the clean path, then calcuate all the possiblities.
 
 ### [Day 21](Day%2021) - Keypad Conundrum
 - **Problem:** Recursive button pressing.
