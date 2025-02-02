@@ -1,6 +1,7 @@
 ﻿namespace BKH.Geometry;
 
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 
 public struct Point2D :
         IComparable<Point2D>,
@@ -94,11 +95,11 @@ public struct Point2D :
         }
     }
 
-    public readonly IEnumerable<Point2D> GetOrthogonalNeighbors()
+    public readonly IEnumerable<Point2D> GetOrthogonalNeighbors(int step = 1)
     {
         foreach(Direction dir in Enum.GetValues(typeof(Direction)))
         {
-            yield return OrthogonalNeighbor(dir);
+            yield return OrthogonalNeighbor(dir, step);
         }
     }
 
@@ -172,14 +173,14 @@ public struct Point2D :
         return (leftSum < rightSum) ? LessThan : GreaterThan;
     }
 
-    public readonly Point2D OrthogonalNeighbor(Direction dir)
+    public readonly Point2D OrthogonalNeighbor(Direction dir, int step = 1)
     {
         return dir switch
         {
-            Direction.Up => this + (0, 1),
-            Direction.Down => this + (0, -1),
-            Direction.Left => this + (-1, 0),
-            Direction.Right => this + (1, 0),
+            Direction.Up => this + (0, step),
+            Direction.Down => this + (0, -step),
+            Direction.Left => this + (-step, 0),
+            Direction.Right => this + (step, 0),
             _ => throw new NotImplementedException($"Unknown direction {dir}")
         };
     }
