@@ -67,10 +67,11 @@ try
         }
     }
 
-    Console.WriteLine($"Part 1: The bot that was responsible for {CHIP_ID_1} and {CHIP_ID_2} chips was: {part1Answer}  73");
+    Console.WriteLine($"Part 1: The bot that was responsible for {CHIP_ID_1} and {CHIP_ID_2} chips was: {part1Answer}");
 
     int part2Answer = output.Where(x => x.Key <= 2).Select(x => x.Value).Aggregate((x, y) => x * y);
-    Console.WriteLine($"Part 2: The product of the chips in bins 0, 1, and 2, is: {part2Answer} 3965");
+    Console.WriteLine($"Part 2: The product of the chips in bins 0, 1, and 2, is: {part2Answer}");
+    Console.WriteLine(String.Join(" ", output.Where(x => x.Key <= 2).Select(x => x.Value)));
 }
 catch (Exception e)
 {
