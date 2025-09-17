@@ -26,7 +26,7 @@ One final note. All the challenge codes sown below are hashed with MD5. If you t
 Here we go! 
 
 ### Code 1 - RTFM!
-There are two files provided, [challenge.bin](Challenge%20Resources\challenge.bin) and [arch-spec](Challenge%20Resources\arch-spec). Leaving the bin file alone, I opened up `arch-spec` and read it over. It provided definitions for the memory, how math works, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was a comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunately this was total non-issue.
+There are two files provided, [challenge.bin](Challenge%20Resources/challenge.bin) and [arch-spec](Challenge%20Resources/arch-spec). Leaving the bin file alone, I opened up `arch-spec` and read it over. It provided definitions for the memory, how math works, some system limits, a few hints, and a listing of the op-codes. The only thing that gave me pause was a comment about the numbers being stored in a little-endian format. I had visions of endless endian bugs. Fortunately this was total non-issue.
 
 Creating a new C# console project, I read through the specification again, then started laying out some basics as I felt out what I would need to implement the program.
 
