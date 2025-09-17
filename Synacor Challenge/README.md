@@ -749,7 +749,7 @@ Putting it all together:
 ```csharp
 ushort Func_6048(ushort a, ushort b)
 {
-    return Func_6027(a, Func_6027(a, b - 1));
+    return Func_6027(a - 1, Func_6027(a, b - 1));
 }
 ```
 Oh dear me.
@@ -761,7 +761,7 @@ ushort RecursiveNightmare(ushort r0, ushort r1)
 {
     if (r0 == 0) return r1 + 1;
     if (r1 == 0) return RecursiveNightmare(r0 - 1, reg[7]);
-    return RecursiveNightmare(r0, RecursiveNightmare(r0, r1 - 1));
+    return RecursiveNightmare(r0 - 1, RecursiveNightmare(r0, r1 - 1));
 }
 ```
 
