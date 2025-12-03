@@ -1,0 +1,50 @@
+# 2025 Puzzle Summary 
+## Spoiler warnings. I do talk about solutions and techniques I used for the puzzles here, but in a general way.
+
+### [Day 1](Day%2001) - Secret Entrance
+- **Problem:** Spinning dials.
+- **Solution:** Modulo math and a careful track of edge cases. Use the examples.
+
+### [Day 2](Day%2002) - Gift Shop
+- **Problem:** 
+- **Solution:** 
+
+### [Day 3](Day%2003) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 4](Day%2004) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 5](Day%2005) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 6](Day%2006) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 7](Day%2007) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 8](Day%2008) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 9](Day%2009) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 10](Day%2010) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 11](Day%2011) - 
+- **Problem:** 
+- **Solution:** 
+
+### [Day 12](Day%2012) - 
+- **Problem:** 
+- **Solution:** 
