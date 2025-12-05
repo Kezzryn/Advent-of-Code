@@ -13,11 +13,11 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 4](Day%2004) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 4](Day%2004) - Printing Department
+- **Problem:** Remove rolls of paper.
+- **Solution:** `LINQ`. It's all simple lines of `LINQ`.
 
-### [Day 5](Day%2005) - 
+### [Day 5](Day%2005) - Cafeteria
 - **Problem:** 
 - **Solution:** 
 
