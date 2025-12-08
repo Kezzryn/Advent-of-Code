@@ -6,10 +6,10 @@
 - **Solution:** Modulo math and a careful track of edge cases. Use the examples.
 
 ### [Day 2](Day%2002) - Gift Shop
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Pattern matching. 
+- **Solution:** Part 1 was straight forward once I figured out how to count digits. For part 2 I had to resort to string and array processing.
 
-### [Day 3](Day%2003) - 
+### [Day 3](Day%2003) - Lobby
 - **Problem:** 
 - **Solution:** 
 
