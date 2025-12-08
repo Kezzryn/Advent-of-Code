@@ -1,39 +1,41 @@
-﻿namespace BKH.Segments;
+﻿using System.Numerics;
 
-public struct Slice(uint start, uint length)
+namespace BKH.Segments;
+
+public struct Slice<T>(T start, T length) where T : INumber<T>
 {
-    public uint Start { get; set; } = start;
-    public uint Length { get; set; } = length;
-    public readonly uint End { get { return Start + Length; } }
+    public T Start { get; set; } = start;
+    public T Length { get; set; } = length;
+    public readonly T End { get { return Start + Length; } }
 
     //if a is contained within b. 
-    public readonly bool Contains(Slice a) => Contains(a, this);
-    public static bool Contains(Slice a, Slice b) => a.Start >= b.Start && a.End <= b.End;
-    public readonly bool Overlaps(Slice a) => Overlaps(a, this);
-    public static bool Overlaps(Slice a, Slice b) => (a.Start >= b.Start || a.End >= b.Start) && (a.Start <= b.End || a.End <= b.End);
-    public readonly bool Adjacent(Slice a) => Adjacent(a, this);
-    public static bool Adjacent(Slice a, Slice b) => (a.End + 1 == b.Start || b.End + 1 == a.Start);
+    public readonly bool Contains(Slice<T> a) => Contains(a, this);
+    public static bool Contains(Slice<T> a, Slice<T> b) => a.Start >= b.Start && a.End <= b.End;
+    public readonly bool Overlaps(Slice<T> a) => Overlaps(a, this);
+    public static bool Overlaps(Slice<T> a, Slice<T> b) => (a.Start >= b.Start || a.End >= b.Start) && (a.Start <= b.End || a.End <= b.End);
+    public readonly bool Adjacent(Slice<T> a) => Adjacent(a, this);
+    public static bool Adjacent(Slice<T> a, Slice<T> b) => (a.End + T.One == b.Start || b.End + T.One == a.Start);
     public override readonly string ToString() => $"Start = {Start} End = {End}";
 }
 
-public class Segments
+public class Segments<T> where T : INumber<T>
 {
-    private readonly SortedList<uint, Slice> _slices = [];
+    private readonly SortedList<T, Slice<T>> _slices = [];
 
     public Segments() { }
 
-    public void AddRange(uint a, uint b)
+    public void AddRange(T a, T b)
     {
         if (b < a) (a, b) = (b, a);
         AddSlice(new(a, b - a));
     }
 
-    public IList<Slice> GetSlices()
+    public IList<Slice<T>> GetSlices()
     {
         return _slices.Values;
     }
 
-    public void AddSlice(Slice newSlice)
+    public void AddSlice(Slice<T> newSlice)
     {
         if (!_slices.TryAdd(newSlice.Start, newSlice))
         {
@@ -46,15 +48,15 @@ public class Segments
         //get previous and next indexes (if available) to look for overlaps and adjaency.
         bool prevOverlap = false;
         bool nextOverlap = false;
-        uint prevKey = 0;
-        uint nextKey = 0;
+        T prevKey = T.Zero;
+        T nextKey = T.Zero;
 
-        uint mergedStart = newSlice.Start;
-        uint mergedEnd = newSlice.End;
+        T mergedStart = newSlice.Start;
+        T mergedEnd = newSlice.End;
 
         if (segmentIndex > 0)
         {
-            Slice prevSlice = _slices.GetValueAtIndex(segmentIndex - 1);
+            Slice<T> prevSlice = _slices.GetValueAtIndex(segmentIndex - 1);
             prevKey = _slices.GetKeyAtIndex(segmentIndex - 1);
 
             if (prevSlice.Contains(newSlice))
@@ -71,7 +73,7 @@ public class Segments
 
         while (segmentIndex < _slices.Count - 1)
         {
-            Slice nextSlice = _slices.GetValueAtIndex(segmentIndex + 1);
+            Slice<T> nextSlice = _slices.GetValueAtIndex(segmentIndex + 1);
             nextKey = _slices.GetKeyAtIndex(segmentIndex + 1);
             if (newSlice.Contains(nextSlice))
             {
@@ -96,13 +98,13 @@ public class Segments
             if (nextOverlap) _slices.Remove(nextKey);
             _slices.Remove(newSlice.Start);
 
-            _slices.Add(mergedStart, new Slice(mergedStart, mergedEnd - mergedStart));
+            _slices.Add(mergedStart, new Slice<T>(mergedStart, mergedEnd - mergedStart));
         }
     }
 
     public void PrintSlices()
     {
-        foreach (Slice slice in _slices.Values)
+        foreach (Slice<T> slice in _slices.Values)
         {
             Console.WriteLine(slice);
         }
