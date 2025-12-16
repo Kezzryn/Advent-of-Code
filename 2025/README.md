@@ -25,9 +25,9 @@
 - **Problem:** 
 - **Solution:** 
 
-### [Day 7](Day%2007) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 7](Day%2007) - Laboratories
+- **Problem:** Split a beam a bunch of times.
+- **Solution:** It doesn't need to be fully simulated, only the head of the beam needs to be tracked.
 
 ### [Day 8](Day%2008) - 
 - **Problem:** 
