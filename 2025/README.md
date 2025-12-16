@@ -10,16 +10,16 @@
 - **Solution:** Part 1 was straight forward once I figured out how to count digits. For part 2 I had to resort to string and array processing.
 
 ### [Day 3](Day%2003) - Lobby
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Finding joltage!
+- **Solution:** A moving window that shrinks as it slides over the puzzle space.
 
 ### [Day 4](Day%2004) - Printing Department
 - **Problem:** Remove rolls of paper.
 - **Solution:** `LINQ`. It's all simple lines of `LINQ`.
 
 ### [Day 5](Day%2005) - Cafeteria
-- **Problem:** 
-- **Solution:** 
+- **Problem:** Ranges!
+- **Solution:** Testing for things in ranges.
 
 ### [Day 6](Day%2006) - 
 - **Problem:** 
