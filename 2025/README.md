@@ -29,22 +29,22 @@
 - **Problem:** Split a beam a bunch of times.
 - **Solution:** It doesn't need to be fully simulated, only the head of the beam needs to be tracked.
 
-### [Day 8](Day%2008) - 
+### [Day 8](Day%2008) - Playground
+- **Problem:** Sorting by distances.
+- **Solution:** Had to implement a new measuring method, EuclideanDistance3D. Once that was sorted, it was just a matter of maintaining and merging lists.
+
+### [Day 9](Day%2009) - Movie Theater
 - **Problem:** 
 - **Solution:** 
 
-### [Day 9](Day%2009) - 
+### [Day 10](Day%2010) - Factory 
 - **Problem:** 
 - **Solution:** 
 
-### [Day 10](Day%2010) - 
+### [Day 11](Day%2011) - Reactor 
 - **Problem:** 
 - **Solution:** 
 
-### [Day 11](Day%2011) - 
-- **Problem:** 
-- **Solution:** 
-
-### [Day 12](Day%2012) - 
+### [Day 12](Day%2012) - Christmas Tree Farm
 - **Problem:** 
 - **Solution:** 
