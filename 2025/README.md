@@ -21,9 +21,9 @@
 - **Problem:** Ranges!
 - **Solution:** Testing for things in ranges.
 
-### [Day 6](Day%2006) - 
-- **Problem:** 
-- **Solution:** 
+### [Day 6](Day%2006) - Trash Compactor
+- **Problem:** Math, left to right and up and down. 
+- **Solution:** A bunch of string parsing.
 
 ### [Day 7](Day%2007) - Laboratories
 - **Problem:** Split a beam a bunch of times.
